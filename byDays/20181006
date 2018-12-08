@@ -1,0 +1,125 @@
+从锁屏到launcher
+01-07 03:49:13.196: D/KeyguardViewMediator(2114): handleKeyguardDone
+01-07 03:49:13.201: D/KeyguardViewMediator(2114): handleHide
+01-07 03:49:13.201: D/KeyguardViewMediator(2114): keyguardGoingAway
+01-07 03:49:13.469: D/KeyguardViewMediator(2114): handleStartKeyguardExitAnimation startTime=453103493 fadeoutDuration=100
+01-07 03:49:13.469: D/KeyguardViewMediator(2114): simPinSecure =false
+01-07 03:49:13.493: D/KeyguardViewMediator(2114): adjustStatusBarLocked: mShowing=false mOccluded=false isSecure=false --> flags=0x0
+
+从launcher到锁屏
+01-07 03:49:40.871: D/KeyguardViewMediator(2114): onStartedGoingToSleep(2)
+01-07 03:49:40.919: D/KeyguardViewMediator(2114): notifyStartedGoingToSleep
+01-07 03:49:40.943: D/KeyguardViewMediator(2114): handleNotifyStartedGoingToSleep
+01-07 03:49:40.973: D/KeyguardViewMediator(2114): notifyScreenTurnedOff
+01-07 03:49:40.974: D/KeyguardViewMediator(2114): handleNotifyScreenTurnedOff
+01-07 03:49:41.178: D/KeyguardViewMediator(2114): onFinishedGoingToSleep(2)
+01-07 03:49:41.178: D/KeyguardViewMediator(2114): notifyFinishedGoingToSleep
+01-07 03:49:41.183: D/KeyguardViewMediator(2114): doKeyguard: showing the lock screen
+01-07 03:49:41.183: D/KeyguardViewMediator(2114): showLocked
+01-07 03:49:41.216: D/KeyguardViewMediator(2114): handleNotifyFinishedGoingToSleep
+01-07 03:49:41.218: D/KeyguardViewMediator(2114): handleShow
+01-07 03:49:41.453: D/KeyguardViewMediator(2114): adjustStatusBarLocked: mShowing=true mOccluded=false isSecure=false --> flags=0x1200000
+
+灭屏到锁屏
+01-07 03:58:00.169: D/KeyguardViewMediator(2114): onStartedWakingUp, seq = 34
+01-07 03:58:00.170: D/KeyguardViewMediator(2114): notifyStartedWakingUp
+01-07 03:58:00.170: D/KeyguardViewMediator(2114): handleNotifyWakingUp
+01-07 03:58:00.193: D/KeyguardViewMediator(2114): notifyScreenOn
+01-07 03:58:00.287: D/KeyguardViewMediator(2114): handleNotifyScreenTurningOn
+01-07 03:58:00.928: D/KeyguardViewMediator(2114): notifyScreenTurnedOn
+01-07 03:58:00.929: D/KeyguardViewMediator(2114): handleNotifyScreenTurnedOn
+
+
+
+061F25 09-29 18:03:34.064   680   799 I InputDispatcher: Application is not responding: Window{3c6c00c u0 StatusBar}.  It has been 10000.9ms since event, 10000.5ms since wait started.  Reason: Waiting to send non-key event because the touched window has not finished processing certain input events that were delivered to it over 500.0ms ago.  Wait queue length: 16.  Wait queue head age: 11105.9ms.
+KeyguardBottomAreaView
+
+	Line 115869: 05F69F 09-29 18:00:22.446   914   914 D CarrierTextLayout: onConfigurationChanged newConfig = {1.0 ?mcc?mnc [zh_CN_#Hans,en_XA,zh_TW_#Hant] ldltr sw320dp w320dp h568dp 240dpi nrml long port finger -keyb/v/h -nav/h appBounds=Rect(0, 0 - 480, 888) s.25}
+
+
+	Line 120837: 061F3C 09-29 18:03:35.386  2092  2092 D CarrierTextLayout: onConfigurationChanged newConfig = {1.0 ?mcc?mnc [zh_CN_#Hans,en_XA,zh_TW_#Hant] ldltr sw320dp w592dp h296dp 240dpi nrml long land finger -keyb/v/h -nav/h appBounds=Rect(0, 0 - 888, 480) s.26}
+	
+	
+ifeq ($(BIRD_ROOT_USER),yes)
+PY_RES := $(shell python $(LOCAL_PATH)/user_to_rootuser.py)
+else
+PY_RES := $(shell python $(LOCAL_PATH)/rootuser_to_user.py)
+endif	
+
+
+persist.sys.usb.config
+
+device/sprd/pike2/sp7731e_1h10/system.prop
+
+# modifyed start by zhangshanshan
+qemu.hw.mainkeys=0
+# modifyed end by zhangshanshan
+
+
+ro.bdfun.adb_def_on
+
+
+usb调试默认打开无弹窗
+一.方法一
+usb调试默认打开：需要添加persist.sys.usb.config=adb
+修改common.mk
+#BIRD:add by hujingcheng for user-root adb default ON begin
+ifeq ($(strip $(BIRD_ROOT_USER)), yes)
+    PRODUCT_PROPERTY_OVERRIDES += persist.sys.usb.config=adb
+    PRODUCT_PROPERTY_OVERRIDES += ro.bdfun.adb_def_on=true #这个属性用于控制弹窗
+endif
+#BIRD:add by hujingcheng for adb enable default ON end
+
+弹窗修改
+UsbDebuggingActivity.java (frameworks\base\packages\systemui\src\com\android\systemui\usb)
+
+   private class UsbDisconnectedReceiver extends BroadcastReceiver {
+	...
+        public void onReceive(Context content, Intent intent) {
+		...
+			//修改：当接收到usb连接的广播时，直接允许Debug模式且总是允许
+			if(SystemProperties.getBoolean("ro.bdfun.adb_def_on",false)){
+				try {
+            		IBinder b = ServiceManager.getService(USB_SERVICE);
+            		IUsbManager service = IUsbManager.Stub.asInterface(b);
+                	service.allowUsbDebugging(true, mKey);
+					if(!mActivity.isFinishing()){
+						mActivity.finish();
+					}
+        		} catch (Exception e) {
+           	 		Log.e(TAG, "Unable to notify Usb service", e);
+        		}
+			}
+
+修改开发者选项去除：撤销设备usb调试授权(因为这里默认是给设备授权，这个功能没用了)
+
+DevelopmentSettings.java (packages\apps\settings\src\com\android\settings\development)
+    public void onCreate(Bundle icicle) {
+        ...
+        if (!SystemProperties.getBoolean("ro.adb.secure", false)||SystemProperties.getBoolean("ro.bdfun.adb_def_on",false)) { //change by hujingcheng
+            if (debugDebuggingCategory != null) {
+                debugDebuggingCategory.removePreference(mClearAdbKeys);
+            }
+        }
+
+二.方法二
+修改ro.adb.secure属性
+该属性ro.adb.secure=1在
+main.mk中定义
+  ifeq ($(user_variant),user)
+    ADDITIONAL_DEFAULT_PROPERTIES += ro.adb.secure=1
+  endif
+尝试在common.mk中重新定义PRODUCT_PROPERTY_OVERRIDES += ro.adb.secure=0
+未起到效果
+
+main.mk查看是在编译开始时，就在项目根目录下Makefile中include
+### DO NOT EDIT THIS FILE ###
+include build/core/main.mk
+### DO NOT EDIT THIS FILE ###
+暂时不好修改
+
+尝试把ro.adb.secure在代码中调用处，使用自定义属性控制，再查看其效果
+
+http://116.7.245.122:8888/users/sign_in
+
+

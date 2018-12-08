@@ -1,0 +1,309 @@
+day10学习笔记
+
+一.I/O流文件存储
+1.写入
+  使用Context类中的openFileOutput方法，将数据存入指定文件返回一个FileOutputStream
+public abstract FileOutputStream openFileOutput(String name, @FileMode int mode)
+参数：	name-文件名(文件写入的位置：/data/data/包名/files/文件名)
+	mode-MODE_PRIVATE覆写模式（本程序可读写，每次写入都覆盖前次的-默认）/MODE-APPEND追加模式（每次写入都在前次之后追加）
+在ThirdActivity中创建一个save方法用于存储输入框th_et2的数据，每次销毁活动onDestroy时调用
+    //java-IO流操作，存储到data
+    public void save(String s){
+        try{
+            FileOutputStream out=null;
+            BufferedWriter bw=null;
+            try{
+                out=openFileOutput("data", Context.MODE_PRIVATE);
+                bw=new BufferedWriter(new OutputStreamWriter(out));
+                bw.write(s);
+            }finally {
+                if(bw!=null){
+                    bw.close();
+                }
+                if(out!=null){
+                    out.close();
+                }
+            }
+        }catch (IOException e){
+            Log.e("ThirdActivity:","IOException");
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(third,"destroy"+th_et2.getText().toString());
+        save(th_et2.getText().toString());
+    }
+
+2.读取
+和上面相反，使用public FileInputStream openFileInput(String name)方法
+    //java-IO流操作-从data读取数据
+    public String load(){
+        StringBuilder content=new StringBuilder();
+        try{
+            FileInputStream in=null;
+            BufferedReader br=null;
+            try{
+                in=openFileInput("data");
+                br=new BufferedReader(new InputStreamReader(in));
+                String line="";
+                while((line=br.readLine())!=null){
+                    content.append(line);
+                }
+            }finally {
+                if(br!=null){
+                    br.close();
+                }
+                if(in!=null){
+                    in.close();
+                }
+            }
+        }catch (IOException e){
+            Log.e("ThirdActivity:","IOException");
+        }
+        return content.toString();
+在onCreate方法中添加该方法的调用：每次创建时加载上次输入的字符
+        th_et2=findViewById(R.id.th_et2);
+        String text2="";
+        if((text2=load())!=null){
+            th_et2.setText(text2);
+        }
+
+问题:android device monitor中file explorer只显示左边的目录树，不显示具体文件
+下载ddmlib.jar，替换./tools/lib/monitor-x86_64/configuration/org.eclipse.osgi/bundles/2/1/.cp/libs/ddmlib.jar
+./tools/lib/ddmlib.jar
+
+
+二.SharedPreference
+  采用键值对的方式进行存储，属于轻量级数据存储，尤其适合保存应用的配置参数。Sharedpreferences提供了常规的数据类型保存接口比如：int、long、boolean、String、Float、Set和Map这些数据类型。 采用xml文件格式来保存数据，该文件所在目录位于/data/data/shared_prefs/。
+1.写入
+重新建一个输入框th_et3，save按钮th_bt-点击时保存
+首先使用Context类的getSharedPreferences方法获取SharedPreferences对象:
+参数（文件名，模式），模式只能选MODE_PRIVATE-意为只有本程序可以读写该文件
+            case R.id.th_bt2:
+                SharedPreferences sp=getSharedPreferences("sharedPrefer",MODE_PRIVATE); //获取sp对象
+                SharedPreferences.Editor ed=sp.edit(); //获得SharedPreferences.Editor对象
+                ed.putInt("1",1);	//在Editor对象中添加数据
+                ed.putBoolean("true",true);
+                ed.putString("face","上");
+                ed.putString("text",th_et3.getText().toString());
+                ed.apply();	//提交数据
+                break;
+这时点击save键可以查看到/data/data/com.example.hjc.hello2/shared_prefs/sharedPrefer.xml文件：
+实际是一个map
+<map>
+    <string name="text">tttt</string>
+    <int name="1" value="1" />
+    <string name="face">上</string>
+    <boolean name="true" value="true" />
+</map>
+
+其他获取到SharedPreferences对象的方法：
+Activity类中public SharedPreferences getPreferences(@Context.PreferencesMode int mode)
+该方法自动设置文件名为当前活动类名
+PreferenceManager类的public static SharedPreferences getDefaultSharedPreferences(Context context)
+该方法自动设置文件名为当前包名
+
+问题：button中英文字符默认大写
+添加android:textAllCaps="false"
+
+
+2.读取
+创建一个恢复按键th_bt3，还是使用getSharedPreferences获取SharedPreferences对象
+            case R.id.th_bt3:
+                SharedPreferences sp1=getSharedPreferences("sharedPerfer",MODE_PRIVATE);
+                String text=sp1.getString("text","nothing");
+                th_et3.setText(text);
+                break;
+然后通过getString/getInt...等对应方法，获取键值。
+SharedPreferences的String getString(String key, @Nullable String defValue);
+参数（key值，默认值），当该key未找到时，返回默认值defValue
+
+
+
+三.SQLite数据库
+  SQLite是一款轻量级的关系型数据库，完全配置时小于 400KB，省略可选功能配置时小于250KB。SQLite支持标准的SQL语法，遵循数据库的ACID事务。
+
+1.SQLite的数据类型
+NULL	null值
+INTEGER	带符号的整数（最大8字节）-2^63~2^63-1
+REAL	带符号的浮点数，存储为 8 字节的 IEEE 浮点数字。 -1.7*10(-308)～1.7*10(308)
+TEXT	文本字符串，使用数据库编码（UTF-8、UTF-16BE 或 UTF-16LE）存储
+BLOB	二进制大对象，用于存储图片等
+
+2.创建数据库
+  Android提供了一个SQLiteOpenHelper抽象类,用于对数据库进行创建和升级（重写onCreate和onUpgrade方法）。要使用数据库，需要继承这个类。
+  先创建一个TestSqlHelper类:
+
+public class TestSqlHelper extends SQLiteOpenHelper{
+    String sqlHelper="TestSqlHelper";
+
+    //建表语句字符串形式，和MySql差不多，有自增功能
+    private static final String CREATE_CAR="create table Car(id integer primary key autoincrement,owner text,price real,seats integer)";
+
+    //构造方法(上下文,数据库名,用于建立自定义游标,版本号)
+    public TestSqlHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+        super(context, name, factory, version);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        //执行sql语句
+        db.execSQL(CREATE_CAR);
+        Log.d(sqlHelper,"已创建");
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    }
+}
+在ThirdActivity中在添加一个按键th_bt4用于创建数据库
+            case R.id.th_bt4:
+                createDataBase();
+                break;
+    //创建数据库
+    public void createDataBase(){
+        testSqlHelper=new TestSqlHelper(this,"Car.db",null,1);
+        testSqlHelper.getWritableDatabase();
+    }
+SQLiteOpenHelper类getWritableDatabase()方法:当数据库不存在时，新建数据库（onCreate方法）；当数据库存在时，打开数据库（onOpen方法）.返回一个可读写的数据库对象.
+另有一个getReadableDatabase()方法，这两个方法的区别是：
+  当磁盘已经满了时，getWritableDatabase会抛异常，而getReadableDatabase不会报错，它此时不会返回读写数据库的对象，而是仅仅返回一个读数据库的对象。
+这时Car.db存入 /data/data/com.example.hjc.hello2/databases目录
+
+3.升级数据库
+增加一张表KEY：
+private static final String CREATE_KEY="create table KEY(id integer primary key autoincrement,name text,weight real)";
+重写onUpgrade方法
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL(CREATE_KEY);
+        Log.d(sqlHelper,"已升级");
+    }
+修改ThirdActivity中新建TestSqlHelper的版本号，使其大于原版本号时，会调用onUpgrade方法
+    //创建数据库
+    public void createDataBase(){
+        testSqlHelper=new TestSqlHelper(this,"Car.db",null,2);
+        testSqlHelper.getWritableDatabase();
+    }
+
+4.插入数据insert
+调用SQLiteDatabase的insert方法可插入数据
+public long insert(String table, String nullColumnHack, ContentValues values)-
+参数（表名，为空列自动赋null,插入数据的包装对象）-返回最新插入的行id
+insert按键th_bt5：
+            case R.id.th_bt5:
+                insert(null,0,0);
+                break;
+
+    public void insert(String owner,double price,int seats){
+        SQLiteDatabase database=testSqlHelper.getWritableDatabase();
+        ContentValues cv=new ContentValues();
+        cv.put("owner","mike");
+        cv.put("price",10.2);
+        cv.put("seats",5);
+        database.insert("Car",null,cv);
+        cv.clear(); //清理已加入ContentValues的数据
+        cv.put("owner","don");
+        cv.put("price",30.2);
+        cv.put("seats",8);
+        database.insert("Car",null,cv);
+    }
+
+
+5.查看数据库
+通过adb shell
+cd /data/data/com.example.hjc.hello2/databases 
+借助sqlite命令查看数据库
+进入数据库Car.db：sqlite3 Car.db
+.table:显示数据库内表的列表
+.schema：显示建表语句
+.quit/.exit:退出
+.header on:显示列名
+.mode column：以左对齐的列显示
+这里直接:select * from Car;
+id          owner       price       seats     
+----------  ----------  ----------  ----------
+1           mike        10.2        5         
+2           don         30.2        8 
+
+
+6.删除数据delete
+看下SQLiteDatabase的delete方法
+public int delete(String table, String whereClause, String[] whereArgs)
+参数：表名，约束子句，子句的参数值
+            case R.id.th_bt6:
+                delete();
+                break;
+    //删除
+    public void delete(){
+        Log.d(third,"进入delete");
+        SQLiteDatabase database=testSqlHelper.getWritableDatabase();
+        database.delete("Car","price between ? and ?",new String[]{"10","11"});
+    }
+上面这个句子=delete from Car where price between 10 and 11;
+
+7.更新数据update
+看下SQLiteDatabase的update方法
+public int update(String table, ContentValues values, String whereClause, String[] whereArgs)
+参数：表名，更新数据，约束子句，子句的参数值
+            case R.id.th_bt7:
+                update();
+                break;
+    //更新
+    public void update(){
+        SQLiteDatabase database=testSqlHelper.getWritableDatabase();
+        ContentValues cv=new ContentValues();
+        cv.put("price",8.6);
+        database.update("Car",cv,"price>?",new String[]{"25"});
+    }
+相当于：update Car set price="8.6" where price>25;
+
+8.查询数据
+看下SQLiteDatabase的query方法
+    public Cursor query(String table, String[] columns, String selection,
+            String[] selectionArgs, String groupBy, String having,
+            String orderBy)
+参数：表名，选择的列名(null代表*)，约束子句，子句的参数值，groupBy参数值，having参数值，orderBy参数--返回可查询结果集的游标
+            case R.id.th_bt8:
+                query();
+                break;
+    //查询
+    public void query(){
+        SQLiteDatabase database=testSqlHelper.getWritableDatabase();
+        Cursor cursor=database.query("Car",null,null,null,null,null,null); //取得可查询结果集的游标
+        Log.d(third,"id的index"+String.valueOf(cursor.getColumnIndex("id")));
+        if(cursor.moveToFirst()){ //将游标指针移到首行
+            do{
+                int id=cursor.getInt(0);
+                String owner=cursor.getString(1);
+                double price=cursor.getDouble(2);
+                int seats=cursor.getInt(3);
+                Log.d(third,"query,id="+id+",owner="+owner+",price="+price+",seats="+seats);
+            }while(cursor.moveToNext()); //循环遍历
+        }
+        cursor.close(); //最后关闭游标
+    }
+需要注意cursor.getInt(int ColumnIndex)中的ColumnIndex从0开始
+
+
+四.权限
+  可以通过在清单文件中添加<uses-permission>标签，声明权限。<uses-permission>是android预定义的权限。
+  作用：1.在安装界面提醒用户该软件需要的权限。
+	2.用户可以在程序管理页面查看到权限。
+
+未完。
+
+
+
+
+
+
+
+
+
+
+
+
+

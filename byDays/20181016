@@ -1,0 +1,59 @@
+com.android.settings/.notification.RedactionInterstitial
+com.android.settings/.fingerprint.FingerprintEnrollFindSensor
+ com.android.settings/.password.ChooseLockGeneric
+TYPE_SECURE_SYSTEM_OVERLAY
+
+SaveChosenLockWorkerBase
+
+http://222.66.158.139:2008/cqweb/#
+
+Google
+跑测Google性能脚本测试时，使用CTest工具，手机出现卡死，死循环在开机界面
+
+
+5501 replace
+
+01-02 02:29:55.125   501   597 I jniKeyboxService: framework check keybox start!
+01-02 02:29:55.135   501   597 D ENGPC   : : check_keybox_is_enabled: tee_msg_len=25
+01-02 02:29:55.137   501   597 D TrustyProduction: production CA command_check_keybox success,return_msg->payload[0]: 0
+01-02 02:29:55.137   501   597 D ENGPC   : : check_keybox_is_enabled: length: 0x8, id: 0x800f, flag: 0x0, ret_code: 0x0, xor: 0x87
+01-02 02:29:55.137   501   597 D ENGPC   : : check_keybox_is_enabled: TEECex_SendMsg_To_TEE() error, tee_rsp.ret_code: 0
+01-02 02:29:55.137   501   597 I jniKeyboxService: check_keybox_is_enabled fail, ret = 0
+
+
+556cd847c7620c959148abe10415eaefb25f9c24 f095196b4937303658bca494db6bc001d761f136 793f7460817166b761a6e81bb3c07c9bcee48772
+
+BUG：前摄开启闪光灯为自动状态下在黑暗环境下拍照闪光灯不会亮
+
+adb shell am start -a com.android.setupwizard.FOUR_CORNER_EXIT
+
+
+adb shell setprop persist.sys.camera.hal.log 7
+
+请上传一下项目Boardconfig.mk 文件
+
+vendor/sprd/modules/libcamera/ispalg/isp2.x/ae/sprd/ae_sprd_adpt.c
+static cmr_s32 ae_post_process(struct ae_ctrl_cxt *cxt)
+{
+.................
+.................
+    if (cxt->camera_id == 1 && cxt->cur_status.settings.flash == FLASH_LED_AUTO) {
+2611        if ((cxt->sync_cur_result.cur_bv <= cxt->flash_swith.led_thr_down) && cxt->sync_cur_status.led_state == 0) {
+
+打印一下这里的判断条件的LOG，看一下代码为什么走不进去。
+前摄
+cxt->camera_id == 1
+Auto 模式
+cxt->cur_status.settings.flash == FLASH_LED_AUTO
+就会进入这个函数。
+低于设置的暗态阀值：
+cxt->sync_cur_result.cur_bv <= cxt->flash_swith.led_thr_down
+LED灯的状态是关闭的：
+cxt->sync_cur_status.led_state == 0
+就会进入打开LED 
+
+
+	ISP_LOGV("BIRD camera_id %d, flash_status %d, cur_bv %d, led_open_thr %d, led_state %d",
+					 cxt->camera_id, cxt->cur_status.settings.flash, cxt->sync_cur_result.cur_bv, cxt->flash_swith.led_thr_down, cxt->sync_cur_status.led_state);//add by hujingcheng
+	if (cxt->camera_id == 1 && cxt->cur_status.settings.flash == FLASH_LED_AUTO) {
+		if ((cxt->sync_cur_result.cur_bv <= cxt->flash_swith.led_thr_down) && cxt->sync_cur_status.led_state == 0) {

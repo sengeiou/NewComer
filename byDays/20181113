@@ -1,0 +1,108 @@
+[Current status]
+
+Android.bp无法读取到BroadConfig.mk文件中定义的宏。由Android.bp编译的模块无法实现条件编译。
+请问如何实现在Android.bp编译模块中条件编译
+目前尝试了两种方法，已贴在Note中，请贵方指正我的写法问题所在。
+若贵方有类似demo或相关资料，也烦请提供一下。
+谢谢。
+
+[Expected result]
+正确获取宏定义，实现条件编译
+
+[Note]
+我们想在  /libcore/luni/src/main/native/libcore_io_Linux.cpp 添加一个宏开关BIRD_INT_ROM
+BIRD_INT_ROM在BroadConfig.mk中定义。
+先在该文件中添加
+#ifndef BIRD_INT_ROM
+    ALOGE("BIRD_INT_ROM undefined");
+#endif
+来判断是否得到该宏定义
+
+尝试了以下方法：
+1.在libcore/Android.mk 添加
+ifdef BIRD_INT_ROM
+	LOCAL_CFLAGS += -DBIRD_INT_ROM=4096
+endif
+后不起作用，BIRD_INT_ROM undefined
+
+2.修改：libcore/NativeCode.bp
+//add by Bird start 添加的部分
+bootstrap_go_package {
+    name: "soong-libcore",
+    pkgPath: "android/soong/libcore",
+    deps: [
+        "blueprint",
+        "blueprint-pathtools",
+        "soong",
+        "soong-android",
+        "soong-cc",
+        "soong-genrule",
+    ],
+    srcs: [
+        "libcore.go",
+    ],
+    pluginFor: ["soong_build"],
+}
+
+libjavacoredefaults {
+    name: "libjavacoredefaults",
+}
+//add by Bird end 添加的部分end
+
+....
+
+cc_library_shared {
+    name: "libjavacore",
+    defaults: [
+        "core_native_default_flags",
+        "core_native_default_libs",
+	"libjavacoredefaults", //add by BIRD 添加
+    ],
+...
+
+添加文件libcore.go
+//add by BIRD
+package libcore
+
+import (
+	"android/soong/android"
+	"android/soong/cc"
+	"fmt"
+)
+
+func libjavacoreFlags(ctx android.BaseContext) []string {
+	var cflags []string
+	ret := ctx.AConfig().Getenv("BIRD_INT_ROM")
+	fmt.Println(ret)
+	if (ret!="") {
+		cflags = append(cflags, "-DBIRD_INT_ROM="+ret)
+		fmt.Println(cflags)
+	}
+	fmt.Println("hjc libcoreFlags BIRD_INT_ROM="+ret)
+	return cflags
+}
+
+func libjavacoreDefaults(ctx android.LoadHookContext) {
+	fmt.Println("hjc libjavacoreDefaults")
+	type props struct {
+		Cflags   []string
+	}
+	p := &props{}
+	p.Cflags = libjavacoreFlags(ctx)
+	ctx.AppendProperties(p)
+}
+
+func libjavacoreDefaultsFactory() android.Module {
+	fmt.Println("hjc libjavacoreDefaultsFactory")
+	module := cc.DefaultsFactory()
+	android.AddLoadHook(module, libjavacoreDefaults)
+
+	return module
+}
+
+func init() {
+	android.RegisterModuleType("libjavacoredefaults", libjavacoreDefaultsFactory)
+}
+
+使用该方法2后直接make也无法取得BIRD_INT_ROM在BroadConfig.mk中的定义;
+先export BIRD_INT_ROM=16384，后再make可以取得该宏BIRD_INT_ROM=16384

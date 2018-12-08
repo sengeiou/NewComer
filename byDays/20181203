@@ -1,0 +1,151 @@
+20181203
+
+11-01 02:14:10.723660  1551  2522 D MediaProvider: delete real file /storage/8685-151C/DCIM/Camera/IMG_20181127_173342.jpg
+
+11-01 02:14:10.871611  1551  2522 D MediaProvider: delete: uri=content://media/external/images/media, count=1, match=1, userWhere=_id=?, whereArgs=[116], caller pid = 2395
+11-01 02:14:10.889508  2395  2526 V Gallery2/MenuExecutor: It takes 512 ms to execute cmd for /local/image/item/116
+
+
+判断otg:
+/frameworks/native/data/etc/android.hardware.usb.host.xml
+
+SPCSS00516152
+
+adb shell setprop vendor.gallery.log.enable 1
+
+预装软件可卸载：
+12-04 22:37:19.417  1444  1444 I SystemConfig: Non-xml file /system/etc/permissions/pms_sysapp_removable_system_list.txt in /system/etc/permissions directory, ignoring
+12-04 22:37:19.495  1444  1444 I SystemConfig: Non-xml file /vendor/etc/permissions/pms_sysapp_removable_vendor_list.txt in /vendor/etc/permissions directory, ignoring
+
+
+
+/frameworks/base/data/etc/platform.xml --google修改记录
+commit	86684240eb5753bb97c2cfc93d1d25fa1870f8f1
+
+    Media process should run with "write" access.
+    
+    The WRITE_MEDIA_STORAGE permission had inadvertently been giving apps
+    the "default" view of storage.  This had worked for a long since,
+    since we also gave them the "sdcard_rw" permission, but a recent
+    security patch broke this for secondary users.
+    
+    Apps holding this permission should have been mounted "write" all
+    along, and relied on that view to access storage devices.  This also
+    means they no longer need the "sdcard_rw" GID.
+
+diff --git a/data/etc/platform.xml b/data/etc/platform.xml
+index 04006b1..3021555 100644
+--- a/data/etc/platform.xml
+    Bug: 72732906, 71737806, 72224817
+    Change-Id: I5cd687a1e128024f33b4acd93c15e75192ed1c85
+
+diff --git a/data/etc/platform.xml b/data/etc/platform.xml
+index 04006b1..3021555 100644
+--- a/data/etc/platform.xml
+index 04006b1..3021555 100644
+--- a/data/etc/platform.xml
++++ b/data/etc/platform.xml
+@@ -62,7 +62,6 @@
+ 
+     <permission name="android.permission.WRITE_MEDIA_STORAGE" >
+         <group gid="media_rw" />
+-        <group gid="sdcard_rw" />
+     </permission>
+ 
+     <permission name="android.permission.ACCESS_MTP" >
+diff --git a/services/core/java/com/android/server/pm/PackageManagerService.java
+index a0cb722..940d19f 100644
+--- a/services/core/java/com/android/server/pm/PackageManagerService.java
++++ b/services/core/java/com/android/server/pm/PackageManagerService.java
+@@ -20936,9 +20936,6 @@ Slog.v(TAG, ":: stepped forward, applying functor at tag
+                 if (Process.isIsolated(uid)) {
+                     return Zygote.MOUNT_EXTERNAL_NONE;
+                 }
+-                if (checkUidPermission(WRITE_MEDIA_STORAGE, uid) == PERMISSION_
+-                    return Zygote.MOUNT_EXTERNAL_DEFAULT;
+-                }
+                 if (checkUidPermission(READ_EXTERNAL_STORAGE, uid) == PERMISSIO
+                     return Zygote.MOUNT_EXTERNAL_DEFAULT;
+                 }
+(END)
+
+
+
+
+Dear MTK,
+
+目前发现的问题如下：
+
+   检查代码,查看到/frameworks/base/data/etc/platform.xml
+
+    <permission name="android.permission.WRITE_MEDIA_STORAGE" >
+        <group gid="media_rw" />
+    </permission>
+
+   权限组gid="media_rw"
+
+而通过adb shell,查看到sdcard路径下权限组为sdcard_rw
+
+1|bird_k39tv1_bsp_1g:/storage/8685-151C # ls -l
+ls: ./.android_secure: Permission denied
+total 1329472
+drwxrwx--x 2 root sdcard_rw     32768 2018-01-01 08:01 Alarms
+drwxrwx--x 4 root sdcard_rw     32768 2018-01-01 12:02 Android
+drwxrwx--x 4 root sdcard_rw     32768 2018-01-01 08:01 DCIM
+
+=======================================================
+
+尝试了以下方法：
+
+1.修改/frameworks/base/data/etc/platform.xml  
+    <permission name="android.permission.WRITE_MEDIA_STORAGE" >
+        <group gid="media_rw" />
+  +       <group gid="sdcard_rw" />
+    </permission>
+
+remake 之后 adb shell cat /system/etc/permissions/platform.xml  确认修改成功。
+
+依然无法彻底删除。
+
+------------------------------------------------------
+
+2.尝试使用挂载路径 /mnt/media_rw/... 删除文件
+
+adb shell df 查看挂载路径是在：/mnt/media_rw/8685-151C
+
+Filesystem                     Size  Used Avail Use% Mounted on
+...
+/dev/block/vold/public:179,129  29G  1.9G   27G   7% /mnt/media_rw/8685-151C
+/mnt/media_rw/8685-151C         29G  1.9G   27G   7% /mnt/runtime/default/8685-151C
+
+cd到该目录下确认其权限组是media_rw
+
+bird_k39tv1_bsp_1g:/mnt/media_rw/8685-151C # ls -l
+total 1329472
+drwxrwx--- 2 media_rw media_rw     32768 2018-01-01 08:01 Alarms
+drwxrwx--- 4 media_rw media_rw     32768 2018-01-01 12:02 Android
+drwxrwx--- 4 media_rw media_rw     32768 2018-01-01 08:01 DCIM
+drwxrwx--- 2 media_rw media_rw     32768 2018-01-01 08:01 Download
+
+修改/vendor/mediatek/proprietary/packages/providers/MediaProvider/src/com/android/providers/media/MediaProvider.java
+public class MediaProvider extends ContentProvider {
+....
+    private void deleteIfAllowed(Uri uri, String path) {
+		Log.e(TAG,"deleteIfAllowed URI="+uri+",path="+path);//mark
+        try {
+            File file = new File(path);
+            checkAccess(uri, file, ParcelFileDescriptor.MODE_WRITE_ONLY);
+			if(isSecondaryExternalPath(path)){
+				Log.d(TAG,"deleteIfAllowed isSecondaryExternalPath");
+				//请问将storage/路径转换为挂载路径的正确方式是什么，有什么api吗，不是很熟？ 这里暂时用replace
+				file=new File(path.replace("storage","mnt/media_rw"));				
+			}
+			Log.d(TAG,"deleteIfAllowed file 1. isExist="+file.exists()+",isFile()="+file.isFile());//mark
+            boolean isDeleted= file.delete();
+			Log.d(TAG,"deleteIfAllowed file 2. isExist="+file.exists()+",isDeleted="+isDeleted);//mark
+...
+
+修改为挂载路径后，确认可以彻底删除。
+
+请贵司分析一下是否是该问题导致，并请指正？
+请问将storage/路径转换为挂载路径的正确方式是什么？

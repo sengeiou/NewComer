@@ -1,0 +1,363 @@
+day08学习笔记
+
+
+一.计算器源码学习2
+1. 首先看Calculator类的onCreate函数，这里定义了该活动创建时需要的一些变量。
+        //整个上半部分视图
+        mDisplayView = findViewById(R.id.display);
+        //公式框
+        mFormulaEditText = (CalculatorEditText) findViewById(R.id.formula);
+        //结果框
+        mResultEditText = (CalculatorEditText) findViewById(R.id.result);
+        //下半部分包括额外的滑动窗口
+        mPadViewPager = (ViewPager) findViewById(R.id.pad_pager);
+        //删除和清除键
+        mDeleteButton = findViewById(R.id.del);
+        mClearButton = findViewById(R.id.clr);
+        //等于号
+        mEqualButton = findViewById(R.id.pad_numeric).findViewById(R.id.eq);
+        //表达式替换器对象-用于通用字符与数学字符的互换(如："/","除号")
+        mTokenizer = new CalculatorExpressionTokenizer(this);
+        //表达式计算器对象-实际进行表达式计算
+        mEvaluator = new CalculatorExpressionEvaluator(mTokenizer);
+
+  这里需要注意的是mFormulaEditText公式区，
+	//设置公式区editable对象的生成工厂
+	mFormulaEditText.setEditableFactory(mFormulaEditableFactory);
+  看下这个工厂的对字符的过滤操作：
+    //新增editable对象将通过CalculatorExpressionBuilder对象进行过滤后返回
+    private final Editable.Factory mFormulaEditableFactory = new Editable.Factory() {
+        @Override
+        public Editable newEditable(CharSequence source) {
+            final boolean isEdited = mCurrentState == CalculatorState.INPUT
+                    || mCurrentState == CalculatorState.ERROR;
+            return new CalculatorExpressionBuilder(source, mTokenizer, isEdited);
+        }
+    };
+
+  添加了一些监听器：
+	//监听：1.文本变化 2.键盘监听 3.文本长度监听 4.长按监听
+        mFormulaEditText.addTextChangedListener(mFormulaTextWatcher);
+        mFormulaEditText.setOnKeyListener(mFormulaOnKeyListener);
+        mFormulaEditText.setOnTextSizeChangeListener(this);
+  删除键添加了长按监听
+        mDeleteButton.setOnLongClickListener(this);
+
+  文本变化监听，当文本改变后的动作：
+    //注册公式区文本变化的监听器
+    private final TextWatcher mFormulaTextWatcher = new TextWatcher() {
+        @Override //文本改变后，设置状态为INPUT，并调用mEvaluator.evaluate()方法
+        public void afterTextChanged(Editable editable) {
+            setState(CalculatorState.INPUT);
+            mEvaluator.evaluate(editable, Calculator.this);
+        }
+    };
+    //键盘监听器只监听到回车时调用onEquals方法
+    private final OnKeyListener mFormulaOnKeyListener = new OnKeyListener() {
+        @Override
+        public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_NUMPAD_ENTER:
+                case KeyEvent.KEYCODE_ENTER:
+                    if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
+                        onEquals();
+                    }
+                    // ignore all other actions
+                    return true;
+            }
+            return false;
+        }
+    };
+
+
+所以，当公式区字符变化时，一般的调用流程是：
+  首先通过CalculatorExpressionBuilder对象过滤非法表达式，然后进入CalculatorExpressionEvaluator的evaluate(）方法。这当中还会调用CalculatorExpressionTokenizer完成通用字符与数学字符的互换。如果顺利，则调用Arity.jar的eval方法，得出该表达式的结果。
+
+
+2.测试输入小数点时的流程
+先注意CalculatorExpressionTokenizer类中的两个方法：
+CalculatorExpressionTokenizer类实际维护的是一个通用字符与数学字符对应的Map<通用字符，数学字符>
+	数学字符：要展示在公式区的字符
+	通用字符：实际代入Arity.jar的eval()方法进行计算的字符
+    //将数学字符转化为通用字符
+    public String getNormalizedExpression(String expr) {
+        for (Entry<String, String> replacementEntry : mReplacementMap.entrySet()) {
+            expr = expr.replace(replacementEntry.getValue(), replacementEntry.getKey());
+        }
+        return expr;
+    }
+    //将通用字符转化为数学字符
+    public String getLocalizedExpression(String expr) {
+        for (Entry<String, String> replacementEntry : mReplacementMap.entrySet()) {
+            expr = expr.replace(replacementEntry.getKey(), replacementEntry.getValue());
+        }
+        return expr;
+    }
+
+这时点击小数点按钮时：
+1).进入onButtonClick中case R.id.dec_point：
+	//首先判断系统属性ro.bdfun.add_zero是否为true，若为true，进入if；false,进入else
+	//系统属性ro.bdfun.add_zero，可通过abd shell getprop | grep ro.bdfun.add_zero查看
+	//这里因为我的手机不存在ro.bdfun.add_zero这个属性，直接进入else
+                if(SystemProperties.getBoolean("ro.bdfun.add_zero",false)){
+                    //当前公式窗口为空时，点击小数点，则在前面加0
+                    if(mFormulaEditText.getText().toString().equals("")){
+                        mFormulaEditText.append("0"+((Button) view).getText());
+                    }else{
+                        //当前公式窗口非空时
+                        mStrLength = mFormulaEditText.getText().toString().length();
+                        mLastStr = mFormulaEditText.getText().toString().substring(mStrLength-1,mStrLength);
+                        //当公式窗最后一个字符是运算符号时，点击小数点，默认前面加个0
+                        if(!mLastStr.equals("0") && !mLastStr.equals("1") && !mLastStr.equals("2") &&
+                           !mLastStr.equals("3") && !mLastStr.equals("4") && !mLastStr.equals("5") &&
+                           !mLastStr.equals("6") && !mLastStr.equals("7") && !mLastStr.equals("8") &&
+                           !mLastStr.equals("9") && !mLastStr.equals(".")){
+
+                           mFormulaEditText.append("0"+((Button) view).getText());
+                           //若最后一个字符非运算符，直接加上小数点
+                        }else{
+                            mFormulaEditText.append(((Button) view).getText());
+                            Log.d(NAME,"小数点3:"+mFormulaEditText.getText().toString());
+                        }
+                    }
+                }else{
+                    Log.d(NAME,"小数点进入自动a:"+mFormulaEditText.getText().toString());
+                    mFormulaEditText.append(((Button) view).getText());
+                    Log.d(NAME,"小数点进入自动b:"+mFormulaEditText.getText().toString());
+                }
+                break;
+
+2).mFormulaEditText进行append操作时进入到CalculatorExpressionBuilder的replace方法
+
+        //最后添加的字符，tbstart=0, tbend=1,并转化为通用字符
+        String appendExpr =
+                mTokenizer.getNormalizedExpression(tb.subSequence(tbstart, tbend).toString());
+        if (appendExpr.length() == 1) {
+            //将整个表达式也转为通用字符
+            final String expr = mTokenizer.getNormalizedExpression(toString());
+            // SPRD 515934 enter all numbers and operators, calculator crash
+            final int len = expr.length();
+            switch (appendExpr.charAt(0)) {
+                case '.':
+                    Log.d(builder,"小数点");
+                    // don't allow two decimals in the same number
+                    //排除两个小数点的情况，先找出原表达式中最后一个小数点的位置
+                    final int index = expr.lastIndexOf('.');
+                    // SPRD: 544823 modify for StringIndexOutOfBoundsException
+                    //若原表达式中存在小数点且两个小数点之间只有数字或为空时，则重赋为空
+                    if (index != -1 && index < start && TextUtils.isDigitsOnly(expr.substring(index + 1, start))) {
+                        appendExpr = "";
+                    }
+                    break;
+                case '+':
+                case '*':
+                case '/':
+                    // don't allow leading operator-不允许+*/出现在首位
+                    if (start == 0) {
+                        appendExpr = "";
+                        break;
+                    }
+                    /*SPRD: Bug 487833 don't allow leading operator change from - to * or / @{ */
+                    //不允许跟在-号后面
+                    if (start == 1 && expr.equals("-")) {
+                        appendExpr = "";
+                        break;
+                    }
+                    /* @} */
+                    /* SPRD 515934 enter all numbers and operators, calculator crash @{ */
+                    Log.d("Calculator", "len: " + len + " start: " + start+" expr: "+expr);
+                    if (start > len) {
+                        break;
+                    }
+                    /* @} */
+                    // don't allow multiple successive operators 不许*+/跟在*+-/后，注意这里8*-6是可以的
+                    while (start > 0 && "+-*/".indexOf(expr.charAt(start - 1)) != -1) {
+                        --start;
+                    }
+                    // fall through
+                case '-':
+                    // don't allow -- or +- 不允许--或+-,8/-9或7*-9这种是合法的
+                    // SPRD 515934 enter all numbers and operators,calculator crash
+                    if ((start > 0) && (start <= len) && "+-".indexOf(expr.charAt(start - 1)) != -1) {
+                        --start;
+                    }
+
+                    // mark as edited since operators can always be appended
+                    mIsEdited = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+这时，点小数点即是进入到上述中 case '.' 中，不改变。
+
+3）这时文本已发生变化从""变为".",上述mFormulaTextWatcher将监听到该变化并调用CalculatorExpressionEvaluator的evaluate方法。
+
+    public void evaluate(String expr, EvaluateCallback callback) {
+        //首先替换表达式中字符为通用字符
+        Log.d(eva,"进入evaluate");
+        expr = mTokenizer.getNormalizedExpression(expr);
+
+        // remove any trailing operators
+        //去除尾部的运算符
+        while (expr.length() > 0 && "+-/*".indexOf(expr.charAt(expr.length() - 1)) != -1) {
+            expr = expr.substring(0, expr.length() - 1);
+        }
+
+        //若此时表达式为空或为纯数字，则调用onEvaluate参数为Calculator.INVALID_RES_ID
+        try {
+            if (expr.length() == 0 || Double.valueOf(expr) != null) {
+                Log.d(eva,"expr空或为纯数字");
+                callback.onEvaluate(expr, null, Calculator.INVALID_RES_ID);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            // expr is not a simple number
+        }
+
+        //过滤完成，这时的expr是正常的表达式
+        try {
+            String test=new String(".");
+            Log.d(eva,String.valueOf(mSymbols.eval(test)));
+            Log.d(eva,"过滤后表达式："+expr);
+            //通过Arity的eval方法，得出该表达式的结果
+            double result = mSymbols.eval(expr);
+            Log.d("Evaluator:",String.valueOf(result));
+            //当结果超出定义（0/0或根号下负数），实际在结果区输出不是数字
+            if (Double.isNaN(result)) {
+                callback.onEvaluate(expr, null, R.string.error_nan);
+            } else {
+                // The arity library uses floating point arithmetic when evaluating the expression
+                // leading to precision errors in the result. The method doubleToString hides these
+                // errors; rounding the result by dropping N digits of precision.
+                //当result合法时，先把double型四舍五入并转为string
+                final String resultString = mTokenizer.getLocalizedExpression(
+                        Util.doubleToString(result, MAX_DIGITS, ROUNDING_DIGITS));
+                callback.onEvaluate(expr, resultString, Calculator.INVALID_RES_ID);
+                Log.d(eva,resultString);
+            }
+        } catch (SyntaxException e) {
+            //转化过程中有语法错误，输出错误
+            callback.onEvaluate(expr, null, R.string.error_syntax);
+        }
+    }
+
+这里"."默认是合法的表达式，直接进入第二个try块中，经过得到结果0
+
+4)这时进入Calculator类的onEvaluate方法中
+
+    @Override
+    public void onEvaluate(String expr, String result, int errorResourceId) {
+        //当state为input时，直接显示result=input
+        if (mCurrentState == CalculatorState.INPUT) {
+            mResultEditText.setText(result);
+            //当第三个参数！=INVALID_RES_ID，进入onError错误处理
+        } else if (errorResourceId != INVALID_RES_ID) {
+            onError(errorResourceId);
+            //当result非空，输出result
+        } else if (!TextUtils.isEmpty(result)) {
+            onResult(result);
+            //当result为空且状态为EVALUATE，则转化状态为INPUT
+        } else if (mCurrentState == CalculatorState.EVALUATE) {
+            // The current expression cannot be evaluated -> return to the input state.
+            setState(CalculatorState.INPUT);
+        }
+        //设置焦点在公式区
+        mFormulaEditText.requestFocus();
+    }
+
+这里进入第一个if中，展示result为0
+
+3.若再点一次"."
+还是先进入CalculatorExpressionBuilder replace方法case '.'
+                case '.':
+                    Log.d(builder,"小数点");
+                    // don't allow two decimals in the same number
+                    //排除两个小数点的情况，先找出原表达式中最后一个小数点的位置
+                    final int index = expr.lastIndexOf('.');
+                    // SPRD: 544823 modify for StringIndexOutOfBoundsException
+                    //若原表达式中存在小数点且两个小数点之间只有数字或为空时，则重赋为空
+                    if (index != -1 && index < start && TextUtils.isDigitsOnly(expr.substring(index + 1, start))) {
+                        appendExpr = "";
+                    }
+                    break;
+这时将直接把追加的字符重赋为空。
+因为这时字符串未发生变化，监听器不会作用。result还是显示原来的字符"0"
+
+4.输入0/0=
+其他和前面一样，按完0/0，这时会进入CalculatorExpressionEvaluator类evaluate方法中
+            if (Double.isNaN(result)) {
+                callback.onEvaluate(expr, null, R.string.error_nan);
+            }
+还是进入onEvaluate的第一个if,但是result=null，结果区无显示。
+再按=，进入onButtonClick方法中case R.id.eq,调用onEquals方法,
+    //只有状态处于input时，状态设为EVALUATE，mEvaluator调用evaluate方法
+    private void onEquals() {
+        if (mCurrentState == CalculatorState.INPUT) {
+            Log.d("onEquals","进入");
+            setState(CalculatorState.EVALUATE);
+            mEvaluator.evaluate(mFormulaEditText.getText(), this);
+        }
+    }
+再次进入CalculatorExpressionEvaluator类evaluate方法中if (Double.isNaN(result))，
+但这时状态为EVALUATE，进入onEvaluate的第二个if中：
+            //当第三个参数！=INVALID_RES_ID，进入onError错误处理
+        } else if (errorResourceId != INVALID_RES_ID) {
+            onError(errorResourceId);
+进入onError:
+   //错误时调用
+    private void onError(final int errorResourceId) {
+	//此时状态为EVALUATE
+        if (mCurrentState != CalculatorState.EVALUATE) {
+            // Only animate error on evaluate.
+            mResultEditText.setText(errorResourceId);
+            return;
+        }
+	展示一个动画，并设置状态为ERROR，结果为“不是数字”
+        reveal(mEqualButton, R.color.calculator_error_color, new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                setState(CalculatorState.ERROR);
+                mResultEditText.setText(errorResourceId);
+            }
+        });
+    }
+
+测试其他错误定义的表达式也会同样输出错误：ln(-1)/根号下-1等
+
+但是测试 tan(pi/2)时，输出1.633E16,这是bug?
+
+
+二.Intent
+之前用过显式intent了
+                intent.setClass(MainActivity.this, SecondActivity.class); //设置跳转的Activity
+                startActivity(intent); //传入intent,启动活动
+隐式intent:
+不明确指向某个活动，而是指定action/category等信息，交由系统分析找到合适的intent去启动
+        //隐式intent
+        Button sc_bt3=findViewById(R.id.sc_bt3);
+        sc_bt3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent("android.intent.action.ACTION_START");
+                startActivity(intent);
+            }
+        });
+	//清单文件
+        <activity android:name=".ThirdActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_START"></action>
+                <category android:name="android.intent.category.DEFAULT"></category>
+            </intent-filter>
+        </activity>
+android.intent.category.DEFAULT是默认的category，可以不用addCategory
+每个intent中，只能指定一个action,但能指定多个category。category用于分类该动作执行的环境。
+
+明天再看
+
+
+
+
+

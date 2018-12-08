@@ -1,0 +1,241 @@
+day26学习笔记
+
+科大讯飞平台sdk
+
+迅飞开放平台 https://www.xfyun.cn/
+
+一.科大讯飞sdk提供服务情况
+新手指南ppt教程&各平台文档链接&在线服务免费提额位置：http://bbs.xfyun.cn/forum.php?mod=viewthread&tid=36513&extra=
+离线服务（离线命令词、离线合成、唤醒），体验期均为35天，装机量3台，体验期结束后，点击控制台---我的应用---立即购买按钮
+在线服务（听写、合成）：免费500次/天---免费提额通过后2w次/天---超过2w/天---联系商务msp_business@iflytek.com
+在线服务（人脸、声纹）：免费500次/天---超过500次/天---联系商务msp_business@iflytek.com
+
+二.预备工作
+参考：https://doc.xfyun.cn/msc_android/
+下面是在Android Studio的操作
+1.将在官网下载的Android SDK 压缩包中libs目录下所有子文件拷贝至Android工程的libs目录下。
+注：要在该module的build.grandle中添加
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+2.添加用户权限：需要申请录音，存储等权限
+详情参考https://doc.xfyun.cn/msc_android/
+
+3.初始化语音配置对象
+初始化后才可以使用MSC的各项服务。建议将初始化放在程序入口处（如Application、Activity的onCreate方法）
+// 将“12345678”替换成您申请的APPID，申请地址：http://www.xfyun.cn
+// 请勿在“=”与appid之间添加任何空字符或者转义符
+SpeechUtility.createUtility(context, SpeechConstant.APPID +"=12345678");
+
+4.示例工程sample在下载的sdk下Sample目录，导入这个module即可。具体问题可以参考这个示例工程。
+
+5.libs目录下Sunflower.jar,这个jar包应该是用于后期数据统计收集的。sample中调用到这个包的一些方法
+    protected void onResume() {
+        // 开放统计 移动数据统计分析
+        //FlowerCollector.onResume(this);
+        //FlowerCollector.onPageStart(tag);
+        super.onResume();
+    }
+	不过，把它删掉也不影响语音功能的正常运行。
+
+三.语音识别
+
+//初始化语音识别对象
+speechRecognizer=SpeechRecognizer.createRecognizer(this,initListener);
+//设置参数
+setRecognizerPara();
+    private void setRecognizerPara(){
+        speechRecognizer.setParameter(SpeechConstant.PARAMS,null);
+        speechRecognizer.setParameter(SpeechConstant.ENGINE_TYPE,mEngineType);
+        speechRecognizer.setParameter(SpeechConstant.RESULT_TYPE,"json");
+        // 设置语音前端点:静音超时时间，即用户多长时间不说话则当做超时处理
+        speechRecognizer.setParameter(SpeechConstant.VAD_BOS, "4000");
+
+        // 设置语音后端点:后端点静音检测时间，即用户停止说话多长时间内即认为不再输入， 自动停止录音
+        speechRecognizer.setParameter(SpeechConstant.VAD_EOS, "1000");
+
+        // 设置标点符号,设置为"0"返回结果无标点,设置为"1"返回结果有标点
+        speechRecognizer.setParameter(SpeechConstant.ASR_PTT, "1");
+        // 设置音频保存路径，保存音频格式支持pcm、wav，设置路径为sd卡请注意WRITE_EXTERNAL_STORAGE权限
+        // 注：AUDIO_FORMAT参数语记需要更新版本才能生效
+        //speechRecognizer.setParameter(SpeechConstant.AUDIO_FORMAT,"wav");
+        //speechRecognizer.setParameter(SpeechConstant.ASR_AUDIO_PATH, Environment.getExternalStorageDirectory()+"/msc/iat.wav");
+
+    }
+//听写监听器
+    /**
+     * 听写监听器。
+     */
+    private RecognizerListener mRecognizerListener = new RecognizerListener() {
+
+        @Override
+        public void onBeginOfSpeech() {
+            // 此回调表示：sdk内部录音机已经准备好了，用户可以开始语音输入
+            showTip("开始说话");
+        }
+
+        @Override
+        public void onError(SpeechError error) {
+            // Tips：
+            // 错误码：10118(您没有说话)，可能是录音机权限被禁，需要提示用户打开应用的录音权限。
+            if(mTranslateEnable && error.getErrorCode() == 14002) {
+                showTip( error.getPlainDescription(true)+"\n请确认是否已开通翻译功能" );
+            } else {
+                showTip(error.getPlainDescription(true));
+            }
+        }
+
+        @Override
+        public void onEndOfSpeech() {
+            // 此回调表示：检测到了语音的尾端点，已经进入识别过程，不再接受语音输入
+            showTip("结束说话");
+        }
+
+        @Override
+        public void onResult(RecognizerResult results, boolean isLast) {
+            Log.d(tag, results.getResultString());
+            if( mTranslateEnable ){
+                //printTransResult( results );
+            }else{
+                printResult(results);
+            }
+
+            if (isLast) {
+                // TODO 最后的结果
+            }
+        }
+
+        @Override
+        public void onVolumeChanged(int volume, byte[] data) {
+            showTip("当前正在说话，音量大小：" + volume);
+            Log.d(tag, "返回音频数据："+data.length);
+        }
+
+        @Override
+        public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
+            // 以下代码用于获取与云端的会话id，当业务出错时将会话id提供给技术支持人员，可用于查询会话日志，定位出错原因
+            // 若使用本地能力，会话id为null
+            //	if (SpeechEvent.EVENT_SESSION_ID == eventType) {
+            //		String sid = obj.getString(SpeechEvent.KEY_EVENT_SESSION_ID);
+            //		Log.d(TAG, "session id =" + sid);
+            //	}
+        }
+    };
+//开始监听
+startReturnCode=speechRecognizer.startListening(mRecognizerListener);
+//停止监听
+speechRecognizer.stopListening();
+//取消监听
+speechRecognizer.cancel();
+
+四.语音合成
+//初始化语音合成对象
+speechSynthesizer=SpeechSynthesizer.createSynthesizer(this,initListener);
+//语音合成参数设置
+    private void setSythesnizerParam(){
+        // 清空参数
+        speechSynthesizer.setParameter(SpeechConstant.PARAMS, null);
+        // 根据合成引擎设置相应参数
+        if(mEngineType.equals(SpeechConstant.TYPE_CLOUD)) {
+            speechSynthesizer.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);
+            //onevent回调接口实时返回音频流数据
+            //mTts.setParameter(SpeechConstant.TTS_DATA_NOTIFY, "1");
+            // 设置在线合成发音人
+            speechSynthesizer.setParameter(SpeechConstant.VOICE_NAME, voicer);
+            //设置合成语速
+            speechSynthesizer.setParameter(SpeechConstant.SPEED, "50");
+            //设置合成音调
+            speechSynthesizer.setParameter(SpeechConstant.PITCH, "50");
+            //设置合成音量
+            speechSynthesizer.setParameter(SpeechConstant.VOLUME, "50");
+        }else {
+            speechSynthesizer.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_LOCAL);
+            // 设置本地合成发音人 voicer为空，默认通过语记界面指定发音人。
+            speechSynthesizer.setParameter(SpeechConstant.VOICE_NAME, "");
+            /**
+             * TODO 本地合成不设置语速、音调、音量，默认使用语记设置
+             * 开发者如需自定义参数，请参考在线合成参数设置
+             */
+        }
+        //设置播放器音频流类型
+        speechSynthesizer.setParameter(SpeechConstant.STREAM_TYPE, "3");
+        // 设置播放合成音频打断音乐播放，默认为true
+        speechSynthesizer.setParameter(SpeechConstant.KEY_REQUEST_FOCUS, "true");
+
+        // 设置音频保存路径，保存音频格式支持pcm、wav，设置路径为sd卡请注意WRITE_EXTERNAL_STORAGE权限
+        // 注：AUDIO_FORMAT参数语记需要更新版本才能生效
+        speechSynthesizer.setParameter(SpeechConstant.AUDIO_FORMAT, "pcm");
+        speechSynthesizer.setParameter(SpeechConstant.TTS_AUDIO_PATH, Environment.getExternalStorageDirectory()+"/msc/tts.pcm");
+    }
+//语音合成监听器
+    private SynthesizerListener synthesizerListener = new SynthesizerListener() {
+
+        @Override
+        public void onSpeakBegin() {
+            showTip("开始播放");
+        }
+
+        @Override
+        public void onSpeakPaused() {
+            showTip("暂停播放");
+        }
+
+        @Override
+        public void onSpeakResumed() {
+            showTip("继续播放");
+        }
+
+        @Override
+        public void onBufferProgress(int percent, int beginPos, int endPos,
+                                     String info) {
+            // 合成进度
+//            mPercentForBuffering = percent;
+//            showTip(String.format(getString(R.string.tts_toast_format),
+//                    mPercentForBuffering, mPercentForPlaying));
+        }
+
+        @Override
+        public void onSpeakProgress(int percent, int beginPos, int endPos) {
+            // 播放进度
+//            mPercentForPlaying = percent;
+//            showTip(String.format(getString(R.string.tts_toast_format),
+//                    mPercentForBuffering, mPercentForPlaying));
+//
+//            SpannableStringBuilder style=new SpannableStringBuilder(texts);
+//            if(!"henry".equals(voicer)||!"xiaoyan".equals(voicer)||
+//                    !"xiaoyu".equals(voicer)||!"catherine".equals(voicer))
+//                endPos++;
+//            Log.e(TAG,"beginPos = "+beginPos +"  endPos = "+endPos);
+//            style.setSpan(new BackgroundColorSpan(Color.RED),beginPos,endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            ((EditText) findViewById(R.id.tts_text)).setText(style);
+        }
+
+        @Override
+        public void onCompleted(SpeechError error) {
+            if (error == null) {
+                showTip("播放完成");
+            } else if (error != null) {
+                showTip(error.getPlainDescription(true));
+            }
+        }
+
+        @Override
+        public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
+            // 以下代码用于获取与云端的会话id，当业务出错时将会话id提供给技术支持人员，可用于查询会话日志，定位出错原因
+            // 若使用本地能力，会话id为null
+            Log.e(tag,"TTS Demo onEvent >>>"+eventType);
+            if (SpeechEvent.EVENT_SESSION_ID == eventType) {
+                String sid = obj.getString(SpeechEvent.KEY_EVENT_SESSION_ID);
+                Log.d(tag, "session id =" + sid);
+            }
+        }
+    };
+//开始读文字
+speechSynthesizer.startSpeaking(text,synthesizerListener);
+//停止读文字
+speechSynthesizer.stopSpeaking();
+
+
+

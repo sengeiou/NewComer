@@ -1,0 +1,470 @@
+day06学习笔记
+
+
+一.创建两个activity测试其生命周期变化
+1.在activity_main.xml中添加一个button
+    <!-- @+id/bt表示在xml中定义这个Button的id为bt, @id/bt表示引用这个id -->
+    <!--
+        layout_width/layout_height:当前元素的宽度/高度
+        wrap_content：恰好包含元素内容的大小；match_parent：与父元素一样大小
+    -->
+   <Button
+        android:id="@+id/bt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="press"  />
+
+2.创建activity_second.xml
+<!--LinearLayout：线性布局，控件摆放方式是线性的(水平或垂直)-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="活动2"/>
+
+</LinearLayout>
+
+3.创建SecondActivity类
+    /**
+     * 项目中任何添加的资源都会在R文件中生成一个资源id
+     * R文件的位置是/app/build/generated/source/r/debug/
+     * 点进去可以看到：这个类里定义了很多int常量(包括之前定义activity_second,activity_second,bt)
+     * @param savedInstanceState
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_second);
+        Log.v(msg, "onCreate");
+    }
+
+4.在MainActivity中注册button的监听
+MainActivity的onCreate()方法
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);//向用户界面填充activity_main.xml的布局内容
+        Log.v(msg, "onCreate"); //在Logcat中输出信息
+
+        Button bt=(Button)findViewById(R.id.bt); //根据id找到这个button
+        bt.setOnClickListener(new View.OnClickListener() {
+            @Override   //设置该按钮的点击监听器，重写其点击时动作（onclick方法）
+            public void onClick(View v) {
+                Intent intent=new Intent(); //显式intent
+                intent.setClass(MainActivity.this, SecondActivity.class); //设置跳转的Activity：目标活动-SecondActivity，上下文MainActivity.this（内部类中）
+                startActivity(intent); //传入intent,启动活动
+            }
+        });
+    }
+
+Intent:意图，可以指明当前组件想执行的动作，可以在不同组件中传递数据。
+
+5.在AndroidManifest.xml中注册活动
+        <activity android:name=".SecondActivity" android:label="活动2">
+        </activity>
+
+6.测试两个activity切换时的方法调用
+a.点击button
+07-02 10:42:16.560 5369-5369/com.example.hjc.hello2 V/MainActivity is :: onPause
+07-02 10:42:16.595 5369-5369/com.example.hjc.hello2 V/SecondActivity:: onCreate
+07-02 10:42:16.598 5369-5369/com.example.hjc.hello2 V/SecondActivity:: onStart
+07-02 10:42:16.603 5369-5369/com.example.hjc.hello2 V/SecondActivity:: onResume
+07-02 10:42:16.683 5369-5388/com.example.hjc.hello2 D/OpenGLRenderer: endAllActiveAnimators on 0x7f5efca800 (RippleDrawable) with handle 0x7f5eff6d40
+07-02 10:42:16.938 5369-5369/com.example.hjc.hello2 V/MainActivity is :: onStop
+
+b.从second返回main
+07-02 10:45:09.245 5369-5369/com.example.hjc.hello2 V/SecondActivity:: onPause
+07-02 10:45:09.256 5369-5369/com.example.hjc.hello2 V/MainActivity is :: onRestart
+07-02 10:45:09.257 5369-5369/com.example.hjc.hello2 V/MainActivity is :: onStart
+07-02 10:45:09.259 5369-5369/com.example.hjc.hello2 V/MainActivity is :: onResume
+07-02 10:45:09.605 5369-5369/com.example.hjc.hello2 V/SecondActivity:: onStop
+07-02 10:45:09.606 5369-5369/com.example.hjc.hello2 V/SecondActivity:: onDestroy
+
+c.直接在second界面，清理后台关闭时
+07-02 10:51:47.962 10306-10306/com.example.hjc.hello2 V/SecondActivity:: onPause
+07-02 10:51:48.017 10306-10306/com.example.hjc.hello2 V/SecondActivity:: onStop
+07-02 10:51:52.472 10306-10306/com.example.hjc.hello2 V/MainActivity is :: onDestroy
+这时只调用main的onDestroy方法
+
+
+二.Service组件
+1.简述
+  服务是一个后台运行的组件，执行长时间运行且不需要用户交互的任务。服务可由其他应用组件启动（如Activity），服务一旦被启动将在后台一直运行，即使启动服务的组件（Activity）已销毁也不受影响。 此外，组件可以绑定到服务，以与之进行交互，甚至是执行进程间通信 (IPC)。
+
+2.Service的状态
+a.启动状态(Started)
+  当应用组件（如 Activity）通过调用 startService() 启动服务时，服务即处于“启动”状态。一旦启动，服务即可在后台无限期运行，即使启动服务的组件已被销毁也不受影响，除非手动调用才能停止服务， 已启动的服务通常是执行单一操作，而且不会将结果返回给调用方。
+
+b.绑定状态(Bound)
+  当应用组件通过调用 bindService() 绑定到服务时，服务即处于“绑定”状态。绑定服务提供了一个客户端-服务器接口，允许组件与服务进行交互、发送请求、获取结果，甚至是利用进程间通信 (IPC) 跨进程执行这些操作。 仅当与另一个应用组件绑定时，绑定服务才会运行。 多个组件可以同时绑定到该服务，但全部取消绑定后，该服务即会被销毁。
+
+3.Service的生命周期
+a.以startService()启动时：从创建到销毁
+onCreate->onStartCommand->onDestroy
+
+b.以bindService()启动时：从创建到销毁
+onCreate->onBind->onUnbind->onDestroy
+将断绑的服务重新绑定：onRebind
+
+详情见service生命周期图
+
+4.测试以startService()启动
+a.创建MyService类extends Service，重写onStartCommand/onDestroy/onCreate方法
+    //服务创建时调用
+    @Override
+    public void onCreate() {
+        Log.v(msg,"onCreate");
+        super.onCreate();
+    }
+
+    /**
+     * 其他组件(如活动)通过调用startService()来请求启动服务时，系统调用该方法。
+     * 工作完成时通过stopSelf()或者stopService()方法来停止服务。
+     */
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.v(msg,"onStartCommand");
+        return START_STICKY;
+    }
+
+    //当服务不再有用或者被销毁时，系统调用该方法。
+    @Override
+    public void onDestroy() {
+        Log.v(msg,"onDestroy");
+        super.onDestroy();
+    }
+b.在布局文件中添加两个button
+    <Button
+        android:id="@+id/bt2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="开启服务"
+        android:onClick="startService"
+        app:layout_constraintLeft_toRightOf="@id/bt"/>
+
+    <Button
+        android:id="@+id/bt3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="停止服务"
+        android:onClick="stopService"
+        app:layout_constraintLeft_toRightOf="@id/bt2"/>
+c.在MainActivity中添加这两个button的onclick事件函数
+    public void startService(View view){
+        startService(new Intent(this,MyService.class));
+    }
+
+    public void stopService(View view) {
+        stopService(new Intent(this, MyService.class));
+        Log.v(msg,"stopService");
+    }
+d.在清单文件中注册这个service
+        <service
+            android:name=".MyService"></service>
+
+
+5.测试以bindService()启动
+a.MyService类中添加
+    class LoadBinder extends Binder{
+        public void startLoad(){
+            Log.d(msg,"loading file");
+        }
+    }
+    private LoadBinder loadBinder=new LoadBinder();
+    /**
+     *必须实现该方法。其他组件想要通过bindService()来绑定服务时，系统调用该方法。
+     *返回IBinder对象，提供一个接口，以便与服务通信。返回null,表示不绑定。
+     */
+    @Override
+    public IBinder onBind(Intent intent) {
+        // TODO: Return the communication channel to the service
+        Log.v(msg,"onBind");
+        return loadBinder;
+    }
+
+    /**
+     *通过unbindService()解除所有客户端绑定时调用
+     */
+    @Override
+    public boolean onUnbind(Intent intent) {
+        Log.v(msg,"onUnbind");
+        return super.onUnbind(intent);
+    }
+
+    //当新的客户端与服务连接，且此前它已经通过onUnbind(Intent)通知断开连接时，系统调用该方法。
+    @Override
+    public void onRebind(Intent intent) {
+        Log.v(msg,"onRebind");
+        super.onRebind(intent);
+    }
+
+b.MainActivity中添加
+    private MyService.LoadBinder loadBinder;
+    private ServiceConnection serviceConnection=new ServiceConnection(){
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            loadBinder=(MyService.LoadBinder)service;
+            loadBinder.startLoad();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+
+    //注册点击事件
+    public void onClick(View v){
+        switch (v.getId()){
+            //绑定服务
+            case R.id.bt4:
+                bindService(new Intent(this,MyService.class),serviceConnection,BIND_AUTO_CREATE);
+                break;
+            //解绑服务
+            case R.id.bt5:
+                unbindService(serviceConnection);
+                break;
+            default:
+                break;
+        }
+
+    }
+
+测试先绑定再解绑：
+07-02 15:42:16.173 2085-2085/com.example.hjc.hello2 V/MyService is: onCreate
+07-02 15:42:16.174 2085-2085/com.example.hjc.hello2 V/MyService is: onBind
+07-02 15:42:16.177 2085-2085/com.example.hjc.hello2 D/MyService is: loading file
+07-02 15:42:25.993 2085-2085/com.example.hjc.hello2 V/MyService is: onUnbind
+07-02 15:42:26.004 2085-2085/com.example.hjc.hello2 V/MyService is: onDestroy
+
+
+三.广播接收器(BroadCast Receiver)
+广播，也被称为全局事件，或系统事件。广播从理论上说，可以将一个动作传播给多个程序.
+
+1.广播的分类
+a.标准广播
+  标准广播（Normal broadcasts）是一种完全异步执行的广播，在广播发出之后，所有的广播接收器几乎都会在同一时刻接收到这条广播消息，因此它们之间没有任何先后顺序可言。这种广播的效率会比较高，但同时也意味着它是无法被截断的。
+
+b.有序广播
+  有序广播（Ordered broadcasts）则是一种同步执行的广播。在广播发出之后，同一时刻只会有一个广播接收器能够收到这条广播消息，当这个广播接收器中的逻辑执行完毕后，广播才会继续传递。所以此时的广播接收器是有先后顺序的，优先级高的广播接收器就可以先收到广播消息，并且前面的广播接收器还可以截断正在传递的广播
+
+2.接收系统广播
+a.创建MyReceiver类
+public class MyReceiver extends BroadcastReceiver {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        Toast.makeText(context,"network changed",Toast.LENGTH_SHORT).show();
+        Log.v("MyReceiver","is onReceive");
+    }
+}
+
+b.静态注册receiver
+  程序未启动时，也能接收广播。
+        <receiver android:name=".MyReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.AIRPLANE_MODE"></action>
+            </intent-filter>
+        </receiver>
+这时开关手机的飞行模式时，MyReceiver就能收到广播
+07-02 16:12:53.753 25376-25376/com.example.hjc.hello2 V/MyReceiver: is onReceive
+
+c.动态注册receiver
+  程序启动之后，才能接收广播。重写下SecondActivity中的onCreate/onDestroy方法
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_second);
+        intentFilter=new IntentFilter();
+        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE"); //手动创建一个IntentFilter
+        netChangeReceiver=new NetChangeReceiver();
+        registerReceiver(netChangeReceiver,intentFilter); //注册这个receiver
+        Log.v(msg, "onCreate");
+    }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(netChangeReceiver); //必须要取消注册
+        Log.v(msg, "onDestroy");
+    }
+这时开关手机的数据流量开关，改变网络状态就可收到广播
+07-02 16:42:40.969 10434-10434/com.example.hjc.hello2 V/NetChangeReceiver: is onReceive
+
+3.发送标准广播
+添加一个button:sc_bt,在onCreate方法中注册onClick事件
+        Button sc_bt=findViewById(R.id.sc_bt);
+        sc_bt.setOnClickListener(new View.OnClickListener() {
+            @Override  //发送一个com.example.hjc.hello.BroadCast的广播
+            public void onClick(View v) {
+                sendBroadcast(new Intent("com.example.hjc.hello.BroadCast"));
+            }
+        });
+
+在AndroidManifest.xml中添加一个接收的广播
+        <receiver android:name=".MyReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.AIRPLANE_MODE"></action>
+                <action android:name="com.example.hjc.hello.BroadCast"></action>
+            </intent-filter>
+        </receiver>
+
+4.发送有序广播
+把上面的sendBroadcast()方法，改成sendOrderedBroadCast(intent,null)方法。
+设置广播接收器的优先级：
+<intent-filter android:priority="100">
+      <action android:name="com.example.hjc.hello.BroadCast"></action>
+</intent-filter>
+数字越大，优先级越高，越早接到广播。
+截断广播：在MyReceiver的onReceive方法中加入abortBroadcast()方法。
+    public void onReceive(Context context, Intent intent) {
+        Toast.makeText(context,"changed",Toast.LENGTH_SHORT).show();
+        abortBroadcast();
+        Log.v("MyReceiver","is onReceive");
+    }
+
+5.发送本地广播
+  由于之前的广播都是全局的，所有应用程序都可以接收到，这样就很容易会引起安全性的问题。只能够在应用程序的内部进行传递，并且广播接收器也只能接收来自应用程序发出的广播。
+
+在SecondActivity中onCreate方法中添加：
+        //本地广播
+        localBroadcastManager=LocalBroadcastManager.getInstance(this);
+        localIntentFilter=new IntentFilter();
+        localIntentFilter.addAction("com.example.hjc.hello.LocalBroadCast");
+        localReceiver=new LocalReceiver();
+        localBroadcastManager.registerReceiver(localReceiver,localIntentFilter); //本地监听器
+        Button sc_bt2=findViewById(R.id.sc_bt2);
+        sc_bt2.setOnClickListener(new View.OnClickListener() {
+            @Override //发送本地广播
+            public void onClick(View v) {
+                localBroadcastManager.sendBroadcast(new Intent("com.example.hjc.hello.LocalBroadCast"));
+            }
+        });
+在onDestroy方法中添加：
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(netChangeReceiver); //必须要取消注册
+        localBroadcastManager.unregisterReceiver(localReceiver); //取消注册本地监听
+        Log.v(msg, "onDestroy");
+    }
+
+注：本地广播无法使用静态注册接收。
+
+
+四.内容提供者Content Provider
+   内容提供者主要用于不同应用程序之间实现数据共享的功能。内容提供者组件通过请求从一个应用程序向其他的应用程序提供数据。这些请求由类 ContentResolver 的方法来处理。内容提供者可以使用不同的方式来存储数据。数据可以被存放在数据库，文件，甚至是网络。
+
+需要继承ContentProvider类，并实现全部6个抽象方法
+主要方法：
+    /**
+     * 创建时调用，返回true代表初始化成功，false代表失败
+     * @return
+     */
+    @Override
+    public boolean onCreate() {
+        return false;
+    }
+    
+    /**
+     * Uri uri=Uri.parse("content://com.example.hjc/emp");Uri的形式
+     * 查询函数 query(uri,new String[]{"ename"},"salary>?","5000","salary")
+     * 等同 select ename from emp where salary>500 order by salary
+     * @param uri 确定查哪张表
+     * @param projection 确定查哪几列
+     * @param selection 约束的参数
+     * @param selectionArgs 约束的参数值
+     * @param sortOrder 排序的参数
+     * @return
+     */
+    @Nullable
+    @Override
+    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+        return null;
+    }
+
+    /**
+     * @param uri
+     * @return 返回一个MIME类型的字符串
+     */
+    @Nullable
+    @Override
+    public String getType(@NonNull Uri uri) {
+        return null;
+    }
+
+    /**
+     * @param uri 哪张表
+     * @param values 需要插入的数据的包装对象
+     * @return
+     */
+    @Nullable
+    @Override
+    public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
+        return null;
+    }
+
+    /**
+     * @param uri 哪张表
+     * @param selection 删除的约束参数
+     * @param selectionArgs 删除的约束参数的值
+     * @return
+     */
+    @Override
+    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+        return 0;
+    }
+
+    /**
+     * @param uri 哪张表
+     * @param values 需要更新的数据的包装对象
+     * @param selection 更新的约束参数
+     * @param selectionArgs 更新的约束参数值
+     * @return
+     */
+    @Override
+    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
+        return 0;
+    }
+
+
+五.LogCat
+Log.v() Log.d() Log.i() Log.w() 以及 Log.e() 。根据首字母对应VERBOSE，DEBUG,INFO, WARN，ERROR。
+
+1.Log.v 的调试颜色为黑色的，任何消息都会输出，这里的v代表verbose啰嗦的意思，
+2.Log.d的输出颜色是蓝色的，仅输出debug调试的意思，但他会输出上层的信息，过滤起来可以通过DDMS的Logcat标签来选择.
+3.Log.i的输出为绿色，一般提示性的消息information，它不会输出Log.v和Log.d的信息，但会显示i、w和e的信息
+4.Log.w的意思为橙色，可以看作为warning警告，一般需要我们注意优化Android代码，同时选择它后还会输出Log.e的信息。
+5.Log.e为红色，可以想到error错误，这里仅显示红色的错误信息，这些错误就需要我们认真的分析，查看栈的信息了。
+
+注意：不同的打印方法在使用时都是某个方法带上(String tag, String msg)参数，tag表示的是打印信息的标签，msg表示的是需要打印的信息。
+
+颜色可以在file-setting-editor-color&fonts-Logcat中修改
+
+
+六.adb常用命令
+adb devices:显示当前运行的全部设备
+语法：adb [-d|-e|-s <serialNumber>] <command>
+参数：
+-d 	指定当前唯一通过 USB 连接的 Android 设备为命令目标
+-e 	指定当前唯一运行的模拟器为命令目标
+-s <serialNumber> 	指定相应 serialNumber 号的设备/模拟器为命令目标
+例.adb -s 8b88e58 shell pm list packages -s 查看8b88e58的系统软件包
+
+
+
+明天再看
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

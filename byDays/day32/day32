@@ -1,0 +1,63 @@
+day32学习笔记
+
+一.飞行模式重看
+从长按power键，跳出的dialog中飞行模式看起
+飞行模式的控件：mAirplaneModeOn=new ToggleAction(图标(开),图标(关),控件信息,信息(开),信息(关));
+  在new ToggleAction的重写的onToggle方法中：
+首先判断是否处于ECM模式(Emergency Callback Mode紧急回拨模式),若处于则跳出ECM退出对话框;
+若不处于ECM模式，则调用changeAirplaneModeSystemSetting(on); 改变飞行模式设置
+
+    private void changeAirplaneModeSystemSetting(boolean on) {
+        TelephonyManager.setRadioBusy(mContext, true);
+        // SPRD: for airplanemode optimization
+		//在setting.Global中设置AIRPLANE_MODE_ON属性：1-开，0-关
+        Settings.Global.putInt(
+                mContext.getContentResolver(),
+                Settings.Global.AIRPLANE_MODE_ON,
+                on ? 1 : 0);
+        Intent intent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+        intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
+        intent.putExtra("state", on);
+		//发送一个飞行模式改变的广播
+        mContext.sendBroadcastAsUser(intent, UserHandle.ALL);
+        if (!mHasTelephony) {
+            mAirplaneState = on ? ToggleAction.State.On : ToggleAction.State.Off;
+        }
+    }
+
+上面方法第一句TelephonyManager.setRadioBusy(mContext, true);抓下radioLog,应该是设置飞行模式时先设置radio状态为busy=ture,修改飞行模式设置，再设回false
+08-03 13:38:06.299 D/TelephonyManager(  792): setRadioBusy true
+08-03 13:38:06.609 D/TelephonyManager(  792): getSettingDefaultSim:phoneIdKey sim_card_favorite_voicephoneId:-1
+08-03 13:38:06.609 D/TelephonyManager(  792): getSettingDefaultSim:phoneIdKey sim_card_favorite_videophoneId:0
+08-03 13:38:06.609 D/TelephonyManager(  792): getSettingDefaultSim:phoneIdKey sim_card_favorite_mmsphoneId:-1
+08-03 13:38:06.609 D/TelephonyManager(  792): setDefaultSim:phoneIdKey multi_sim_voice_call phoneId -1
+08-03 13:38:06.609 D/TelephonyManager(  792): setDefaultSim:phoneIdKey multi_sim_video_call phoneId 0
+08-03 13:38:06.609 D/TelephonyManager(  792): setDefaultSim:phoneIdKey multi_sim_mms phoneId -1
+08-03 13:38:06.709 D/TelephonyManager(  792): setRadioBusy false
+	
+这个飞行模式的广播ACTION_AIRPLANE_MODE_CHANGED将被所有用户接收，例如FMplayService
+中接收到该广播后，onCreate时发现处于飞行模式时将会停止FM服务
+		else if (action.equals(Intent.ACTION_AIRPLANE_MODE_CHANGED)) {
+                if (intent.hasExtra("state")) {
+                    boolean enable = intent.getBooleanExtra("state", false);
+                    if (DEBUG) Log.d(LOGTAG, "airplane mode enable " + enable);
+                    if (enable) {
+                            mNeedShutdown = true;
+                            Toast airplaneInfo = Toast.makeText(context, getResources().getString(R.string.airplane_info),Toast.LENGTH_LONG);
+                            airplaneInfo.show();
+                            if(!mBinded){
+                                fmOff();
+                            }
+							
+二.MMItest
+1.BluetoothTestActivity 蓝牙测试
+获取蓝牙适配器对象：mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+蓝牙设备发现广播接收器：private BluetoothDiscoveryReceiver btDiscoveryReceiver;
+蓝牙适配器状态广播接收器：private BlueToothStateReceiver btStateReceiver;
+
+
+
+
+
+
+

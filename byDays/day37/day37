@@ -1,0 +1,44 @@
+day37
+
+一.完成平台移植任务
+1.修改完成的(参考其他人以前改的)
+Patch查询指令
+默认年份修改（平台默认2018年1月1号）
+默认字体大小
+设置-休眠-添加永不
+开发者选项默认关闭，平台已经默认关闭，宏控打开
+usb调试默认关闭
+
+2.默认ok的
+音量键拍照，如果默认ok
+相机添加存储位置选项
+其他没有sim卡，还需要确认
+
+
+
+3.白天没有手机，看下挂断的流程
+InCallFragment中onClick方法
+  public void onClick(View view) {
+    if (view == endCallButton) {
+      LogUtil.i("InCallFragment.onClick", "end call button clicked");
+      inCallScreenDelegate.onEndCallClicked();
+再到CallCardPresenter类中onEndCallClicked方法
+  public void onEndCallClicked() {
+    LogUtil.i("CallCardPresenter.onEndCallClicked", "disconnecting call: " + mPrimary);
+    if (mPrimary != null) {
+      mPrimary.disconnect();
+    }
+再在DialerCall类disconnect方法
+  public void disconnect() {
+    LogUtil.i("DialerCall.disconnect", "");
+    setState(DialerCall.State.DISCONNECTING);
+    for (DialerCallListener listener : mListeners) {
+      listener.onDialerCallUpdate();
+    }
+    mTelecomCall.disconnect();
+  }
+  
+电话录音类PhoneRecorderHelper 停止录音：stop()方法
+mRecorderHelper = PhoneRecorderHelper.getInstance(getApplicationContext());获取电话录音对象
+
+

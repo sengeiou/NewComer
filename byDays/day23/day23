@@ -1,0 +1,196 @@
+day23学习笔记
+
+一.宏
+1.BIRD_PLAY_MUSIC_SCREENOFF 关屏时继续放音乐
+  在AudioPreview中广播接收器BroadcastReceiver mHomeKeyEventReceive的onReceive方法中修改接收到Intent.ACTION_SCREEN_OFF的情况
+  当开启宏时，不关闭音乐。
+            } else if (!BirdFeatureOption.BIRD_PLAY_MUSIC_SCREENOFF&&action.equals(Intent.ACTION_SCREEN_OFF)) {//BIRD:modify by wucheng 20170429
+                stopPlayback();
+                finish();
+			}
+			
+2.BIRD_DEFAULT_TIMEZONE 默认时区
+在ServiceStateTracker类中setAndBroadcastNetworkSetTimeZone方法：该方法用于通过网络获取设置时区信息
+        //bird:WangBiyao for BIRD_DEFAULT_TIMEZONE 20170426 begin
+        // Determine if the Icc card exists
+        boolean iccCardExist = false;
+        boolean defTimeZone = !SystemProperties.get("persist.sys.timezone", "").equals("");
+        if (mUiccApplcation != null) {
+            iccCardExist = mUiccApplcation.getState() != AppState.APPSTATE_UNKNOWN;
+        }
+		//只有当defTimeZone自定义存在且sim卡不存在时，不通过该方法设置时区
+        if (defTimeZone && !iccCardExist) {
+            return;
+        }
+设置的时区属性：protected static final String TIMEZONE_PROPERTY = "persist.sys.timezone";
+BIRD_DEFAULT_TIMEZONE = America/Chicago
+
+3.BIRD_DEFAULT_TIME_FORMATE 修改默认时间格式(12/24小时)
+在DatabaseHelper类中loadSystemSettings方法中修改
+loadSetting(stmt, Settings.System.TIME_12_24,SystemProperties.get("ro.bdfun.default_time_format","12"));
+默认是12小时制。
+
+4.BIRD_DEFAULT_DATE_FORMAT 默认日期格式
+修改了几处
+1)date & time 设置页面 ：DateTimeSettings类
+2)时钟界面：Utils中updateDate方法
+# 0 --
+# 1 -- MM-dd-yyyy
+# 2 -- dd-MM-yyyy
+# 3 -- yyyy-MM-dd
+# 4 -- EE-MMM-d-yyyy
+# 5 -- EE-d-MMM-yyyy
+# 6 -- yyyy-MMM-d-EE
+
+5.BIRD_DEFAULT_FONT_SIZE 默认字体大小
+还是在在DatabaseHelper类中loadSystemSettings方法中修改
+            //bird:WangBiyao for BIRD_DEFAULT_FONT_SIZE 20170415 begin
+            if (SystemProperties.getInt("ro.bdfun.default_font_size",0) != 0)
+            loadSetting(stmt, Settings.System.FONT_SCALE, getDefaultFontSize());
+# 0 --
+# 1 -- Small
+# 2 -- Default
+# 3 -- Large
+# 4 -- Largest
+
+6.BIRD_DEFAULT_INPUT_METHOD 设置默认输入法
+直接把需要默认启动的输入法的类 填进去，格式 com.android.inputmethod.latin/.LatinIME
+			String defIME= SystemProperties.get("ro.bdfun.def_ime","");
+			android.util.Log.e("wcc","defIME:"+ defIME);
+            if(!TextUtils.isEmpty(defIME)){
+        		loadSetting(stmt,Settings.Secure.DEFAULT_INPUT_METHOD, defIME);
+        		loadSetting(stmt,Settings.Secure.ENABLED_INPUT_METHODS, defIME+":com.android.inputmethod.latin/.LatinIME");
+            } else
+			//bird:WangBiyao for BIRD_DEFAULT_INPUT_METHOD 20170410 end
+            if(isSupportCMCC){
+                loadStringSetting(stmt, Settings.Secure.DEFAULT_INPUT_METHOD,
+                        R.string.config_default_input_method);
+                loadStringSetting(stmt, Settings.Secure.ENABLED_INPUT_METHODS,
+                        R.string.config_enabled_input_method);
+            }
+			
+			
+7.BIRD_DEFAULT_PICTURE_SIZE_BACK/BIRD_DEFAULT_PICTURE_SIZE_FRONT 前后默认照片大小
+需要给定的大小与entryValues数组中存在一致，格式是 宽度x长度
+        //bird:WangBiyao for default picture size 20170417 begin
+        String defaultValue = null;
+        String pictureSizeBack = SystemProperties.get("ro.bdfun.def_picture_size_back", "");
+        String pictureSizeFront = SystemProperties.get("ro.bdfun.def_picture_size_front", "");
+        //bird:WangBiyao for default picture size 20170417 end
+        for (int i = 0; i < selectedSizes.size(); i++) {
+            Size size = selectedSizes.get(i);
+            entries[i] = getSizeSummaryString(size);
+            entryValues[i] = SettingsUtil.sizeToSettingString(size);
+            //bird:WangBiyao for default picture size 20170417 begin
+            if (((key.equals(Keys.KEY_PICTURE_SIZE_BACK) && entryValues[i].equals(pictureSizeBack)) 
+                    || (key.equals(Keys.KEY_PICTURE_SIZE_FRONT) && entryValues[i].equals(pictureSizeFront))) 
+                    && defaultValue == null) {
+                defaultValue = entryValues[i];
+                android.util.Log.i("wang","defaultValue==="+defaultValue);
+            }
+            //bird:WangBiyao for default picture size 20170417 end
+        }
+测试出来不是想得这样，明天再看
+
+8.BIRD_FAKE_FOCUS 对焦动画
+在PhotoModule类中，长按快门时onShutterButtonLongPressed，启动中心对焦，发一个消息SHOW_FOCUS_START_UI，开始动画效果。完成后，
+发SHOW_FOCUS_SUCCESS_UI消息，展示完成动画。
+            case SHOW_FOCUS_START_UI: {
+                if(!mFocusAreaSupported) {
+                    TextureView textureView =
+                            (TextureView) mActivity.findViewById(R.id.preview_content);
+                    Animation startAnimation = new ScaleAnimation(START_MULTIPLE, END_MULTIPLE, START_MULTIPLE, END_MULTIPLE,
+                            Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                    startAnimation.setDuration(FOCUS_START_ANIMATION_TIME);
+
+                    if (mUI != null) mFocusManager.focusStarted();
+                    textureView.startAnimation(startAnimation);
+                    mHandler.sendEmptyMessageDelayed(SHOW_FOCUS_SUCCESS_UI, FOCUS_START_ANIMATION_TIME);
+                }
+                break;
+            }
+			
+9.BIRD_ADB_DEFAULT_OFF adb调试默认关闭
+只有第一次开机默认设置关闭
+        //BIRD:add by wangye 20170421 begin
+        if (SystemProperties.getBoolean("ro.bdfun.adb_def_off", false)) {
+            boolean isFirst = Settings.Global.getInt(getActivity().getContentResolver(),"bird_adb_enabled", 0) == 0;
+            if (isFirst) {
+                Settings.Global.putInt(getActivity().getContentResolver(),
+                            Settings.Global.ADB_ENABLED, 0);
+                Settings.Global.putInt(getActivity().getContentResolver(),"bird_adb_enabled", 1);
+            }
+        }
+		
+10.BIRD_DEV_DEFAULT_OFF 默认开发者模式关闭
+//只有存在这个设置选项且上次mLastEnabledStat为false，才会启动这个宏
+        if (mHaveDebugSettings && !mLastEnabledState) {
+            // Overall debugging is disabled, but there are some debug
+            // settings that are enabled.  This is an invalid state.  Switch
+            // to debug settings being enabled, so the user knows there is
+            // stuff enabled and can turn it all off if they want.
+            Settings.Global.putInt(getActivity().getContentResolver(),
+                    Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 1);
+            //BIRD:add by wangye 20170424 begin
+            if (SystemProperties.getBoolean("ro.bdfun.dev_def_off", false)) {
+                mLastEnabledState = false;
+            }else{
+                mLastEnabledState = true;
+            }
+            //BIRD:add by wangye 20170424 end
+            mSwitchBar.setChecked(mLastEnabledState);
+            setPrefsEnabledState(mLastEnabledState);
+        }
+		
+11.BIRD_MUSIC_SHARE 添加share选项
+MediaPlaybackActivity中onCreateOptionsMenu方法中添加share菜单选项
+			if(BirdFeatureOption.BIRD_MUSIC_SHARE){
+            	menu.add(0,SHARE,0,R.string.share_menu);
+			}
+TrackBrowserActivity中onCreateOptionsMenu方法同样添加
+在onOptionsItemSelected方法中，添加分享的功能
+                case SHARE:
+                    if(mService != null){
+                        MusicUtils.share(this,mService.getAudioId());
+                    }
+                    return true;
+
+					
+12.BIRD_MUSCI_NOTIFICATION_CANCEL 状态栏添加一个cancel按键
+在MediaPlaybackService中updateNotificationAsync方法 
+        if(BIRD_MUSCI_NOTIFICATION_CANCEL){
+            mStatusBarViews = new RemoteViews(getPackageName(), R.layout.bird_statusbar);
+        }else {//BIRD:add by wangye 20170414 end
+            mStatusBarViews = new RemoteViews(getPackageName(), R.layout.statusbar);
+        }
+  bird_statusbar.xml比原来多个cancel button
+再设置一下点击事件
+        PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(CANCEL_ACTION), 0);
+        if(BIRD_MUSCI_NOTIFICATION_CANCEL){
+            mStatusBarViews.setOnClickPendingIntent(R.id.cancel_btn, cancelPendingIntent);
+        }
+
+		
+
+
+
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			

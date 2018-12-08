@@ -1,0 +1,16 @@
+ro.sys.usb.charging.only
+
+	   //bird:zhangshanshan for BIRD_DEFAULT_DATE_FORMAT 20171019 begin
+		String dateFormat2 = DateFormat.getDateFormatString2(getContext());  
+		if(!android.os.SystemProperties.get("ro.cust.default.date.format","").equals("")){   
+		  mDateView.setDatePattern(dateFormat2);     	
+	//		mDateView.setFormat24Hour(dateFormat2);
+        //	mDateView.setFormat12Hour(dateFormat2);
+		}else
+		{
+        mDateView.setDatePattern(Patterns.dateViewSkel);
+		}
+        //bird:zhangshanshan for BIRD_DEFAULT_DATE_FORMAT 20171019 end
+
+
+ro.setupwizard.mode=DISABLED

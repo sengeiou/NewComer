@@ -1,0 +1,306 @@
+day34学习笔记
+
+一.MMITest
+1.BluetoothTestActivity 蓝牙测试
+蓝牙设备发现广播接收器：private BluetoothDiscoveryReceiver btDiscoveryReceiver;
+蓝牙适配器状态广播接收器：private BlueToothStateReceiver btStateReceiver;
+
+BluetoothAdapter类的一些方法
+BluetoothAdapter.getDefaultAdapter()，获取蓝牙适配器对象
+public String getAddress()，获取本地蓝牙适配器的mac地址 (例如：00:11:22:AA:BB:CC)
+public int getState()，获取本地蓝牙适配器的状态
+public boolean enable(),打开蓝牙适配器，返回true，则打开成功;返回false，则不成功(例如处于飞行模式时)
+public boolean disable(boolean persist)，关闭蓝牙适配器
+public boolean startDiscovery(),开始扫描远程蓝牙设备
+public boolean cancelDiscovery(),取消扫描
+
+BluetoothAdapter的状态：打开时STATE_OFF--STATE_TURNING_ON--STATE_ON;关闭时STATE_ON--STATE_TURNING_OFF--STATE_OFF
+STATE_OFF：蓝牙关闭状态
+STATE_TURNING_ON：蓝牙正在打开状态
+STATE_ON：蓝牙打开状态，可以调用
+STATE_TURNING_OFF：蓝牙正在关闭状态
+
+BluetoothAdapter广播相关：
+ACTION_STATE_CHANGED：蓝牙状态改变
+ACTION_DISCOVERY_STARTED：扫描开始
+ACTION_DISCOVERY_FINISHED：扫描结束
+ACTION_SCAN_MODE_CHANGED：扫描模式改变SCAN_MODE
+
+扫描状态：
+SCAN_MODE_NONE：不能扫描及被扫描
+SCAN_MODE_CONNECTABLE：可以扫描，但不能被扫描到
+SCAN_MODE_CONNECTABLE_DISCOVERABLE：可以扫描，也可以被发现
+
+BluetoothDevice中相关属性
+BluetoothDevice.ACTION_FOUND: 远程设备已发现(intent-action).
+BluetoothDevice.BOND_BONDED:绑定状态-该设备已绑定(配对).
+BluetoothDevice.EXTRA_DEVICE：用于获取存放于intent中ParcelableExtra域中的远程BluetoothDevice信息的key值
+6.0以后的如果需要利用本机查找周围的wifi和蓝牙设备，需要在配置文件中申请两个权限：
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+蓝牙适配器状态广播接收器：
+    private class BlueToothStateReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.w(TAG, "BlueToothStateReceiver");
+            int newState = mBluetoothAdapter.getState();
+            switch (newState) {
+				//蓝牙为打开状态时，开始扫描
+                case BluetoothAdapter.STATE_ON:
+                    //设置扫描模式为SCAN_MODE_CONNECTABLE_DISCOVERABLE
+					btPageScan();
+					//开始扫描远程蓝牙设备
+                    btStartDiscovery();
+                    break;
+                case BluetoothAdapter.STATE_TURNING_OFF:
+                    break;
+					//当为关闭状态时(刚进入时)，打开蓝牙适配器
+                case BluetoothAdapter.STATE_OFF:
+                    mBluetoothAdapter.enable();
+                    break;
+                case BluetoothAdapter.STATE_TURNING_ON:
+                    break;
+                default:
+                    // do nothing
+            }
+			//在BluetoothTestActivity中重写了btStateChange方法，主要是根据蓝牙状态改变UI文字显示
+            btStateChange(newState);
+        }
+		
+蓝牙适配器状态广播接收器：
+    private class BluetoothDiscoveryReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+			//当接收到设备已发现的广播时
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                Log.v(TAG, "found bluetooth device");
+				//获取远程设备蓝牙信息的包装对象BluetoothDevice
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                if (device != null) {
+				//若该远程设备的绑定状态是未绑定时？，
+                    if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
+					//添加这个device到DeviceList中，并在ui显示设备名
+                        btDeviceListAdd(device);
+                    }
+                } else {
+                    Log.w(TAG, "not find any device");
+                }
+				//扫描结束时，
+            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                Log.v(TAG, "=============discovery finished !");
+				//toast展示蓝牙扫描的结果，存储结果
+                btDiscoveryFinished();
+            }
+        }
+    }
+	
+	
+2.WifiTestActivity WiFi测试
+WifiManager：wifi管理类
+获取WifiManager对象：通过Context.getSystemService(WifiManager.class)或者Context.getSystemService(Context.WIFI_SERVICE)获取
+public int getWifiState()，获取wifi状态
+public boolean setWifiEnabled(boolean enabled)，开启或关闭wifi
+public boolean startScan()，启动wifi扫描，需要Manifest.permission.CHANGE_WIFI_STATE 权限
+public WifiInfo getConnectionInfo(),获取当前wifi连接的信息包装对象
+public List<ScanResult> getScanResults(),获取扫描结果的列表
+
+WiFi的状态：
+WIFI_STATE_DISABLED：wifi已关闭
+WIFI_STATE_DISABLING：wifi关闭中
+WIFI_STATE_ENABLING：wifi开启中
+WIFI_STATE_ENABLED：wifi已开启
+WIFI_STATE_UNKNOWN：wifi状态未知(当开启或关闭中出现error时)
+
+wifi的广播：
+WIFI_STATE_CHANGED_ACTION：wifi状态改变的广播
+SCAN_RESULTS_AVAILABLE_ACTION：扫描结果已可用(收到该广播后可去获取扫描结果)
+
+wifi状态改变广播接收器：
+    private class WifiStateChangeReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int newState = mWifiManager.getWifiState(); 	//获取wifi状态
+            Log.d(TAG, "" + newState);
+            switch (newState) {
+			//wifi开启时，等5秒后，扫描wifi列表
+                case WifiManager.WIFI_STATE_ENABLED:
+                    wifiStartDiscovery();
+                    break;
+                case WifiManager.WIFI_STATE_DISABLED:
+                case WifiManager.WIFI_STATE_DISABLING:
+                case WifiManager.WIFI_STATE_UNKNOWN:
+                case WifiManager.WIFI_STATE_ENABLING:
+                default:
+                    // do nothing
+                    break;
+            }
+			//根据wifi状态修改ui中文字变化
+            wifiStateChange(newState);
+        }
+
+wifi扫描广播接收器：	
+    private class WifiScanReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+			//当收到SCAN_RESULTS_AVAILABLE_ACTION这个广播，就可以获取扫描结果的列表
+            if (action.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
+                List<ScanResult> wifiScanResultList = mWifiManager.getScanResults();
+                if (wifiScanResultList != null
+                        && wifiScanResultList.size() != mLastCount) {
+						//遍历扫描结果列表，改变ui中列表显示
+                    wifiDeviceListChange(wifiScanResultList);
+                    mLastCount = wifiScanResultList.size();
+                }
+            }
+        }
+    }
+    
+三.GpsTestActivity GPS测试
+LocationManager位置管理器类：该类提供对系统位置服务的访问
+获取LocationManager对象:(LocationManager) getSystemService(Context.LOCATION_SERVICE);
+public GpsStatus getGpsStatus(GpsStatus status)，获取当前GPS引擎状态(应只在GpsStatus.onGpsStatusChanged中调用)
+public void requestLocationUpdates (String provider, long minTime, float minDistance, LocationListener listener)方法：
+以指定的provider注册位置更新listener监听器，minTime-位置更新的最小间隔1s,minDistance-位置更新的最小距离0
+
+位置服务Provider：
+LocationManager.GPS_PROVIDER:由GPS提供位置服务
+LocationManager.NETWORK_PROVIDER：由网络提供位置服务
+LocationManager.PASSIVE_PROVIDER：被动位置服务，返回由其他提供程序生成的位置
+
+位置服务状态：
+LocationProvider.AVAILABLE：服务可用
+LocationProvider.OUT_OF_SERVICE：无服务
+LocationProvider.EMPORARILY_UNAVAILABLE：暂时不可用
+
+位置监听器：
+        locationListener = new LocationListener() {
+		//位置发生变化时调用
+            public void onLocationChanged(Location location) {
+            }
+			//当位置服务禁用时调用，ui上显示已禁用信息
+            public void onProviderDisabled(String provider) {
+                showGpsMsg();
+            }
+			//当位置服务可用时调用，ui上什么都不显示
+            public void onProviderEnabled(String provider) {
+                showGpsMsg();
+            }
+			//当位置服务状态发生变化时调用
+            public void onStatusChanged(String provider, int status,
+                    Bundle extras) {
+            }
+        };
+		
+GpsStatus.GPS事件：
+GPS_EVENT_STARTED：GPS服务启动事件
+GPS_EVENT_STOPPED：GPS服务停止事件
+GPS_EVENT_FIRST_FIX：第一次定位事件
+GPS_EVENT_SATELLITE_STATUS:定期发送的卫星状态事件
+
+GpsStatus中方法
+public Iterable<GpsSatellite> getSatellites(),获取代表当前GpsStatus的卫星数组
+
+GpsSatellite中方法
+public int getPrn(),获取卫星的编号(伪随机数)
+public float getSnr(),该卫星信号信噪比(越高越好)
+
+Settings.Secure.setLocationProviderEnabled(ContentResolver cr,String provider, boolean enabled),设置provider为enable；
+这里就把GPS设为enable，Settings.Secure.setLocationProviderEnabled(getContentResolver(),LocationManager.GPS_PROVIDER, true);
+
+GPS状态监听器：
+        gpsStatusListener = new GpsStatus.Listener() {
+		//当卫星状态改变时
+            public void onGpsStatusChanged(int event) {
+                Log.d(TAG, " " + event);
+                if (event == GpsStatus.GPS_EVENT_SATELLITE_STATUS) {
+				//展示当前卫星状态列表
+                    showSatelliteCount();
+                }
+            }
+        };
+
+showSatelliteCount方法
+    private void showSatelliteCount() {
+        int count = 0;
+        boolean flag = false;
+        if (manager != null) {
+		//获取当前GpsStatus
+            GpsStatus status = manager.getGpsStatus(null);
+            Iterator<GpsSatellite> iterator = status.getSatellites().iterator(); //获取当前卫星列表的迭代器
+            // get satellite count
+            mSatelliteInfo.setText("\n\n");
+            while (iterator.hasNext()) {
+                Log.d(TAG, "has next");
+                count++;
+                GpsSatellite gpsSatellite = iterator.next(); //遍历取得pnr和snr两个属性
+                float snr = gpsSatellite.getSnr();
+                Log.d(TAG, "snr = "+snr);
+                if (snr > 35.0)
+                    flag = true;
+			... //卫星状态展示在UI上
+			
+			//检测到卫星数量>=4，且flag=true(存在snr>35),即通过
+		    if (count >= SATELLITE_COUNT_MIN && flag) {
+                Toast.makeText(GpsTestActivity.this, R.string.text_pass,
+                        Toast.LENGTH_SHORT).show();
+                storeRusult(true);
+                finish();
+            }
+		
+//在onStop中重置		
+    public void onStop() {
+        Settings.Secure.setLocationProviderEnabled(getContentResolver(),
+        LocationManager.GPS_PROVIDER, false);
+        if (gpsStatusListener != null) {
+			//移除GpsStatus监听
+            manager.removeGpsStatusListener(gpsStatusListener);
+        }
+        if (locationListener != null) {
+		//移除位置监听
+            manager.removeUpdates(locationListener);
+        }
+        super.onStop();
+    }
+
+	
+四.SIMCardTestActivity sim卡测试
+SubscriptionManager：SIM卡管理类
+int mSubId = SubscriptionManager.getSubId(simId)[0]; 获取subid
+
+subid：值从1开始，机器每插入一个新卡，值就会加1。(换位置，拔了重插不会增加)。
+slotId/phoneId：卡槽编号，0或1
+
+TelephonyManager:电话信息管理类
+获取TelephonyManager对象：TelephonyManager.from(SIMCardTestActivity.this); 实际也是通过getSystemService(Context.TELEPHONY_SERVICE)
+public int getPhoneCount(),返回可用的电话数sim卡位（0：没有sim卡位；1：1个；2：2个；与有无放卡无关）
+
+public int getSimState(int slotIdx)，获取对应slotIdx卡位上sim卡状态  SIM_STATE_READY-可用，SIM_STATE_ABSENT-不可用
+public String getSimCountryIsoForPhone(int phoneId)，返回对应sim卡的国家代码
+public String getSimOperatorNumericForPhone(int phoneId),返回操作码(以MCC+MNC生成的5-6位数字)
+public String getSimOperatorNameForPhone(int phoneId)，返回服务的提供商名字
+public String getSimSerialNumber(int subId)，返回sim卡的序列号
+public String getSubscriberId(int subId)，返回sim卡的id(the IMSI for a GSM phone)
+public String getDeviceId(int slotId)，返回设备的id(the IMEI for GSM)
+public String getLine1Number(int subId),返回电话号码
+public static int getPhoneType(int networkMode),返回手机模式GSM/CDMA/SIP
+public int getDataState()，返回当前数据连接状态
+public int getDataActivity(),返回当前使用电话数据活动状态() DATA_ACTIVITY_INOUT-数据交互 DATA_ACTIVITY_IN-数据流入...
+
+
+ 
+
+
+
+
+
+
+		
+
+		
+
+    
+
+

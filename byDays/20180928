@@ -1,0 +1,127 @@
+./vendor/sprd/release/PAC_Resource/CP2/pike2_cm4_builddir/PM_pike2_cm4.bin
+
+
+
+Android:/ # iwnpi wlan0 get_reg mac 0x100
+ret: status 0 :end
+reg values is :0x00007222	
+Android:/ # iwnpi wlan0 get_reg mac 0x108
+ret: status 0 :end
+reg values is :0x00000032	
+Android:/ # iwnpi wlan0 get_reg mac 0x114
+ret: status 0 :end
+reg values is :0x3E800000	
+
+
+
+
+vendor/build.prop:
+ro.vendor.build.fingerprint=Android/Android/Android:8.1.0/OPM2.171019.012/39510:user/release-keys
+
+MakeFile
+BUILD_FINGERPRINT := $(BIRD_PRODUCT_BRAND)/$(BIRD_PRODUCT_NAME)/$(BIRD_PRODUCT_DEVICE):$(PLATFORM_VERSION)/$(BUILD_ID)/$(BF_BUILD_NUMBER):$(TARGET_BUILD_VARIANT)/$(BUILD_VERSION_TAGS)
+
+39510:对应BF_BUILD_NUMBER
+
+
+
+system/build.prop:
+ro.build.fingerprint=Android/Android/Android:8.1.0/OPM2.171019.012/39412:user/release-keys
+
+
+com.android.camera2/com.android.camera.CameraLauncher
+
+http://www.zdfans.com/html/7037.html
+
+
+ ResumedActivity: ActivityRecord{97aea92 u0 com.tencent.mobileqq/.activity.SplashActivity t19}
+
+进入拍照
+  ResumedActivity: ActivityRecord{3cd8dae u0 com.android.camera2/com.android.camera.CaptureActivity t19}
+
+qq拍完照：
+  ResumedActivity: ActivityRecord{9e74cbc u0 com.tencent.mobileqq/com.tencent.biz.qqstory.takevideo.EditPicActivity t19}
+
+  Activities waiting for another to become visible:
+    TaskRecord{ddee8c1 #19 A=com.tencent.mobileqq U=0 StackId=1 sz=4}
+      Wait #2: ActivityRecord{c602051 u0 com.tencent.mobileqq/com.tencent.biz.qqstory.takevideo.artfilter.ArtFilterBridgeActivity t19}
+      Wait #1: ActivityRecord{97aea92 u0 com.tencent.mobileqq/.activity.SplashActivity t19}
+      Wait #0: ActivityRecord{3cd8dae u0 com.android.camera2/com.android.camera.CaptureActivity t19 f}
+	  
+	  
+	  
+	  0A284B 09-29 14:03:18.937  8630  8630 E SplashActivity: 1|openAIO|0
+	  0A287C 09-29 14:03:18.974  8630  8630 I SplashActivity: openAIO f == null 
+	  0A6ED8 09-29 14:04:29.039  8630  8630 D ArtFilterBridgeActivity: doStartEditPic
+	  0A6FFB 09-29 14:04:32.350 10364 10364 E EditPicActivity: doOnCreate instance=100297292, video params=com.tencent.biz.qqstory.takevideo.EditVideoParams@a205476
+	  
+//进入聊天界面
+0A2359 09-29 14:03:06.887   801  8953 I am_create_activity: [0,159050386,19,com.tencent.mobileqq/.activity.SplashActivity,android.intent.action.MAIN,NULL,NULL,270533632]
+0A235D 09-29 14:03:06.888   801  8953 I wm_task_moved: [19,1,2]
+0A2362 09-29 14:03:06.901   801  8953 I am_pause_activity: [0,225516539,com.android.launcher3/.Launcher]
+//进入拍照
+0A3785 09-29 14:03:47.097   801  2172 I am_create_activity: [0,63802798,19,com.android.camera2/com.android.camera.CaptureActivity,android.media.action.IMAGE_CAPTURE,NULL,NULL,536870915]
+0A3796 09-29 14:03:47.119   801  2172 I am_pause_activity: [0,159050386,com.tencent.mobileqq/.activity.SplashActivity]
+//
+0A6BAC 09-29 14:04:27.408   801  5968 I am_finish_activity: [0,63802798,19,com.android.camera2/com.android.camera.CaptureActivity,app-request]
+0A6BD2 09-29 14:04:27.422   801  5968 I am_pause_activity: [0,63802798,com.android.camera2/com.android.camera.CaptureActivity]	  
+
+0A6E92 09-29 14:04:28.401   801  2458 I am_create_activity: [0,207626321,19,com.tencent.mobileqq/com.tencent.biz.qqstory.takevideo.artfilter.ArtFilterBridgeActivity,NULL,NULL,NULL,67371008]
+0A6E9A 09-29 14:04:28.407   801  2458 I am_pause_activity: [0,159050386,com.tencent.mobileqq/.activity.SplashActivity]
+
+
+
+
+//调用camera
+05AD37 09-13 16:59:13.967   565  3400 I am_create_activity: [0,157649827,72,com.android.camera2/com.android.camera.CaptureActivity,android.media.action.IMAGE_CAPTURE,NULL,NULL,536870915]
+//
+
+
+http://116.7.245.122:8888/users/sign_in
+
+
+Invalid parameter.
+
+
+Usage: flash_tool OPTION...
+Run FlashTool in console mode.
+Example: flash_tool -i download.xml
+
+Mandatory:
+  -i    console mode configuration file
+
+Overwriting settings specified in the configuration file:
+  -d    download agent file path
+  -s    scatter file path
+  -c    flash tool features, just support:
+            format
+            download
+            format-download
+            firmware-upgrade
+  -p    specify com port(Windows Only), format is as COM4+COM6 (BROM download), COM5 (preloader download)
+
+Miscellaneous:
+  -r    redirect debug log to parent process
+  -h    display this help and exit
+-b  specify whether to reboot after action (e.g format, download, efuse write)
+
+
+(mkdir -p out/target/product/sp7731e_1h10/recovery ) && (mkdir -p out/target/product/sp7731e_1h10/recovery/root/etc out/target/product/sp7731e_1h10/recovery/root/sdcard out/target/product/sp7731e_1h10/recovery/root/tmp ) && (echo Copying baseline ramdisk... ) && (rsync -a --exclude=etc --exclude=sdcard --exclude=/root/sepolicy --exclude=/root/plat_file_contexts --exclude=/root/nonplat_file_contexts --exclude=/root/plat_property_contexts --exclude=/root/nonplat_property_contexts  out/target/product/sp7731e_1h10/root out/target/product/sp7731e_1h10/recovery ) && (cp -f out/target/product/sp7731e_1h10/system/bin/adbd out/target/product/sp7731e_1h10/recovery/root/sbin/adbd ) && (echo ----- Making BIRD_ROOT_USER0000000000 ------ ) && (cp -f out/target/product/sp7731e_1h10/root/sbin/adbd out/target/product/sp7731e_1h10/recovery/root/sbin/adbd ) && (echo ----- Making BIRD_ROOT_USER00sssssss------ ) && (echo Modifying ramdisk contents... ) && (rm -f out/target/product/sp7731e_1h10/recovery/root/init*.rc ) && (cp -f device/sprd/pike2/common/recovery/init.rc out/target/product/sp7731e_1h10/recovery/root/ ) && (cp out/target/product/sp7731e_1h10/root/init.recovery.*.rc out/target/product/sp7731e_1h10/recovery/root/ || true ) && (mkdir -p out/target/product/sp7731e_1h10/recovery/root/res ) && (rm -rf out/target/product/sp7731e_1h10/recovery/root/res/* ) && (cp -rf bootable/recovery/res-xhdpi/* out/target/product/sp7731e_1h10/recovery/root/res ) && (cp -f bootable/recovery/fonts/18x32.png out/target/product/sp7731e_1h10/recovery/root/res/images/font.png ) && (cp -f device/sprd/pike2/common/recovery/recovery.f2fs.fstab out/target/product/sp7731e_1h10/recovery/root/etc/recovery.fstab ) && (cp out/target/product/sp7731e_1h10/obj/PACKAGING/ota_keys_intermediates/keys out/target/product/sp7731e_1h10/recovery/root/res/keys ) && (cat out/target/product/sp7731e_1h10/system/etc/prop.default > out/target/product/sp7731e_1h10/recovery/root/prop.default ) && (cat out/target/product/sp7731e_1h10/vendor/default.prop >> out/target/product/sp7731e_1h10/recovery/root/prop.default ) && (cat out/target/product/sp7731e_1h10/obj/ETC/system_build_prop_intermediates/build.prop out/target/product/sp7731e_1h10/vendor/build.prop >> out/target/product/sp7731e_1h10/recovery/root/prop.default ) && (ln -sf prop.default out/target/product/sp7731e_1h10/recovery/root/default.prop ) && (out/host/linux-x86/bin/mkbootfs -d out/target/product/sp7731e_1h10/system out/target/product/sp7731e_1h10/recovery/root | out/host/linux-x86/bin/minigzip > out/target/product/sp7731e_1h10/ramdisk-recovery.img ) && (out/host/linux-x86/bin/mkbootimg  --kernel out/target/product/sp7731e_1h10/kernel  --ramdisk out/target/product/sp7731e_1h10/ramdisk-recovery.img --cmdline \"console=ttyS1,115200n8 buildvariant=userdebug\" --base 0x00000000 --pagesize 2048 --dt out/target/product/sp7731e_1h10/dt.img --os_version 8.1.0 --os_patch_level 2018-08-05 --kernel_offset 0x00008000 --ramdisk_offset 0x05400000 --output  out/target/product/sp7731e_1h10/recovery.img --id > out/target/product/sp7731e_1h10/recovery.id ) && (out/host/linux-x86/bin/avbtool add_hash_footer --image  out/target/product/sp7731e_1h10/recovery.img --partition_size 36700160 --partition_name recovery --algorithm SHA256_RSA4096 --key vendor/sprd/proprietories-source/packimage_scripts/signimage/sprd/config/rsa4096_recovery.pem --rollback_index 0 ) && (size=\$(for i in  out/target/product/sp7731e_1h10/recovery.img; do stat --format \"%s\" \"\$i\" | tr -d '\\n'; echo +; done; echo 0); total=\$(( \$( echo \"\$size\" ) )); printname=\$(echo -n \" out/target/product/sp7731e_1h10/recovery.img\" | tr \" \" +); img_blocksize=4224; twoblocks=\$((img_blocksize * 2)); onepct=\$(((((37847040 / 100) - 1) / img_blocksize + 1) * img_blocksize)); reserve=\$((twoblocks > onepct ? twoblocks : onepct)); maxsize=\$((37847040 - reserve)); echo \"\$printname maxsize=\$maxsize blocksize=\$img_blocksize total=\$total reserve=\$reserve\"; if [ \"\$total\" -gt \"\$maxsize\" ]; then echo \"error: \$printname too large (\$total > [37847040 - \$reserve])\"; false; elif [ \"\$total\" -gt \$((maxsize - 32768)) ]; then echo \"WARNING: \$printname approaching size limit (\$total now; limit \$maxsize)\"; fi ) && (echo ----- Made recovery image:  out/target/product/sp7731e_1h10/recovery.img -------- )
+
+
+choose_sub
+select_card
+
+  $(if $(findstring yes,$(BIRD_ROOT_USER)),\
+5501a
+
+
+./system/bin/adbd
+./root/sbin/adbd
+
+./recovery/root/sbin/adbd
+
+非root: ./system/bin/adbd=./recovery/root/sbin/adbd
+root	./root/sbin/adbd=./recovery/root/sbin/adbd
+
+

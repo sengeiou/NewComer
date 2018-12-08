@@ -1,0 +1,382 @@
+		//bird add by wucheng for enter system Settings instead of Launcher Settings when clicking "SETTINGS" button 20180129
+		if("true".equals(Utilities.getSystemProperty("ro.bdfun.launcher_settings",false))){
+	        Intent intent = new Intent(Intent.ACTION_APPLICATION_PREFERENCES)
+	                .setPackage(getPackageName());
+	        intent.setSourceBounds(getViewBounds(v));
+	        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	        startActivity(intent, getActivityLaunchOptions(v));
+		} else {
+		    Intent settings = new Intent(android.provider.Settings.ACTION_SETTINGS);
+	            settings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+	            startActivity(settings);	
+
+		}
+		//bird add by wucheng for enter system Settings instead of Launcher Settings when clicking "SETTINGS" button 20180129
+
+ persist.sys.cam.3dnr=true
+		TDNRPhotoModule
+DreamUIPreferenceSettingFragment
+#mark by hujingcheng
+TARGET_BOARD_CAMERA_3DNR_CAPTURE := true
+		
+开宏：BIRD_LAUNCHER3_HIDE_SEARCHBAR=yes   (workspace与allapp中搜索框都隐藏)
+      BIRD_LAUNCHER3_ALLAPP_SEARCHBAR=no (仅隐藏allapp中搜索框)
+      BIRD_LAUNCHER3_WORKSPACE_SEARCHBAR=no (仅隐藏worksapce中搜索框)
+
+
+#add by bird  bird  wucheng 20180630 begin
+ifeq ($(strip $(BIRD_SHOW_UNREADNUM_IN_LAUNCHER)), yes)
+    PRODUCT_PROPERTY_OVERRIDES += ro.launcher.unread.sms=true
+    PRODUCT_PROPERTY_OVERRIDES += ro.launcher.unread.call=true
+    PRODUCT_PROPERTY_OVERRIDES += ro.launcher.unread.email=true
+endif 
+#add by bird  bird  wucheng 20180630 end
+
+
+[4/946] including bird/custom/bird_k39tv1_64_bsp/hal/Android.mk ...
+[5/946] including bird/custom/bird_k39tv1_bsp/hal/Android.mk ...
+build/make/core/base_rules.mk:260: error: bird/custom/bird_k39tv1_bsp/hal/aal: MODULE.TARGET.STATIC_LIBRARIES.libaal_config already defined by bird/custom/bird_k39tv1_64_bsp/hal/aal.
+22:40:29 ckati failed with: exit status 1
+
+[0;31m#### failed to build some targets (18 seconds) ####[00m
+
+
+01-06 09:12:49.788: D/CAM_ModeListView(26096): returned i=11,362.0,543.0,448.0,672.0
+01-06 09:12:49.893: E/AudioManagerEx(26096): new AudioManagerEx
+01-06 09:12:49.895: I/CAM_ModeListView(26096): FullyShownState onItemSelected
+01-06 09:12:49.899: I/AddonManager(26096): get addon packages from AddonManagerService for app:com.android.camera2-->[] cost 1ms
+01-06 09:12:49.900: D/AddonManager(26096): -> getAddon: featureClassName:plugin.sprd.cameracmccplugin.AddonAddCameraForCMCC
+01-06 09:12:49.900: I/AddonManager(26096): -> getAddon,The classloader of defClazz is dalvik.system.PathClassLoader[DexPathList[[zip file "/system/app/DreamCamera2/DreamCamera2.apk"],nativeLibraryDirectories=[/system/app/DreamCamera2/lib/arm, /system/app/DreamCamera2/DreamCamera2.apk!/lib/armeabi-v7a, /system/lib, /vendor/lib, /system/lib, /vendor/lib]]]
+01-06 09:12:49.901: W/AddonManager(26096): Load class plugin.sprd.cameracmccplugin.AddonAddCameraForCMCC failed, have you installed the plugin apk ? Didn't find class "plugin.sprd.cameracmccplugin.AddonAddCameraForCMCC" on path: DexPathList[[zip file "/system/app/DreamCamera2/DreamCamera2.apk"],nativeLibraryDirectories=[/system/app/DreamCamera2/lib/arm, /system/app/DreamCamera2/DreamCamera2.apk!/lib/armeabi-v7a, /system/lib, /vendor/lib, /system/lib, /vendor/lib]]
+01-06 09:12:49.901: D/AddonManager(26096): ->getAddon, createAddon app: ApplicationInfo{72ef861 com.android.camera2}, clazz: null, classloader:dalvik.system.PathClassLoader[DexPathList[[zip file "/system/app/DreamCamera2/DreamCamera2.apk"],nativeLibraryDirectories=[/system/app/DreamCamera2/lib/arm, /system/app/DreamCamera2/DreamCamera2.apk!/lib/armeabi-v7a, /system/lib, /vendor/lib, /system/lib, /vendor/lib]]]
+01-06 09:12:49.901: D/AddonManager(26096): ->getAddon: Create feature <plugin.sprd.cameracmccplugin.AddonAddCameraForCMCC> object Failed, AddonManager will return <class com.sprd.camera.plugin.AddCameraForCMCC> object.
+01-06 09:12:49.917: I/CAM_CameraActivity Drea(26096): onModeSelected mCurrentModeIndex=0,change to 20
+01-06 09:12:49.918: I/CAM_PhotoModule(26096): pause
+01-06 09:12:49.920: D/CAM_CameraAppUI Dream(26096): updateParametersGridLine hideGridLines
+01-06 09:12:49.921: I/CAM2PORT_AndCam2AgntImp(26096): AppFW handleMessage - action = 'CANCEL_AUTO_FOCUS'
+01-06 09:12:49.921: D/CAM_PhotoModule(26096): updateUIGridLineToDefault = close
+01-06 09:12:49.921: I/CAM2PORT_DispatchThread(26096): Runnable job.run() end!
+01-06 09:12:49.921: I/CAM_PhotoModule(26096): stopPreview start!mCameraDevice=com.android.ex.camera2.portability.SprdAndroidCamera2AgentImpl$SprdAndroidCamera2ProxyImpl@c0ade6
+01-06 09:12:49.921: I/CAM_PhotoModule(26096): stopPreview
+01-06 09:12:49.921: I/CAM2PORT_CamAgnt(26096): stopPreview getState = 16
+01-06 09:12:49.923: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait will!
+01-06 09:12:49.932: I/CAM2PORT_AndCam2AgntImp(26096): AppFW handleMessage - action = 'CANCEL_AUTO_FOCUS_FINISH'
+01-06 09:12:49.932: I/CAM2PORT_AndCam2AgntImp(26096): AppFW handleMessage - action = 'SET_AUTO_FOCUS_MOVE_CALLBACK'
+01-06 09:12:49.933: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.notifyAll()!
+01-06 09:12:49.933: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait end!
+01-06 09:12:49.933: I/CAM2PORT_DispatchThread(26096): Runnable job.run() end!
+01-06 09:12:49.933: I/CAM2PORT_AndCam2AgntImp(26096): AppFW handleMessage - action = 'STOP_PREVIEW'
+01-06 09:12:49.933: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait will!
+01-06 09:12:49.934: I/CAM2PORT_CamStateHolder(26096): setState - state = 1000
+01-06 09:12:49.934: I/CAM2PORT_AndCam2AgntImp(26096): closePreviewSession
+01-06 09:12:49.981: I/CAM2PORT_CamStateHolder(26096): setState - state = 100
+01-06 09:12:49.985: I/CAM_PhotoModule(26096): stopPreview end!
+01-06 09:12:49.985: I/CAM_PreviewOverlay(26096): setDetector isDetector:true
+01-06 09:12:49.986: D/CAM_BottomBar(26096): setShutterButtonEnabled : true
+01-06 09:12:49.987: I/CAM_PhotoModule(26096): closeCamera will! mCameraDevice=com.android.ex.camera2.portability.SprdAndroidCamera2AgentImpl$SprdAndroidCamera2ProxyImpl@c0ade6
+01-06 09:12:49.988: D/CAM_PhotoModule(26096): stopFaceDetection mFaceDetectionStarted=false
+01-06 09:12:49.988: I/CAM_PhotoModule(26096): closeCamera end!
+01-06 09:12:49.989: E/CAM_DataModuleManager(26096): remove listener = com.dream.camera.modules.autophoto.AutoPhotoUI
+01-06 09:12:49.989: I/CAM_PreviewOverlay(26096): setDetector isDetector:true
+01-06 09:12:49.990: I/CAM_PhotoModule(26096): pause end!
+01-06 09:12:49.990: D/CAM_BottomBar(26096): setShutterButtonEnabled : true
+01-06 09:12:49.990: V/CAM_CameraAppUI Dream(26096): mFocusRing.stopFocusAnimations()
+01-06 09:12:49.991: I/CAM_PhotoModule(26096): destroy
+01-06 09:12:49.991: I/CAM_CameraActivity Drea(26096): onModeSelected mCurrentModule=com.dream.camera.modules.autophoto.AutoPhotoModule@ffc7d74,modeIndex=20
+01-06 09:12:49.992: I/CAM_CameraActivity Drea(26096): setModuleFromModeIndex modeIndex=20
+01-06 09:12:49.992: I/CAM_PhotoModule(26096): init Camera
+01-06 09:12:49.993: I/CAM_PhotoModule(26096): requestCameraOpen mCameraId:0
+01-06 09:12:49.993: I/CAM_CameraController(26096): requestCamera
+01-06 09:12:49.993: I/CAM_CameraController(26096): mRequestingCameraId = -1mInfo = com.android.ex.camera2.portability.AndroidCameraAgentImpl$AndroidCameraDeviceInfo@c31d96b
+01-06 09:12:49.993: V/CAM_ActvCamDevTrckr(26096): Tracking active camera: null
+01-06 09:12:49.993: V/CAM_CameraController(26096): different camera already opened, closing then reopening
+01-06 09:12:49.993: I/CAM2PORT_CamAgnt(26096): closeCamera getState = 4
+01-06 09:12:49.994: I/CAM_PhotoModule(26096): Sound release start
+01-06 09:12:49.997: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.notifyAll()!
+01-06 09:12:49.997: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait end!
+01-06 09:12:49.997: I/CAM2PORT_DispatchThread(26096): Runnable job.run() end!
+01-06 09:12:49.997: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait will!
+01-06 09:12:49.997: I/CAM2PORT_AndCam2AgntImp(26096): AppFW handleMessage - action = 'SET_SENSOR_SELF_SHOT_LISTENER'
+01-06 09:12:49.998: I/CAM2PORT_AndCam2AgntImp(26096): AppFW handleMessage - action = 'SET_FACE_DETECTION_LISTENER'
+01-06 09:12:49.998: I/CAM2PORT_AndCam2AgntImp(26096): AppFW handleMessage - action = 'STOP_FACE_DETECTION'
+01-06 09:12:50.001: I/CAM2PORT_AndCam2AgntImp(26096): AppFW handleMessage - action = 'RELEASE'
+01-06 09:12:50.001: I/CAM2PORT_AndCam2AgntImp(26096): CameraActions.RELEASE,Session = null;CameraDevice = android.hardware.camera2.impl.CameraDeviceImpl@fe06a37;PreviewSurface = Surface(name=null)/@0x549b0a6;CaptureReader = android.media.ImageReader@6ec5047
+01-06 09:12:50.001: I/CAM2PORT_AndCam2AgntImp(26096): CameraDevice.close
+01-06 09:12:50.179: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.180: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.181: I/CAM_CameraActivity Drea(26096): onCameraAvailable requestPending=false
+01-06 09:12:50.182: I/CAM2PORT_AndCam2AgntImp(26096): PreviewSurface.release
+01-06 09:12:50.182: I/CAM2PORT_AndCam2AgntImp(26096): CaptureReader.close
+01-06 09:12:50.182: I/CAM2PORT_CamStateHolder(26096): setState - state = 1
+01-06 09:12:50.183: I/CAM_CameraController(26096): checkAndOpenCamera
+01-06 09:12:50.184: I/CAM_PhotoModule(26096): init: requestCameraOpen cost: 191
+01-06 09:12:50.185: I/CAM_DreamPhotoUI(26096): initUI cost: 0
+01-06 09:12:50.185: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.notifyAll()!
+01-06 09:12:50.186: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait end!
+01-06 09:12:50.187: I/CAM2PORT_DispatchThread(26096): Runnable job.run() end!
+01-06 09:12:50.187: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait will!
+01-06 09:12:50.188: I/CAM_PhotoModule(26096):  init _preferences_camera_TDNREnable,0
+01-06 09:12:50.188: I/CAM_CameraActivity Drea(26096): init totally cost: 196
+01-06 09:12:50.189: I/CAM2PORT_AndCam2AgntImp(26096): AppFW handleMessage - action = 'OPEN_CAMERA'
+01-06 09:12:50.189: I/CAM2PORT_AndCam2AgntImp(26096): Opening camera index 0 (id 0) with camera2 API
+01-06 09:12:50.190: E/CAM_ModeSelectorItem(26096):  setOrientation mCurrentDegree = 0
+01-06 09:12:50.190: D/CAM_DreamSetting(26096): changeChildModeToString = category_photo,false,20
+01-06 09:12:50.190: E/CAM_ModeSelectorItem(26096):  setOrientation mCurrentDegree = 0
+01-06 09:12:50.190: E/DreamSetting(26096): DataStructSetting = category_photo,false,TDNRPhotoModule,0
+01-06 09:12:50.190: E/CAM_ModeSelectorItem(26096):  setOrientation mCurrentDegree = 0
+01-06 09:12:50.191: E/CAM_ModeSelectorItem(26096):  setOrientation mCurrentDegree = 0
+01-06 09:12:50.191: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.191: E/CAM_ModeSelectorItem(26096):  setOrientation mCurrentDegree = 0
+01-06 09:12:50.191: I/chatty(26096): uid=10057(com.android.camera2) identical 2 lines
+01-06 09:12:50.192: E/CAM_ModeSelectorItem(26096):  setOrientation mCurrentDegree = 0
+01-06 09:12:50.192: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.192: E/CAM_ModeSelectorItem(26096):  setOrientation mCurrentDegree = 0
+01-06 09:12:50.192: D/CAM_CameraActivity Drea(26096): module:com.dream.camera.modules.tdnrphoto.TDNRPhotoModule@e01b99d
+01-06 09:12:50.192: I/CAM_PhotoModule(26096): resume start!
+01-06 09:12:50.193: I/CAM_PhotoModule(26096): requestCameraOpen mCameraId:0
+01-06 09:12:50.193: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.193: I/CAM_CameraController(26096): requestCamera
+01-06 09:12:50.193: I/CAM_CameraController(26096): mRequestingCameraId = 0mInfo = com.android.ex.camera2.portability.AndroidCameraAgentImpl$AndroidCameraDeviceInfo@c31d96b
+01-06 09:12:50.199: E/CAM_DataModuleManager(26096): add listener = com.dream.camera.modules.tdnrphoto.TDNRPhotoUI
+01-06 09:12:50.199: I/CAM_CameraAppUI Dream(26096): setSurfaceVisibility visible = false
+01-06 09:12:50.202: D/DataModuleBasic(26096): initializeData -- generateSupportDataList supportdataResourceID:2131493067
+01-06 09:12:50.202: E/DataModuleBasic(26096): ======== support data list start ========== resourceID:2131493067
+01-06 09:12:50.202: E/DataModuleBasic(26096): key = pref_camera_picturesize_back_key storePosition = 2 mDefaultValue = large mEntryValues = large,medium,small, mEntries = 大,中,小,
+01-06 09:12:50.202: D/CAM_DreamUtil(26096): savaRightMode cameraId=0,saveMode=20
+01-06 09:12:50.202: E/DataModuleBasic(26096): key = pref_camera_jpeg_quality_key storePosition = 2 mDefaultValue = super mEntryValues = super,hight,normal, mEntries = 极精细,精细,正常,
+01-06 09:12:50.203: I/CAM_CameraActivity Drea(26096): resetBottomControls cost: 0
+01-06 09:12:50.203: E/DataModuleBasic(26096): key = pref_camera_ai_detect_key storePosition = 2 mDefaultValue = face mEntryValues = off,face,smile, mEntries = 关闭,人脸检测,笑脸拍照,
+01-06 09:12:50.203: E/DataModuleBasic(26096): key = pref_camera_antibanding_key storePosition = 2 mDefaultValue = ANTIBANDING_50HZ mEntryValues = ANTIBANDING_50HZ,ANTIBANDING_60HZ,ANTIBANDING_AUTO, mEntries = 50Hz,60Hz,
+01-06 09:12:50.203: E/DataModuleBasic(26096): key = pref_camera_touching_photograph_key storePosition = 2 mDefaultValue = 0 mEntryValues = 0,1, mEntries = 0,1,
+01-06 09:12:50.205: I/CAM_BottomBar(26096): onMeasure[1073742464][1073743104]
+01-06 09:12:50.205: E/DataModuleBasic(26096): key = pref_time_stamp_key storePosition = 2 mDefaultValue = 0 mEntryValues = 0,1, mEntries = 0,1,
+01-06 09:12:50.205: E/DataModuleBasic(26096): key = pref_freeze_frame_display_key storePosition = 2 mDefaultValue = 0 mEntryValues = 0,1, mEntries = 0,1,
+01-06 09:12:50.206: E/DataModuleBasic(26096): key = pref_camera_countdown_duration_key storePosition = 2 mDefaultValue = 0 mEntryValues = 0,3,10, mEntries = 关闭,3,10,
+01-06 09:12:50.206: E/DataModuleBasic(26096): key = pref_camera_zoom_enable_key storePosition = 2 mDefaultValue = 1 mEntryValues = 0,1, mEntries = 0,1,
+01-06 09:12:50.207: E/DataModuleBasic(26096): ===== support data list end =====
+01-06 09:12:50.209: D/DataModuleBasic(26096): ===== mutex data list start =====
+01-06 09:12:50.210: D/DataModuleBasic(26096): ===== mutex data list end =====
+01-06 09:12:50.223: D/DataModuleBasic(26096): ===== ui show item start =====
+01-06 09:12:50.231: D/DataModuleBasic(26096): ===== ui show item end =====
+01-06 09:12:50.231: E/DataModuleInterfacePV(26096): setEVSPicturesize: selectedSizes object is null or size is 0
+01-06 09:12:50.232: I/DataModuleInterfacePV(26096): entryValues[0]2592x1944
+01-06 09:12:50.233: I/DataModuleInterfacePV(26096): entryValues[1]1600x1200
+01-06 09:12:50.233: I/DataModuleInterfacePV(26096): entryValues[2]1280x960
+01-06 09:12:50.234: I/DataModuleInterfacePV(26096): entryValues[3]1920x1088
+01-06 09:12:50.236: I/DataModuleInterfacePV(26096): entryValues[4]1280x720
+01-06 09:12:50.238: I/DataModuleInterfacePV(26096): entryValues[5]864x480
+01-06 09:12:50.238: I/DataModuleInterfacePV(26096): setEVSPicturesize() key = pref_camera_picturesize_back_key storePosition = 2 mDefaultValue = 2592x1944 mEntryValues = 2592x1944,1600x1200,1280x960,1920x1088,1280x720,864x480, mEntries = (4:3) 5.0百万像素,(4:3) 1.9百万像素,(4:3) 1.2百万像素,(16:9) 2.1百万像素,(16:9) 0.9百万像素,(16:9) 0.4百万像素,
+01-06 09:12:50.239: D/CAM_CameraFreezeFrameDisplayControl(26096): DD sFreezSwitchtrue
+01-06 09:12:50.240: D/CAM_PhotoModule_AIDetection(26096):  getChooseValue strValue=face
+01-06 09:12:50.252: W/SoundPoolThread(26096): type=1400 audit(0.0:4950): avc: denied { read } for name="u:object_r:media_prop:s0" dev="tmpfs" ino=13155 scontext=u:r:platform_app:s0:c512,c768 tcontext=u:object_r:media_prop:s0 tclass=file permissive=0
+01-06 09:12:50.246: I/CAM_PhotoModule(26096): SoundInitialized start
+01-06 09:12:50.251: D/CAM_PhotoModule(26096): handleMsg 1
+01-06 09:12:50.263: W/SoundPool(26096): Use of stream types is deprecated for operations other than volume control
+01-06 09:12:50.263: W/SoundPool(26096): See the documentation of SoundPool() for what to use instead with android.media.AudioAttributes to qualify your playback use case
+01-06 09:12:50.265: V/NuMediaExtractor(26096): setDataSource fd=76 (/system/app/DreamCamera2/DreamCamera2.apk), offset=1171920, length=7617
+01-06 09:12:50.265: E/libc(26096): Access denied finding property "media.stagefright.extractremote"
+01-06 09:12:50.272: W/SoundPoolThread(26096): type=1400 audit(0.0:4951): avc: denied { read } for name="u:object_r:media_prop:s0" dev="tmpfs" ino=13155 scontext=u:r:platform_app:s0:c512,c768 tcontext=u:object_r:media_prop:s0 tclass=file permissive=0
+01-06 09:12:50.283: V/NuMediaExtractor(26096): setDataSource fd=84 (/system/media/audio/ui/camera_click.ogg), offset=0, length=5951
+01-06 09:12:50.287: E/libc(26096): Access denied finding property "media.stagefright.extractremote"
+01-06 09:12:50.292: W/SoundPoolThread(26096): type=1400 audit(0.0:4952): avc: denied { read } for name="u:object_r:media_prop:s0" dev="tmpfs" ino=13155 scontext=u:r:platform_app:s0:c512,c768 tcontext=u:object_r:media_prop:s0 tclass=file permissive=0
+01-06 09:12:50.301: V/NuMediaExtractor(26096): track of type 'audio/vorbis' does not publish bitrate
+01-06 09:12:50.306: E/libc(26096): Access denied finding property "media.metrics.enabled"
+01-06 09:12:50.316: I/OMXClient(26096): Treble IOmx obtained
+01-06 09:12:50.323: V/NuMediaExtractor(26096): track of type 'audio/vorbis' does not publish bitrate
+01-06 09:12:50.326: E/libc(26096): Access denied finding property "media.metrics.enabled"
+01-06 09:12:50.312: W/SoundPoolThread(26096): type=1400 audit(0.0:4953): avc: denied { read } for name="u:object_r:media_prop:s0" dev="tmpfs" ino=13155 scontext=u:r:platform_app:s0:c512,c768 tcontext=u:object_r:media_prop:s0 tclass=file permissive=0
+01-06 09:12:50.340: I/OMXClient(26096): Treble IOmx obtained
+01-06 09:12:50.577: I/ACodec(26096): 0x8ea03888 err = 0 ExecutingToIdleState sendCommand OMX_CommandStateSet OMX_StateLoaded
+01-06 09:12:50.589: E/libc(26096): Access denied finding property "media.metrics.enabled"
+01-06 09:12:50.572: W/SoundPoolThread(26096): type=1400 audit(0.0:4954): avc: denied { read } for name="u:object_r:media_prop:s0" dev="tmpfs" ino=13155 scontext=u:r:platform_app:s0:c512,c768 tcontext=u:object_r:media_prop:s0 tclass=file permissive=0
+01-06 09:12:50.593: I/ACodec(26096): 0x8ea039a8 err = 0 ExecutingToIdleState sendCommand OMX_CommandStateSet OMX_StateLoaded
+01-06 09:12:50.593: V/NuMediaExtractor(26096): setDataSource fd=82 (/system/app/DreamCamera2/DreamCamera2.apk), offset=1179600, length=7755
+01-06 09:12:50.598: E/libc(26096): Access denied finding property "media.stagefright.extractremote"
+01-06 09:12:50.582: W/SoundPoolThread(26096): type=1400 audit(0.0:4955): avc: denied { read } for name="u:object_r:media_prop:s0" dev="tmpfs" ino=13155 scontext=u:r:platform_app:s0:c512,c768 tcontext=u:object_r:media_prop:s0 tclass=file permissive=0
+01-06 09:12:50.592: W/SoundPoolThread(26096): type=1400 audit(0.0:4956): avc: denied { read } for name="u:object_r:media_prop:s0" dev="tmpfs" ino=13155 scontext=u:r:platform_app:s0:c512,c768 tcontext=u:object_r:media_prop:s0 tclass=file permissive=0
+01-06 09:12:50.605: E/libc(26096): Access denied finding property "media.metrics.enabled"
+01-06 09:12:50.612: W/SoundPoolThread(26096): type=1400 audit(0.0:4957): avc: denied { read } for name="u:object_r:media_prop:s0" dev="tmpfs" ino=13155 scontext=u:r:platform_app:s0:c512,c768 tcontext=u:object_r:media_prop:s0 tclass=file permissive=0
+01-06 09:12:50.622: V/NuMediaExtractor(26096): track of type 'audio/vorbis' does not publish bitrate
+01-06 09:12:50.624: E/libc(26096): Access denied finding property "media.metrics.enabled"
+01-06 09:12:50.632: I/OMXClient(26096): Treble IOmx obtained
+01-06 09:12:50.649: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.649: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.notifyAll()!
+01-06 09:12:50.649: I/CAM2PORT_AndCam2AgntImp(26096): onOpened CameraDevice will camera=android.hardware.camera2.impl.CameraDeviceImpl@434afe0
+01-06 09:12:50.650: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait end!
+01-06 09:12:50.650: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.651: I/CAM_CameraActivity Drea(26096): onCameraUnavailable
+01-06 09:12:50.651: I/CAM_CameraActivity Drea(26096): checkAllCameraAvailable mCameraId =0 mCameraAvailable=false
+01-06 09:12:50.652: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.653: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.658: I/chatty(26096): uid=10057(com.android.camera2) Camera2 Handler identical 2 lines
+01-06 09:12:50.659: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.666: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.667: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.669: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.672: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.684: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.686: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.699: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.707: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.710: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.712: I/chatty(26096): uid=10057(com.android.camera2) Camera2 Handler identical 1 line
+01-06 09:12:50.715: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.717: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.720: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.725: I/chatty(26096): uid=10057(com.android.camera2) Camera2 Handler identical 2 lines
+01-06 09:12:50.726: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.730: W/CAM2PORT_SprdAndCam2Cap(26096): Unable to convert from API 2 antibanding: 3
+01-06 09:12:50.731: W/CAM2PORT_SprdAndCam2Cap(26096): Unable to convert from API 2 ISO: 6
+01-06 09:12:50.731: W/CAM2PORT_SprdAndCam2Cap(26096): Unable to convert from API 2 Metering: 3
+01-06 09:12:50.733: I/CAM2PORT_SprdAndCam2Cap(26096): supportedFlashLevels = 0
+01-06 09:12:50.736: W/CAM2PORT_AndCam2Capabs(26096): Unable to convert from API 2 scene mode: 1
+01-06 09:12:50.736: W/CAM2PORT_AndCam2Capabs(26096): Unable to convert from API 2 white balance: 0
+01-06 09:12:50.737: I/CAM2PORT_CamStateHolder(26096): setState - state = 10
+01-06 09:12:50.737: I/CAM2PORT_CamAgnt(26096):  onCameraOpened , CameraProxy = com.android.ex.camera2.portability.SprdAndroidCamera2AgentImpl$SprdAndroidCamera2ProxyImpl@f455299
+01-06 09:12:50.738: I/CAM2PORT_AndCam2AgntImp(26096): onOpened CameraDevice end mOpenCallback=com.android.ex.camera2.portability.CameraAgent$CameraOpenCallbackForward@b04f95e
+01-06 09:12:50.738: I/CAM_CameraController(26096): onCameraOpened,CameraProxy = com.android.ex.camera2.portability.SprdAndroidCamera2AgentImpl$SprdAndroidCamera2ProxyImpl@f455299
+01-06 09:12:50.738: I/CAM_CameraActivity Drea(26096): onCameraOpened, CameraProxy = com.android.ex.camera2.portability.SprdAndroidCamera2AgentImpl$SprdAndroidCamera2ProxyImpl@f455299
+01-06 09:12:50.742: W/CAM2PORT_SprdAndCam2Cap(26096): Unable to convert from API 2 antibanding: 3
+01-06 09:12:50.742: W/CAM2PORT_CamAgnt(26096): Unsupported settings in applySettings()
+01-06 09:12:50.744: I/DataModuleInterfacePV(26096): entryValues[0]2592x1944
+01-06 09:12:50.744: I/DataModuleInterfacePV(26096): entryValues[1]1600x1200
+01-06 09:12:50.745: I/DataModuleInterfacePV(26096): entryValues[2]1280x960
+01-06 09:12:50.745: I/DataModuleInterfacePV(26096): entryValues[3]1920x1088
+01-06 09:12:50.745: I/DataModuleInterfacePV(26096): entryValues[4]1280x720
+01-06 09:12:50.746: I/DataModuleInterfacePV(26096): entryValues[5]864x480
+01-06 09:12:50.746: I/DataModuleInterfacePV(26096): setEVSPicturesize() key = pref_camera_picturesize_back_key storePosition = 2 mDefaultValue = 2592x1944 mEntryValues = 2592x1944,1600x1200,1280x960,1920x1088,1280x720,864x480, mEntries = (4:3) 5.0百万像素,(4:3) 1.9百万像素,(4:3) 1.2百万像素,(16:9) 2.1百万像素,(16:9) 0.9百万像素,(16:9) 0.4百万像素,
+01-06 09:12:50.746: E/DataModuleBasic(26096): all change :     key = pref_camera_picturesize_back_key value = 2592x1944
+01-06 09:12:50.746: E/DataModuleBasic(26096): notify user Key Change  :     key = pref_camera_picturesize_back_key value = 2592x1944
+01-06 09:12:50.747: E/CAM_BMDream(26096): updatePhotoButtonItems key = pref_camera_picturesize_back_key
+01-06 09:12:50.747: E/CAM_BMDream(26096): updatePhotoButtonItems index = 0
+01-06 09:12:50.747: I/CAM_PhotoModule(26096): onCameraAvailable
+01-06 09:12:50.748: W/CAM_FocusOverlayMgr(26096): The coordinate transformer could not be built because the preview rectdid not have a width and height
+01-06 09:12:50.748: I/CAM_FocusRingView(26096): Computing center via preview size.
+01-06 09:12:50.748: D/CAM_FocusOverlayMgr(26096): AA getFocusMode true,null
+01-06 09:12:50.748: I/CAM_FocusOverlayMgr(26096): AA getFocusMode stored focus setting for camera: continuous-picture
+01-06 09:12:50.749: V/CAM_FocusOverlayMgr(26096): focus mode resolved from setting: CONTINUOUS_PICTURE
+01-06 09:12:50.749: V/CAM_PhotoModule(26096): updateSettingsBeforeStartPreview begin
+01-06 09:12:50.749: I/CAM2PORT_AndCam2AgntImp(26096): AppFW handleMessage - action = 'CANCEL_AUTO_FOCUS'
+01-06 09:12:50.749: W/CAM2PORT_AndCam2AgntImp(26096): Ignoring attempt to release focus lock without preview
+01-06 09:12:50.750: I/CAM2PORT_AndCam2AgntImp(26096): AppFW handleMessage - action = 'CANCEL_AUTO_FOCUS_FINISH'
+01-06 09:12:50.751: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.752: I/chatty(26096): uid=10057(com.android.camera2) identical 1 line
+01-06 09:12:50.753: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.756: D/CAM_CameraUtil(26096): getAdaptedThumbnailSize:320x240; with ratio: 1.3333333333333333
+01-06 09:12:50.756: I/CAM_PhotoModule(26096): setting preview size. optimal: 960x720original: 0x0
+01-06 09:12:50.756: I/CAM_PhotoModule(26096): updating aspect ratio
+01-06 09:12:50.756: V/CAM_TexViewHelper(26096): updateAspectRatio 1.3333334
+01-06 09:12:50.756: V/CAM_TexViewHelper(26096): setAspectRatio: 1.3333334
+01-06 09:12:50.756: V/CAM_TexViewHelper(26096): updateTransform
+01-06 09:12:50.757: D/CAM_PhotoModule(26096): Preview size is 960x720
+01-06 09:12:50.757: E/CAM_CameraUtil(26096): Can't find an appropiate frame rate range!
+01-06 09:12:50.757: I/CAM_PhotoModule(26096): updateParametersBurstMode
+01-06 09:12:50.758: I/CAM_TDNRPhotoModule(26096): updateParameters3DNR set3DNREnable : 1
+01-06 09:12:50.758: I/CAM_PhotoModule(26096): updateParametersAppModeId
+01-06 09:12:50.758: V/CAM_PhotoModule(26096): updateSettingsBeforeStartPreview end
+01-06 09:12:50.758: I/CAM2PORT_DispatchThread(26096): Runnable job.run() end!
+01-06 09:12:50.758: I/CAM_PhotoModule(26096): startPreview
+01-06 09:12:50.758: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait will!
+01-06 09:12:50.759: I/CAM2PORT_AndCam2AgntImp(26096): AppFW handleMessage - action = 'APPLY_SETTINGS'
+01-06 09:12:50.759: I/CAM_FocusOverlayMgr(26096): resetTouchFocus mInitialized:true
+01-06 09:12:50.759: I/CAM_CameraAppUI Dream(26096): onPreviewStarted mModeCoverState = 1
+01-06 09:12:50.759: I/CAM_PhotoModule(26096): changeCameraState mCameraState=0 mContinuousCaptureCount=0
+01-06 09:12:50.759: D/CAM_PhotoModule(26096): face = face; hdrState = false
+01-06 09:12:50.759: I/CAM2PORT_SprdAndCam2Set(26096):  set CONTROL_SPRD_3DNR_ENABLED: mCurrentEnable3dnr = 1
+01-06 09:12:50.760: D/CAM_PhotoModule(26096): startFaceDetection 
+01-06 09:12:50.760: I/CAM2PORT_SprdAndCam2Set(26096): set CONTROL_SPRD_ADJUST_FLASH_LEVEL mFlashLevel =0
+01-06 09:12:50.760: I/CAM2PORT_SprdAndCam2Set(26096): set CONTROL_SPRD_APP_MODE_ID mCurrentAppModeId =20
+01-06 09:12:50.760: I/CAM2PORT_CamStateHolder(26096): setState - state = 100
+01-06 09:12:50.761: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.notifyAll()!
+01-06 09:12:50.761: I/CAM2PORT_AndCam2AgntImp(26096): AppFW handleMessage - action = 'SET_FACE_DETECTION_LISTENER'
+01-06 09:12:50.761: I/CAM2PORT_AndCam2AgntImp(26096): AppFW handleMessage - action = 'START_FACE_DETECTION'
+01-06 09:12:50.762: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait end!
+01-06 09:12:50.762: I/CAM2PORT_DispatchThread(26096): Runnable job.run() end!
+01-06 09:12:50.762: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait will!
+01-06 09:12:50.762: I/CAM2PORT_AndCam2AgntImp(26096): AppFW handleMessage - action = 'SET_PREVIEW_TEXTURE_ASYNC'
+01-06 09:12:50.763: D/CAM_BMDream(26096): load
+01-06 09:12:50.770: D/CAM_BMDream(26096): load
+01-06 09:12:50.777: D/CAM_BMDream(26096): setButtonVisibility: 22, visibility is 8
+01-06 09:12:50.777: E/CAM_BMDream(26096): button does not found
+01-06 09:12:50.777: E/for_test(26096): cameracapability support flash = true
+01-06 09:12:50.777: E/for_test(26096): cameracapability support flash = false
+01-06 09:12:50.778: D/CAM_BMDream(26096): setButtonVisibility: 20, visibility is 8
+01-06 09:12:50.781: E/CAM_BMDream(26096): button does not found
+01-06 09:12:50.781: D/CAM_BMDream(26096): setButtonVisibility: 32, visibility is 8
+01-06 09:12:50.782: E/CAM_BMDream(26096): button does not found
+01-06 09:12:50.782: I/CAM_DreamPhotoUI(26096): onPreviewStarted cost: 22
+01-06 09:12:50.784: E/CAM_ModeSelectorItem(26096):  setOrientation mCurrentDegree = 0
+01-06 09:12:50.785: I/chatty(26096): uid=10057(com.android.camera2) identical 7 lines
+01-06 09:12:50.785: E/CAM_ModeSelectorItem(26096):  setOrientation mCurrentDegree = 0
+01-06 09:12:50.785: I/CAM_PhotoModule(26096): startPreview end!
+01-06 09:12:50.786: V/CAM_CameraActivity Drea(26096): invoking onChangeCamera
+01-06 09:12:50.796: I/CAM2PORT_AndCam2AgntImp(26096): setPreviewTexture cost 33
+01-06 09:12:50.797: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.notifyAll()!
+01-06 09:12:50.797: I/CAM2PORT_CamStateHolder(26096): setState - state = 1000
+01-06 09:12:50.797: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait end!
+01-06 09:12:50.797: I/CAM_SurfaceViewEx(26096): setTransformMatrix(): width = 640 height = 853 scaledTextureWidth = 639.0 scaledTextureHeight = 853.0 mAspectRatio = 1.3333334
+01-06 09:12:50.798: I/CAM2PORT_DispatchThread(26096): Runnable job.run() end!
+01-06 09:12:50.798: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait will!
+01-06 09:12:50.798: V/CAM_PhotoModule(26096): updateLeftSettings begin
+01-06 09:12:50.800: V/CAM_PhotoModule(26096): setDisplayOrientation (screen:preview) 0:90
+01-06 09:12:50.800: I/CAM2PORT_AndCam2AgntImp(26096): AppFW handleMessage - action = 'START_PREVIEW_ASYNC'
+01-06 09:12:50.800: I/CAM2PORT_CamStateHolder(26096): setState - state = 10000
+01-06 09:12:50.800: D/CAM_FocusOverlayMgr(26096): AA getFocusMode true,null
+01-06 09:12:50.800: I/CAM_FocusOverlayMgr(26096): AA getFocusMode stored focus setting for camera: continuous-picture
+01-06 09:12:50.800: V/CAM_FocusOverlayMgr(26096): focus mode resolved from setting: CONTINUOUS_PICTURE
+01-06 09:12:50.801: D/CAM_FocusOverlayMgr(26096): AA getFocusMode true,null
+01-06 09:12:50.801: I/CAM_FocusOverlayMgr(26096): AA getFocusMode stored focus setting for camera: continuous-picture
+01-06 09:12:50.801: V/CAM_FocusOverlayMgr(26096): focus mode resolved from setting: CONTINUOUS_PICTURE
+01-06 09:12:50.802: E/CAM2PORT_SprdCamCapabs(26096): antibandingModeFromString IllegalArgumentException !
+01-06 09:12:50.802: D/CAM_PhotoModule(26096): findJpegQuality
+01-06 09:12:50.802: D/CAM_PhotoModule(26096): getConvertJpegQuality
+01-06 09:12:50.802: D/CAM_PhotoModule(26096): getConvertJpegQuality result = 2
+01-06 09:12:50.802: D/CAM_PhotoModule(26096): findJpegQuality convertQuality = 2 VAL_DEFAULT_QUALITY != convertQuality = true
+01-06 09:12:50.803: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.804: I/Camera-JNI(26096): getNumberOfCameras():2
+01-06 09:12:50.808: D/CAM_PhotoModule(26096): findJpegQuality result = 95
+01-06 09:12:50.808: D/CAM_PhotoModule(26096): findJpegQuality result = 95
+01-06 09:12:50.809: I/CAM_PhotoModule(26096): updateParametersSensorSelfShot
+01-06 09:12:50.809: D/CAM_PhotoModule(26096): updateCameraShutterSound mShutterSoundEnabled =false
+01-06 09:12:50.809: D/CAM_PhotoModule(26096): updateMakeLevel false
+01-06 09:12:50.809: V/CAM_PhotoModule(26096): updateLeftSettings end
+01-06 09:12:50.810: E/CAM_CameraActivity Drea(26096): flashId =20 can not find
+01-06 09:12:50.815: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.notifyAll()!
+01-06 09:12:50.817: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait end!
+01-06 09:12:50.818: I/CAM2PORT_DispatchThread(26096): Runnable job.run() end!
+01-06 09:12:50.818: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait will!
+01-06 09:12:50.822: I/gralloc(26096): gralloc_register_buffer hnd=0x910bde40, share_fd=94, share_attr_fd=97, magic=51647890, format=17, internal_format=11, byte_stride=960, flags=4, usage=0x20000103, size=1036800, width=960, height=720, internalWidth=960, internalHeight=720, stride=960, base=0x8b558000, writeOwner=0, attr_base=0xffffffff, yuv_info=2, fd=-1, buf_idx=0, offset=0, min_pgsz=4096, phyaddr=0
+01-06 09:12:50.819: I/CAM2PORT_AndCam2AgntImp(26096): AppFW handleMessage - action = 'APPLY_SETTINGS'
+01-06 09:12:50.826: I/CAM2PORT_SprdAndCam2Set(26096):  set CONTROL_SPRD_3DNR_ENABLED: mCurrentEnable3dnr = 1
+01-06 09:12:50.826: I/CAM2PORT_SprdAndCam2Set(26096): set CONTROL_SPRD_ADJUST_FLASH_LEVEL mFlashLevel =0
+01-06 09:12:50.826: I/CAM2PORT_SprdAndCam2Set(26096): set CONTROL_SPRD_APP_MODE_ID mCurrentAppModeId =20
+01-06 09:12:50.831: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.notifyAll()!
+01-06 09:12:50.832: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait end!
+01-06 09:12:50.832: I/CAM2PORT_DispatchThread(26096): Runnable job.run() end!
+01-06 09:12:50.832: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait will!
+01-06 09:12:50.832: I/CAM2PORT_AndCam2AgntImp(26096): AppFW handleMessage - action = 'SET_DISPLAY_ORIENTATION'
+01-06 09:12:50.837: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.notifyAll()!
+01-06 09:12:50.841: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait end!
+01-06 09:12:50.841: I/CAM2PORT_DispatchThread(26096): Runnable job.run() end!
+01-06 09:12:50.842: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait will!
+01-06 09:12:50.845: I/CAM2PORT_AndCam2AgntImp(26096): AppFW handleMessage - action = 'SET_AUTO_FOCUS_MOVE_CALLBACK'
+01-06 09:12:50.845: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.notifyAll()!
+01-06 09:12:50.847: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait end!
+01-06 09:12:50.847: I/CAM2PORT_DispatchThread(26096): Runnable job.run() end!
+01-06 09:12:50.847: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait will!
+01-06 09:12:50.848: I/CAM2PORT_AndCam2AgntImp(26096): AppFW handleMessage - action = 'APPLY_SETTINGS'
+01-06 09:12:50.849: I/CAM2PORT_SprdAndCam2Set(26096):  set CONTROL_SPRD_3DNR_ENABLED: mCurrentEnable3dnr = 1
+01-06 09:12:50.850: I/CAM2PORT_SprdAndCam2Set(26096): set CONTROL_SPRD_ADJUST_FLASH_LEVEL mFlashLevel =0
+01-06 09:12:50.850: I/CAM2PORT_SprdAndCam2Set(26096): set CONTROL_SPRD_APP_MODE_ID mCurrentAppModeId =20
+01-06 09:12:50.862: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.notifyAll()!
+01-06 09:12:50.862: I/CAM2PORT_DispatchThread(26096): DispatchThread.this.wait end!
+01-06 09:12:50.912: W/SoundPoolThread(26096): type=1400 audit(0.0:4958): avc: denied { read } for name="u:object_r:media_prop:s0" dev="tmpfs" ino=13155 scontext=u:r:platform_app:s0:c512,c768 tcontext=u:object_r:media_prop:s0 tclass=file permissive=0
+01-06 09:12:50.914: I/ACodec(26096): 0x8ea03888 err = 0 ExecutingToIdleState sendCommand OMX_CommandStateSet OMX_StateLoaded
+01-06 09:12:50.925: E/libc(26096): Access denied finding property "media.metrics.enabled"
+01-06 09:12:51.042: I/gralloc(26096): gralloc_register_buffer hnd=0x910bdcc0, share_fd=84, share_attr_fd=89, magic=51647890, format=17, internal_format=11, byte_stride=960, flags=4, usage=0x20000103, size=1036800, width=960, height=720, internalWidth=960, internalHeight=720, stride=960, base=0x8b852000, writeOwner=0, attr_base=0xffffffff, yuv_info=2, fd=-1, buf_idx=0, offset=0, min_pgsz=4096, phyaddr=0
+01-06 09:12:51.061: I/gralloc(26096): gralloc_register_buffer hnd=0x910bdd80, share_fd=93, share_attr_fd=95, magic=51647890, format=17, internal_format=11, byte_stride=960, flags=4, usage=0x20000103, size=1036800, width=960, height=720, internalWidth=960, internalHeight=720, stride=960, base=0x8b45a000, writeOwner=0, attr_base=0xffffffff, yuv_info=2, fd=-1, buf_idx=0, offset=0, min_pgsz=4096, phyaddr=0
+01-06 09:12:51.077: I/gralloc(26096): gralloc_register_buffer hnd=0x910bdf00, share_fd=96, share_attr_fd=98, magic=51647890, format=17, internal_format=11, byte_stride=960, flags=4, usage=0x20000103, size=1036800, width=960, height=720, internalWidth=960, internalHeight=720, stride=960, base=0x8b35c000, writeOwner=0, attr_base=0xffffffff, yuv_info=2, fd=-1, buf_idx=0, offset=0, min_pgsz=4096, phyaddr=0
+01-06 09:12:51.420: E/CAM_CameraActivity Drea(26096): flashId =20 can not find
+01-06 09:12:51.700: D/CAM_PhotoModule(26096): handleMsg 15
+01-06 09:12:52.646: E/CAM_CameraActivity Drea(26096): flashId =20 can not find
+

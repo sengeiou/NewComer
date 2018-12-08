@@ -1,0 +1,89 @@
+
+
+TO all：
+    如题，gms九月更新，启用时间：11月中旬 gms-oem-OMR1-8.1-signed-201809。
+此次更新主要是:
+    1.更新了apk
+    2.etc/permissions/privapp-permissions-google.xml中package="com.google.android.googlequicksearchbox"新增权限android.permission.PACKAGE_USAGE_STATS
+    3.GoogleDialer不再以分辨率和CPU指令集为区分提供apk,只以分辨率区分提供apk.
+
+上传记录：
+/vendor/partner_gms 	gms包9月更新
+commit 	0cdbec026869ac5b8974a26277d0b296ac3720f1
+
+
+6580go-GMS包更新总结
+更新位置：/vendor/partner_gms
+
+1.编译gms或gms-go版本，通常在/bird/device/common.mk中会有类似定义
+ifeq ($(strip $(BUILD_GMS)), yes)
+  ifeq ($(strip $(BUILD_AGO_GMS)), yes)
+    $(call inherit-product-if-exists, vendor/partner_gms/products/gms_go.mk)
+  else
+    $(call inherit-product-if-exists, vendor/partner_gms/products/gms.mk)
+  endif
+endif  
+当BUILD_GMS=yes且BUILD_AGO_GMS=yes时，编译gms-go版本；
+当BUILD_GMS=yes且BUILD_AGO_GMS！=yes时，编译gms版本；
+
+2.gms版本属性
+在vendor/partner_gms/products/gms_go.mk或gms.mk中定义。
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.opa.eligible_device=true \
+    ro.setupwizard.mode=OPTIONAL \
+    ro.com.google.gmsversion=8.1_201809
+ro.com.google.gmsversion属性即为gms版本,在更新时通常需要修改。
+
+3.控制gms包中指定apk是否参与编译
+在vendor/partner_gms/products/gms_go.mk或gms.mk中控制。
+以gms_go.mk为例：
+根据google的注释，
+# GMS mandatory core packages  #gms必需的核心包
+GMS_PRODUCT_PACKAGES += \
+    ConfigUpdater \
+...
+    WebViewGoogle
+
+# GMS mandatory application packages #gms必需的应用包
+GMS_PRODUCT_PACKAGES += \
+    AssistantGo \
+...
+    YouTubeGo
+这两项通常不能修改。
+
+# GMS optional application packages #gms可选的应用包
+GMS_PRODUCT_PACKAGES += \
+    CalendarGoogle \
+    FilesGo \
+    MessagesGo
+这里可以修改添加需要的gms模块名或定义宏控控制。
+如：
+ifeq ($(strip $(BIRD_ADD_GOOGLE_PHOTOS)), yes)
+   GMS_PRODUCT_PACKAGES += Photos
+endif
+
+4.apk权限
+权限文件：vendor/partner_gms/etc/permissions/privapp-permissions-google.xml
+更新时需要注意对比各apk的权限变动，一是对比前月的gms包，二是对比当前最新代码中的权限。
+
+5.apk更新
+需要与当前最新代码中apk对比。
+若有apk变更，则要更新；
+若有新增或删除apk，需要与spl确认后明确是否添加。
+apk的Android.mk文件通常不需要变动，如需变动也要与spl确认。
+注意Android.mk中LOCAL_OVERRIDES_PACKAGES属性
+如：vendor/partner_gms/apps/GMailGo/Android.mk
+LOCAL_OVERRIDES_PACKAGES := Email Exchange2 Gmail2 MtkEmail中被覆盖的Email Exchange2 Gmail2 MtkEmail模块不会参与编译。
+这个属性需要和之前版本保持一致。
+
+6.通知并上传代码
+因上传文件较大，耗时较长。上传前可先将已修改完成的gms包压缩打包，放在共享文件夹，以供急需使用。
+上传时需要邮件通知主线上所有人，gms包更新及变动点，并提供以上提及压缩包以供急用。
+
+
+
+
+
+
+
+

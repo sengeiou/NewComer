@@ -1,0 +1,75 @@
+01-01 21:52:37.649: D/LILJKS(1465): mAttachInfo.mFullScreen=false
+01-01 21:52:37.649: D/LILJKS(1465): mAttachInfo.mFullScreen=false
+01-01 21:52:43.979: D/MusicUtils(1465): deleteTracks select item :1
+01-01 21:52:44.029: D/DeleteItems(1465): mItemList.LENGTH=1
+01-01 21:52:44.039: I/AlbumBrowserActivity(1465): AlbumActivity onContentChanged
+01-01 21:52:44.039: D/MultiTrackChoiceActivity(1465): onContentChanged---requery
+01-01 21:52:44.039: D/MultiTrackChoiceActivity(1465): onContentChanged---requery
+01-01 21:52:44.039: I/AlbumBrowserActivity(1465): AlbumActivity onContentChanged
+01-01 21:52:44.159: D/MultiTrackChoiceActivity(1465): mReScanHandler---handleMessage
+01-01 21:52:44.159: E/MultiTrackChoiceActivity(1465): onActivityResult  requestCode= 0 resultCode= -1
+01-01 21:52:44.179: I/gralloc.midgard(1465): gralloc_register_buffer hnd=0x810fa2a8, share_fd=86, share_attr_fd=87, ion_hnd=0x9, magic=51647890, format=1,         	internal_format=1, byte_stride=768, flags=4, usage=0x933, size=33024, width=182, height=43, internalWidth=182,         	internalHeight=43, stride=192, base=0x5434e000, lockState=1073741824, writeOwner=0, pid=1465, attr_base=0xffffffff, yuv_info=1, fd=0, buf_idx=0,        		offset=14000001000, min_pgsz=-2129681752, phyaddr=402fd4eb810fa2a8
+01-01 21:52:44.219: I/gralloc.midgard(1465): gralloc_unregister_buffer hnd=0x8110f1c8, share_fd=80, share_attr_fd=83, ion_hnd=0x3, magic=51647890, format=1,                 internal_format=1, byte_stride=960, flags=4, usage=0xb00, size=151680, width=240, height=158, internalWidth=240,                 internalHeight=158, stride=240, base=0x54533000, lockState=1073741824, writeOwner=0, pid=1465, attr_base=0xffffffff, yuv_info=1, fd=0, buf_idx=0,                 offset=1000001000, min_pgsz=-2131016664, phyaddr=810d7c888110f1c8
+01-01 21:52:44.219: I/gralloc.midgard(1465): gralloc_unregister_buffer hnd=0x81113568, share_fd=84, share_attr_fd=85, ion_hnd=0xa, magic=51647890, format=1,                 internal_format=1, byte_stride=960, flags=4, usage=0xb00, size=151680, width=240, height=158, internalWidth=240,                 internalHeight=158, stride=240, base=0x549c1000, lockState=1073741824, writeOwner=0, pid=1465, attr_base=0xffffffff, yuv_info=1, fd=0, buf_idx=0,                 offset=1000, min_pgsz=-2131016664, phyaddr=810d7ca081113568
+01-01 21:52:44.249: I/TrackBrowser(1465): onDestroy
+01-01 21:52:44.249: I/MusicDRM(1465): destroyDRM
+01-01 21:52:44.249: D/MultiTrackChoiceActivity(1465): onQueryComplete
+01-01 21:52:44.249: D/MultiTrackChoiceActivity(1465): changeCursor
+01-01 21:52:44.259: D/MultiTrackChoiceActivity(1465): onQueryComplete
+01-01 21:52:44.259: D/MultiTrackChoiceActivity(1465): changeCursor
+01-01 21:52:44.259: I/TrackBrowser(1465): onCreate
+01-01 21:52:44.259: I/MusicDRM(1465): initDRM
+01-01 21:52:44.259: D/DRM(1465): after call  MusicDRM.getInstance().initDRM
+01-01 21:52:44.279: I/TrackBrowser(1465): intent.getAction() = android.intent.action.EDIT
+01-01 21:52:44.289: D/AbsListView(1465): reset listView argument, mVelocityScale: 1.0 mMinimumVelocity: 38 mTouchSlop: 6 mDensityScale: 0.75
+01-01 21:52:44.449: I/TrackBrowser(1465): onResume
+01-01 21:52:44.659: D/mali_winsys(1465): EGLint new_window_surface(egl_winsys_display*, void*, EGLSurface, EGLConfig, egl_winsys_surface**, egl_color_buffer_format*, EGLBoolean) returns 0x3000
+01-01 21:52:44.689: D/MediaPlaybackService(1465): onStartCommand cmd-->null   action-->null
+CameraLauncher
+
+ro.zx13.project.name
+
+
+tts_play_example_title
+
+01-01 21:52:44.739: I/gralloc.midgard(1465): gralloc_register_buffer hnd=0x811399a0, share_fd=80, share_attr_fd=84, ion_hnd=0x3, magic=51647890, format=1,         	internal_format=1, byte_stride=960, flags=4, usage=0xb00, size=307200, width=240, height=320, internalWidth=240,         	internalHeight=320, stride=240, base=0x54968000, lockState=1073741824, writeOwner=0, pid=1465, attr_base=0xffffffff, yuv_info=1, fd=0, buf_idx=0,        		offset=11000001000, min_pgsz=-2129421920, phyaddr=402fd4eb811399a0
+01-01 21:52:44.739: I/gralloc.midgard(1465): gralloc_register_buffer hnd=0x8113a188, share_fd=85, share_attr_fd=88, ion_hnd=0xa, magic=51647890, format=1,         	internal_format=1, byte_stride=960, flags=4, usage=0xb00, size=307200, width=240, height=320, internalWidth=240,         	internalHeight=320, stride=240, base=0x549b3000, lockState=1073741824, writeOwner=0, pid=1465, attr_base=0xffffffff, yuv_info=1, fd=0, buf_idx=0,        		offset=f300001000, min_pgsz=-2129419896, phyaddr=402fd4eb8113a188
+01-01 21:52:44.829: I/TrackBrowser(1465): init
+01-01 21:52:44.839: I/drm(1465): isDrmEnabled =true
+01-01 21:52:44.849: I/drm(1465): isDrmEnabled =true
+01-01 21:52:44.859: I/drm(1465): isDrmEnabled =true
+01-01 21:52:44.869: I/drm(1465): isDrmEnabled =true
+01-01 21:52:44.899: D/dalvikvm(1465): GC_FOR_ALLOC freed 269K, 12% free 3322K/3772K, paused 13ms, total 15ms
+01-01 21:52:44.909: I/drm(1465): isDrmEnabled =true
+01-01 21:52:45.059: I/gralloc.midgard(1465): gralloc_unregister_buffer hnd=0x80fcf7a0, share_fd=77, share_attr_fd=78, ion_hnd=0x4, magic=51647890, format=1,                 internal_format=1, byte_stride=960, flags=4, usage=0xb00, size=307200, width=240, height=320, internalWidth=240,                 internalHeight=320, stride=240, base=0x549fe000, lockState=1073741824, writeOwner=0, pid=1465, attr_base=0xffffffff, yuv_info=1, fd=0, buf_idx=0,                 offset=1000, min_pgsz=-2131016664, phyaddr=80f79d4080fcf7a0
+01-01 21:52:45.059: I/gralloc.midgard(1465): gralloc_unregister_buffer hnd=0x80fd62a0, share_fd=81, share_attr_fd=82, ion_hnd=0x8, magic=51647890, format=1,                 internal_format=1, byte_stride=960, flags=4, usage=0xb00, size=307200, width=240, height=320, internalWidth=240,                 internalHeight=320, stride=240, base=0x54a49000, lockState=1073741824, writeOwner=0, pid=1465, attr_base=0xffffffff, yuv_info=1, fd=0, buf_idx=0,                 offset=43a0000000001000, min_pgsz=-2131016664, phyaddr=80f79d5880fd62a0
+01-01 21:52:45.299: D/DeleteItems(1465): onDestroy
+01-01 21:52:45.309: D/MultiTrackChoiceActivity(1465): Activity destroy start
+01-01 21:52:45.309: D/MultiTrackChoiceActivity(1465): changeCursor
+01-01 21:52:45.309: D/MultiTrackChoiceActivity(1465): Activity destroy end
+01-01 21:52:45.329: E/ActivityThread(1465): Activity com.android.music.DeleteItems has leaked IntentReceiver com.android.music.DeleteItems$3@41929178 that was originally registered here. Are you missing a call to unregisterReceiver()?
+01-01 21:52:45.329: E/ActivityThread(1465): android.app.IntentReceiverLeaked: Activity com.android.music.DeleteItems has leaked IntentReceiver com.android.music.DeleteItems$3@41929178 that was originally registered here. Are you missing a call to unregisterReceiver()?
+01-01 21:52:45.329: E/ActivityThread(1465): 	at android.app.LoadedApk$ReceiverDispatcher.<init>(LoadedApk.java:809)
+01-01 21:52:45.329: E/ActivityThread(1465): 	at android.app.LoadedApk.getReceiverDispatcher(LoadedApk.java:600)
+01-01 21:52:45.329: E/ActivityThread(1465): 	at android.app.ContextImpl.registerReceiverInternal(ContextImpl.java:1480)
+01-01 21:52:45.329: E/ActivityThread(1465): 	at android.app.ContextImpl.registerReceiver(ContextImpl.java:1460)
+01-01 21:52:45.329: E/ActivityThread(1465): 	at android.app.ContextImpl.registerReceiver(ContextImpl.java:1454)
+01-01 21:52:45.329: E/ActivityThread(1465): 	at android.content.ContextWrapper.registerReceiver(ContextWrapper.java:467)
+01-01 21:52:45.329: E/ActivityThread(1465): 	at com.android.music.DeleteItems.registerSDListener(DeleteItems.java:192)
+01-01 21:52:45.329: E/ActivityThread(1465): 	at com.android.music.DeleteItems.onCreate(DeleteItems.java:108)
+01-01 21:52:45.329: E/ActivityThread(1465): 	at android.app.Activity.performCreate(Activity.java:5259)
+01-01 21:52:45.329: E/ActivityThread(1465): 	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1099)
+01-01 21:52:45.329: E/ActivityThread(1465): 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2228)
+01-01 21:52:45.329: E/ActivityThread(1465): 	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2337)
+01-01 21:52:45.329: E/ActivityThread(1465): 	at android.app.ActivityThread.access$800(ActivityThread.java:151)
+01-01 21:52:45.329: E/ActivityThread(1465): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1243)
+01-01 21:52:45.329: E/ActivityThread(1465): 	at android.os.Handler.dispatchMessage(Handler.java:102)
+01-01 21:52:45.329: E/ActivityThread(1465): 	at android.os.Looper.loop(Looper.java:136)
+01-01 21:52:45.329: E/ActivityThread(1465): 	at android.app.ActivityThread.main(ActivityThread.java:5375)
+01-01 21:52:45.329: E/ActivityThread(1465): 	at java.lang.reflect.Method.invokeNative(Native Method)
+01-01 21:52:45.329: E/ActivityThread(1465): 	at java.lang.reflect.Method.invoke(Method.java:515)
+01-01 21:52:45.329: E/ActivityThread(1465): 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:989)
+01-01 21:52:45.329: E/ActivityThread(1465): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:805)
+01-01 21:52:45.329: E/ActivityThread(1465): 	at dalvik.system.NativeStart.main(Native Method)
+01-01 21:52:46.079: I/gralloc.midgard(1465): gralloc_unregister_buffer hnd=0x810fa2a8, share_fd=86, share_attr_fd=87, ion_hnd=0x9, magic=51647890, format=1,                 internal_format=1, byte_stride=768, flags=4, usage=0x933, size=33024, width=182, height=43, internalWidth=182,                 internalHeight=43, stride=192, base=0x5434e000, lockState=1073741824, writeOwner=48, pid=1465, attr_base=0xffffffff, yuv_info=1, fd=0, buf_idx=0,                 offset=14000001000, min_pgsz=-2131016664, phyaddr=81064738810fa2a8
+

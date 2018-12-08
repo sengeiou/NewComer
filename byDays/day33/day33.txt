@@ -1,0 +1,24 @@
+day33学习笔记
+一.白天主要完成分析隐私log相关任务
+
+二.晚上自己写写代码
+记录下问题:
+1.removePreference(Preference preference)方法需要由其父节点调用才能生效
+    <PreferenceCategory android:title="custom"
+        android:key="down">
+        <EditTextPreference android:title="brightness setting"
+            android:summary="edit-change"
+            android:key="edit_adp" />
+        <ListPreference android:title="brightness list"
+            android:summary="list-change"
+            android:key="list_adp"
+            android:entries="@array/brightness_level"
+            android:entryValues="@array/brightness_level_values"/>
+    </PreferenceCategory>
+需要((PreferenceGroup)findPreference("down")).removePreference(editAdp);才能删除
+
+2.ListPreference的key-values都为String型
+            android:entries="@array/brightness_level"
+            android:entryValues="@array/brightness_level_values"
+否则,将报错
+

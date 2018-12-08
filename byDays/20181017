@@ -1,0 +1,36 @@
+SetupWizardExitActivity
+已跳过设置向导
+com.android.setupwizard.FOUR_CORNER_EXIT
+com.google.android.setupwizard
+
+445 950
+
+adb shell am start -a com.android.setupwizard.FOUR_CORNER_EXIT
+
+input tap 44 66;input tap 436 54;input tap 436 891;input tap 39 901;
+
+DebugKeepScreenOn
+
+
+android.os.BinderProxy.transactNative
+android.os.BinderProxy.transact (Binder.java)
+android.security.IKeystoreService$Stub$Proxy.clear_uid (IKeystoreService.java)
+android.security.KeyStore.clearUid (KeyStore.java)
+com.android.server.pm.PackageManagerService.removeKeystoreDataIfNeeded (PackageManagerService.java)
+com.android.server.pm.PackageManagerService.removePackageDataLIF (PackageManagerService.java)
+com.android.server.pm.PackageManagerService.deleteInstalledPackageLIF (PackageManagerService.java)
+com.android.server.pm.PackageManagerService.deletePackageLIF (PackageManagerService.java)
+com.android.server.pm.PackageManagerService.deletePackageX (PackageManagerService.java)
+(locked <0x063567fb> (a java.lang.Object))
+com.android.server.pm.PackageManagerService$13.run (PackageManagerService.java)
+android.os.Handler.handleCallback (Handler.java)
+android.os.Handler.dispatchMessage (Handler.java)
+android.os.Looper.loop (Looper.java)
+android.os.HandlerThread.run (HandlerThread.java)
+com.android.server.ServiceThread.run (ServiceThread.java)
+
+
+/system/bt/btif/src/
+
+
+7130D_S8020A_E_DS442_CAMFONE

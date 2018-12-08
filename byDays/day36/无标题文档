@@ -1,0 +1,90 @@
+  DTC     arch/arm/boot/dts/sp9850ka-2c10-cmcc-tee-no-fp.dtb
+  DTC     arch/arm/boot/dts/sp7731e_vp.dtb
+  DTC     arch/arm/boot/dts/sp7731e_zebu.dtb
+  DTC     arch/arm/boot/dts/sp7731e_fpga.dtb
+  DTC     arch/arm/boot/dts/sp7731e-1h10-native.dtb
+  DTC     arch/arm/boot/dts/sp7731e-1h30-o-native.dtb
+  DTC     arch/arm/boot/dts/sp7731e-1h10-native-fp.dtb
+  DTC     arch/arm/boot/dts/sp7731e-1h30-o-native-fp.dtb
+  DTC     arch/arm/boot/dts/sp7731e-16c10-native.dtb
+  DTC     arch/arm/boot/dts/sp7731e-14c20-native.dtb
+  DTC     arch/arm/boot/dts/sp7731e-14c10-native.dtb
+  DTC     arch/arm/boot/dts/sp9832e-1h10-go.dtb
+  DTC     arch/arm/boot/dts/sp9832e-2c10-go.dtb
+  DTC     arch/arm/boot/dts/sp9832e-1h10-go-no-fp.dtb
+  DTC     arch/arm/boot/dts/sp9832e-2c10-go-no-fp.dtb
+  DTC     arch/arm/boot/dts/sp9832e-10c10-go.dtb
+  DTC     arch/arm/boot/dts/sp9832e-10c10-native.dtb
+  DTC     arch/arm/boot/dts/sp9832e-10c10-gofu.dtb
+  DTC     arch/arm/boot/dts/sp9832e-1h10-gofu.dtb
+  DTC     arch/arm/boot/dts/sp9832e-1h10-gofu-avb.dtb
+  DTC     arch/arm/boot/dts/sp9820e-1h10-native.dtb
+  DTC     arch/arm/boot/dts/sp9820e-13c10-native.dtb
+  DTC     arch/arm/boot/dts/sp9820e-5c10-native.dtb
+  DTC     arch/arm/boot/dts/sp9820e-2c10-native.dtb
+  CC      drivers/rtc/rtc-sprd.o
+  DTC     arch/arm/boot/dts/sp9820e-1h10-kaios-native.dtb
+  DTC     arch/arm/boot/dts/sp9820e-2h10-kaios-native.dtb
+  DTC     arch/arm/boot/dts/sp9820e-13c10-kaios-native.dtb
+  DTC     arch/arm/boot/dts/sp9820e-5c10-kaios-native.dtb
+  DTC     arch/arm/boot/dts/sp9820e-2c10-kaios-native.dtb
+  DTC     arch/arm/boot/dts/sp9820e-2h10-native.dtb
+  DTC     arch/arm/boot/dts/sp9820e-17c10-native.dtb
+  LD      drivers/rtc/built-in.o
+  LD      drivers/built-in.o
+  LINK    vmlinux
+  LD      vmlinux.o
+  MODPOST vmlinux.o
+WARNING: modpost: Found 2 section mismatch(es).
+To see full details build your kernel with:
+'make CONFIG_DEBUG_SECTION_MISMATCH=y'
+  GEN     .version
+  CHK     include/generated/compile.h
+  UPD     include/generated/compile.h
+  CC      init/version.o
+  LD      init/built-in.o
+  KSYM    .tmp_kallsyms1.o
+  KSYM    .tmp_kallsyms2.o
+  LD      vmlinux
+  SORTEX  vmlinux
+  SYSMAP  System.map
+  Building modules, stage 2.
+  MODPOST 0 modules
+  OBJCOPY arch/arm/boot/Image
+  Kernel: arch/arm/boot/Image is ready
+   text	   data	    bss	    dec	    hex	filename
+10549132	4144074	7674872	22368078	1554f4e	vmlinux
+  Kernel: arch/arm/boot/Image is ready
+   text	   data	    bss	    dec	    hex	filename
+10549132	4144074	7674872	22368078	1554f4e	vmlinux
+  GZIP    arch/arm/boot/compressed/piggy.gzip
+  AS      arch/arm/boot/compressed/piggy.gzip.o
+  LD      arch/arm/boot/compressed/vmlinux
+  OBJCOPY arch/arm/boot/zImage
+  Kernel: arch/arm/boot/zImage is ready
+make[1]:正在离开目录 `/data/code/7731e/out/target/product/sp7731e_1h20/obj/KERNEL'
+make:离开目录“/data/code/7731e/kernel”
+make:进入目录'/data/code/7731e/kernel'
+make[1]: 正在进入目录 `/data/code/7731e/out/target/product/sp7731e_1h20/obj/KERNEL'
+  CHK     include/config/kernel.release
+  GEN     ./Makefile
+  CHK     include/generated/uapi/linux/version.h
+  CHK     include/generated/utsrelease.h
+  Using /data/code/7731e/kernel as source for kernel
+make[2]: “include/generated/mach-types.h”是最新的。
+  CHK     include/generated/timeconst.h
+  CHK     include/generated/bounds.h
+  CHK     include/generated/asm-offsets.h
+  CALL    /data/code/7731e/kernel/scripts/checksyscalls.sh
+  Building modules, stage 2.
+  MODPOST 0 modules
+make[1]:正在离开目录 `/data/code/7731e/out/target/product/sp7731e_1h20/obj/KERNEL'
+make:离开目录“/data/code/7731e/kernel”
+[  4% 17/408] Building with Jack: out/target/common/obj/APPS/messaging_intermediates/with-local/classes.dex
+[  4% 18/408] Building with Jack: out/target/common/obj/APPS/SprdDialer_intermediates/with-local/classes.dex
+ninja: build stopped: subcommand failed.
+17:05:15 ninja failed with: exit status 1
+
+#### failed to build some targets (05:53 (mm:ss)) ####
+
+

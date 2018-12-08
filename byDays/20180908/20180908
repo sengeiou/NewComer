@@ -1,0 +1,49 @@
+com.android.contacts/.activities.PeopleActivity  ContactsDatabaseHelper
+
+com.google.android.packageinstaller/com.android.packageinstaller.permission.ui.GrantPermissionsActivity   //授予权限的activity
+
+PeopleActivity
+
+
+09-08 16:45:15.967: D/MusicBrowserActivity(5947): onCreate start
+09-08 16:45:16.299: D/PermissionsActivity(5947): onCreate
+09-08 16:45:16.523: D/OpenGLRenderer(5947): textureCacheSize 25165824
+09-08 16:45:16.529: D/OpenGLRenderer(5947): HWUI GL Pipeline
+09-08 16:45:16.811: I/zygote(5947): android::hardware::configstore::V1_0::ISurfaceFlingerConfigs::hasWideColorDisplay retrieved: 0
+09-08 16:45:16.811: I/OpenGLRenderer(5947): Initialized EGL, version 1.4
+09-08 16:45:16.812: D/OpenGLRenderer(5947): Swap behavior 2
+09-08 16:45:16.844: D/mali_winsys(5947): EGLint new_window_surface(egl_winsys_display *, void *, EGLSurface, EGLConfig, egl_winsys_surface **, egl_color_buffer_format *, EGLBoolean) returns 0x3000, win:0x95dfd008
+09-08 16:45:16.845: I/OpenGLRenderer(5947): queryNativeWindowStatus 0x95dfd008 query=0 dataspace=0
+09-08 16:45:16.970: I/gralloc(5947): gralloc_register_buffer hnd=0xafd7b580, share_fd=55, share_attr_fd=56, magic=51647890, format=1, internal_format=1, byte_stride=1920, flags=4, usage=0xb00, size=1843200, width=480, height=960, internalWidth=480, internalHeight=960, stride=480, base=0x94e46000, writeOwner=0, attr_base=0xffffffff, yuv_info=1, fd=-1, buf_idx=0, offset=0, min_pgsz=4096, phyaddr=0
+09-08 16:45:17.227: D/MusicDataLoader(5947): unregisterDataListner mDataListennerList:[]
+09-08 16:45:17.236: E/MusicUtils(5947): Trying to unbind with null token
+09-08 16:45:23.875: D/PermissionsActivity(5947): Cannot grant permission:android.permission.READ_PHONE_STATE
+09-08 16:45:23.894: V/Toast(5947): Toast SHOW: android.widget.Toast@528eece view = android.widget.LinearLayout{c84a1ef V.E...... ......I. 0,0-0,0} caller: com.android.music.RequestPermissionsActivityBase.onRequestPermissionsResult:145 
+09-08 16:45:23.973: V/Toast(5947): SHOW: android.widget.Toast$TN@ba9f4fc
+09-08 16:45:24.127: V/Toast(5947): HANDLE SHOW: android.widget.Toast$TN@ba9f4fc mView=null mNextView=android.widget.LinearLayout{c84a1ef V.E...... ......I. 0,0-0,0}
+09-08 16:45:24.127: V/Toast(5947): HANDLE HIDE: android.widget.Toast$TN@ba9f4fc mView=null
+09-08 16:45:24.127: V/Toast(5947): ADD! android.widget.LinearLayout{c84a1ef V.E...... ......I. 0,0-0,0} in android.widget.Toast$TN@ba9f4fc
+09-08 16:45:24.132: D/OpenGLRenderer(5947): textureCacheSize 25165824
+09-08 16:45:24.403: D/OpenGLRenderer(5947): textureCacheSize 25165824
+09-08 16:45:24.572: D/mali_winsys(5947): EGLint new_window_surface(egl_winsys_display *, void *, EGLSurface, EGLConfig, egl_winsys_surface **, egl_color_buffer_format *, EGLBoolean) returns 0x3000, win:0x951f0008
+09-08 16:45:24.572: I/OpenGLRenderer(5947): queryNativeWindowStatus 0x951f0008 query=0 dataspace=0
+09-08 16:45:24.598: I/gralloc(5947): gralloc_register_buffer hnd=0xafd7b940, share_fd=61, share_attr_fd=62, magic=51647890, format=1, internal_format=1, byte_stride=1920, flags=4, usage=0xb00, size=190080, width=480, height=99, internalWidth=480, internalHeight=99, stride=480, base=0xb0f74000, writeOwner=0, attr_base=0xffffffff, yuv_info=1, fd=-1, buf_idx=0, offset=0, min_pgsz=4096, phyaddr=0
+09-08 16:45:24.882: I/gralloc(5947): gralloc_unregister_buffer hnd=0xafd7b580, share_fd=55, share_attr_fd=56, magic=51647890, format=1, internal_format=1, byte_stride=1920, flags=4, usage=0xb00, size=1843200, width=480, height=960, internalWidth=480, internalHeight=960, stride=480, base=0x94e46000, writeOwner=0, attr_base=0xffffffff, yuv_info=1, fd=-1, buf_idx=0, offset=0, min_pgsz=4096, phyaddr=0
+09-08 16:45:24.886: W/libEGL(5947): EGLNativeWindowType 0x95dfd008 disconnect failed
+09-08 16:45:25.259: D/PermissionsActivity(5947): onDestory
+09-08 16:45:25.974: V/Toast(5947): HIDE: android.widget.Toast$TN@ba9f4fc
+09-08 16:45:25.975: V/Toast(5947): HANDLE HIDE: android.widget.Toast$TN@ba9f4fc mView=android.widget.LinearLayout{c84a1ef V.E...... ........ 0,0-480,99}
+09-08 16:45:25.976: V/Toast(5947): REMOVE! android.widget.LinearLayout{c84a1ef V.E...... ........ 0,0-480,99} in android.widget.Toast$TN@ba9f4fc
+09-08 16:45:26.004: I/gralloc(5947): gralloc_unregister_buffer hnd=0xafd7b940, share_fd=61, share_attr_fd=62, magic=51647890, format=1, internal_format=1, byte_stride=1920, flags=4, usage=0xb00, size=190080, width=480, height=99, internalWidth=480, internalHeight=99, stride=480, base=0xb0f74000, writeOwner=0, attr_base=0xffffffff, yuv_info=1, fd=-1, buf_idx=0, offset=0, min_pgsz=4096, phyaddr=0
+09-08 16:45:26.004: W/libEGL(5947): EGLNativeWindowType 0x951f0008 disconnect failed
+
+
+
+
+
+	Line 14550: 0058DC 01-01 17:37:27.518  1689  1689 D PermissionsActivity: onCreate
+	Line 14714: 0059C7 01-01 17:37:28.821   637   681 I ActivityManager: Displayed com.google.android.packageinstaller/com.android.packageinstaller.permission.ui.GrantPermissionsActivity: +1s97ms (total +1s835ms)
+	Line 14979: 005B18 01-01 17:37:30.091   282  1059 E BufferQueueProducer: [com.google.android.packageinstaller/com.android.packageinstaller.permission.ui.GrantPermissionsActivity#0] disconnect: not connected (req=1)
+	Line 15129: 005BAE 01-01 17:37:30.781   282   629 E BufferQueueProducer: [com.android.music/com.android.music.RequestPermissionsActivity#0] disconnect: not connected (req=1)
+	Line 15244: 005C34 01-01 17:37:31.700  1689  1689 D PermissionsActivity: onDestory
+

@@ -1,0 +1,205 @@
+day02学习笔记
+
+一.find命令
+在硬盘上查找
+语法：find [PATH] [OPTION] [ACTION]
+
+1.与时间相关参数：atime,mtime,ctime
+以mtime为例，
+  -mtime n:在n天之前的“一天之内”被更改的文件
+  -mtime +n: 在n天之前(不含n天)
+  -mtime -n: 在n天之内(含n天)
+  -newer file: 列出比file新的文件
+注：find ~/tools -mtime 0  寻找24小时内有更改的文件
+例：find ~/hjc/day01 -newer ./day01/d1.tar 寻找比d1.tar新的文件
+    find /var -mtime n:
+	若n=4,代表4-5天前；
+	若n=+4,代表4天内；
+	若n=-4,代表是5天前；
+
+2.与用户或用户组相关参数
+参数：
+  -uid n:以用户帐号id查找
+  -gid n:以用户组id查找
+  -user name:以用户名name查找
+  -group name:以用户组名name查找
+  -nouser:寻找文件所有者不在/etc/passwd中的文件
+  -nogroup:寻找文件所在组不在/etc/group中的文件
+注：可以用cat /etc/passwd | grep huangyaosheng 查看uid/gid
+ huangyaosheng:x:1000:1000:黄耀生:/home/huangyaosheng:/bin/bash
+其中：uid=1000,gid=1000.
+
+3.与文件名称类型权限等相关参数
+参数：
+  -name n:查找名为n的文件
+  -type TYPE:TYPE-目录(d),文件(f),其他类型参考ll后显示的类型
+  -regex PATTERN:查找符合正则表达式pattern的文件
+  -size (+-)SIZE:查找比SIZE大/小的文件，单位：c-byte;k-kb
+  -perm +mode:查找权限匹配mod的文件
+  -empty:查找空文件或空目录
+例：find -name "*.sh" 查找后缀为sh的文件
+   find -regex .*d.* 查找文件名中含d的文件(注意查找的文件带有目录)
+   find -size +5k 查找>5kb的文件
+   find -perm -775 查找权限是775的文件
+
+4.其他参数
+  -exec command:后接其他命令command
+  -print:将结果打印到屏幕上（默认操作）
+例：find -perm -775 -exec ls -l {} \;
+
+二.andriod常用工具
+
+1.Beyond Compare 文件比较工具
+
+  可以比较2个文件夹，文本等其中的不同，它用不同的颜色来表示两个分区或文件（夹）的差异。
+  黑色表示左右两侧的文件（夹）是一样的，所以备份时我们可以忽略它们.
+  蓝色表示右（左）侧是完全没有的，这时我们右击这个文件（夹），选择“复制到右（左）侧”即可.
+  红色表示两边都有这个文件（夹），但不完全相同.
+  黄色的文件（夹）一般不必理会。常见的系统卷标信息文件夹（System Volume Information）就是黄色的.
+
+2.GAT 调试工具
+
+GAT是MTK在DDMS基础上进行二次开发封装的一个集多种debug功能为一体的工具，除
+了包含原有DDMS的功能以外还支持kernel抓取，获取native进程列表，backtrace
+decode，提取手机端debug信息等功能；当MTKLogger出现异常时，经常会需要使用
+GAT工具来抓取log。
+
+3.Git 代码管理工具
+
+Git是分布式版本控制系统.
+  集中式版本控制系统:CVS,SVN.版本库是集中存放在中央服务器的,而干活的时候，要从中央服务器取得最新的版本，然后开始干活，干完活了，再把自己的活推送给中央服务器。集中式版本控制系统最大的毛病就是必须联网才能工作。
+  分布式版本控制系统根本没有“中央服务器”，每个人的电脑上都是一个完整的版本库。工作的时候，就不需要联网了。多个人如何协作呢？比方说你在自己电脑上改了文件A，你的同事也在他的电脑上改了文件A，这时，你们俩之间只需把各自的修改推送给对方，就可以互相看到对方的修改了。分布式版本控制系统的安全性要高很多，因为每个人电脑里都有完整的版本库，某一个人的电脑坏掉了不要紧。
+  分布式版本控制系统通常也有一台充当“中央服务器”的电脑，但这个服务器的作用仅仅是用来方便“交换”大家的修改，没有它大家也一样干活，只是交换修改不方便而已。
+
+注：所有的版本控制系统，其实只能跟踪文本文件的改动，比如TXT文件，网页，所有的程序代码等等。版本控制系统可以告诉你每次的改动，比如在第5行加了一个单词“Linux”，在第8行删了一个单词“Windows”。而图片、视频这些二进制文件，虽然也能由版本控制系统管理，但没法跟踪文件的变化，只能把二进制文件每次改动串起来，也就是只知道图片从100KB改成了120KB，但到底改了啥，版本控制系统不知道。
+
+git常用操作
+输入git，可以查看git是否已安装。
+输入git --version 可以查看git版本。git version 1.7.9.5
+如果没安装，输入 sudo apt-get install git安装即可
+
+  a.创建一个新的空仓库 git init
+Initialized empty Git repository in /home/huangyaosheng/hjc/gtest/.git/
+  
+  b.向仓库中添加文件 git add readme.txt
+注意需要add的文件要先放在上面创建的gtest目录下
+
+  c.将文件提交到仓库 git commit
+git commit -m "add a readme txt"
+得到：[master (root-commit) 5a745b6] add a readme txt
+ 1 file changed, 1 insertion(+)
+ create mode 100644 readme.txt
+注：可以add多个文件，再一次性提交。-m "xx"：打印本次提交的说明。这里显示改变了，插入了一行内容。
+
+  d.查看仓库状态 git status
+先修改下readme.txt,再输入git status.
+得到：# On branch master
+# Changes not staged for commit:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#	modified:   readme.txt
+#
+no changes added to commit (use "git add" and/or "git commit -a")
+状态是readme.txt被修改了，但没有准备提交修改。
+
+  e.查看difference git diff readme.txt
+得到:diff --git a/readme.txt b/readme.txt
+index 44441c5..eab63c0 100644
+--- a/readme.txt
++++ b/readme.txt
+@@ -1 +1,2 @@
+ i'm learning git. 001
++002
+显示加了一行002。
+
+  f.显示从最近到最远的提交日志 git log
+commit fc817a899f82cc3e0e71a37e6e3b3a86027a86f6
+Author: hjc <tomorrow94i@163.com>
+Date:   Wed Jun 27 14:50:42 2018 +0800
+
+    add read 2
+
+commit 1c8bb9d426fe3f6fee1a29fa4d246a580c06bd51
+Author: hjc <tomorrow94i@163.com>
+Date:   Wed Jun 27 14:48:26 2018 +0800
+
+    add read
+1c8bb9d426fe3f6fee1a29fa4d246a580c06bd51:commit id 版本号
+
+  g.版本回退 git reset --hard HEAD^
+git reset --hard HEAD^
+HEAD表示当前版本，上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100。
+要在恢复第二版，若当前命令行窗口未关闭，则
+git reset --hard fc817a899f82cc3e0e71a37e6e3b3a86027a86f6 更换版本号即可
+
+  h.记录你的每一次命令 git reflog
+fc817a8 HEAD@{0}: reset: moving to fc817a899f82cc3e0e71a37e6e3b3a86027a86f6
+1c8bb9d HEAD@{1}: reset: moving to HEAD^
+fc817a8 HEAD@{2}: commit: add read 2
+1c8bb9d HEAD@{3}: commit (initial): add read
+紧接上面的情况，若当前命令行窗口关闭，则调用此命令获得版本号。
+
+三.连接github远程仓库：
+
+  以前注册过一个，但是不知道怎么管理代码。
+因为这个电脑是别人的，先修改git的用户名和提交邮箱
+git config user.name hjc
+git config user.email tomorrow94i@163.com
+
+本地Git仓库和GitHub仓库之间的传输是通过SSH加密的。
+1.创建ssh key
+  ssh-keygen -t rsa -C "tomorrow94i@163.com"
+  .ssh目录里面有id_rsa和id_rsa.pub两个文件，这两个就是SSH Key的秘钥对，id_rsa是私钥，不能泄露出去，id_rsa.pub是公钥.
+
+2.登陆github,在setting里add ssh key,在Key文本框里粘贴id_rsa.pub文件的内容，title可以任意填。
+
+3.在github中创建一个仓库gtest,在本地仓库目录：
+git remote add origin git@github.com:ever_who/gtest.git
+git push -u origin master
+远程库的名字就是origin，这是Git默认的叫法.
+把本地库的内容推送到远程，用git push命令，实际上是把当前分支master推送到远程。-u:关联本地master与远程master。
+
+这时，github远程库的内容与本地已一致。之后，要推送本地已提交的master分支，只需要 git push origin master。
+
+问题：git remote add origin git@github.com:ever_who/gtest.git命令打错，后面在重输也无效，一直显示 Reposity not found.
+解决：修改 .git/config 文件，删除[remote "origin"]   
+   url = git@github.com:alexagui/my_project.git  
+   fetch = +refs/heads/*:refs/remotes/origin/*
+  再重新运行上两条命令就好了。
+
+推送成功：Counting objects: 6, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (6/6), 414 bytes, done.
+Total 6 (delta 0), reused 0 (delta 0)
+To git@github.com:ever-who/gtest.git
+ * [new branch]      master -> master
+Branch master set up to track remote branch master from origin.
+
+
+四.创建window虚拟机完成共享文件夹的配置
+使用virt-manager命令打开虚拟系统管理器。按照步骤，导入win8的镜像文件。
+问题：本来想用vmware player去新建，但是img格式的镜像不支持。导入完成后，第二次打开，win8界面变成黑白的。
+解决：删除，重装。在轻松访问-关闭高对比度。
+再按照步骤，配置共享文件夹
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
+
+
+	
+
+

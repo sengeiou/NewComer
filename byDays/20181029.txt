@@ -1,0 +1,44 @@
+        /**
+         * Sets the flash mode.
+         *
+         * @param value flash mode.
+         * @see #getFlashMode()
+         */
+        public void setFlashMode(String value) {
+            set(KEY_FLASH_MODE, value);
+        }
+		
+		
+		== Lucas.Hu@unisoc.com On 20181029T05:35:35 (xml) ==
+HI 修改方案如下：
+vendor/sprd/modules/libcamera/ispalg/isp2.x/ae/sprd/ae_sprd_adpt.c
+1241static cmr_s32 ae_crtl_set_flash_mode (struct ae_ctrl_cxt *cxt,cmr_handle param )
+1242{
+1243    cmr_s32 rtn = AE_SUCCESS;
+1244
+1245    if ((NULL == cxt) || (NULL == param)) {
+1246        ISP_LOGE("fail to set flash mode, cxt %p ", cxt);
+1247        return AE_PARAM_NULL;
+1248    }
+
++++    ISP_LOGE("ae_crtl_set_flash_mode %d",cxt->cur_status.flash_mode);
+
+1250    cmr_s32 *flash_mode = (cmr_s32 *) param;
+1251    cxt->cur_status.flash_mode = *flash_mode;
+
++++        if (( 1 == cxt->camera_id ) && (3 == cxt->cur_status.flash_mode))
++++        {
++++        cxt->cur_status.led_state = 0;
++++        cxt->cur_status.settings.flash = FLASH_LED_AUTO;
++++        ISP_LOGE("ae_crtl_set_flash_mode FLASH_LED_AUTO");
++++        }
+
+1252
+1253    return rtn;
+1254}
+
+如果FIX，请自测一下前摄像flash  auto/on/off各个模式是否正常，问题FIX。
+如果不能FIX，请
+adb root
+adb remount
+adb shell setprop persist.sys.camera.hal.log 5

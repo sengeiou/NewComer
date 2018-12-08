@@ -1,0 +1,11 @@
+    BUILD_NUM_FROM_FILE=`cat out/build_number.txt`
+    OTA_OUT_DIR=outbin
+    if [ ! -d "$ANDROID_PRODUCT_OUT/OTA_OUT_DIR" ]; then
+	mkdir -p $ANDROID_PRODUCT_OUT/$OTA_OUT_DIR
+    fi
+    mv -f $ANDROID_PRODUCT_OUT/$CUSTOM_BASE_PRJ-ota-$BUILD_NUM_FROM_FILE.zip $ANDROID_PRODUCT_OUT/$OTA_OUT_DIR
+    cp -f $ANDROID_PRODUCT_OUT/obj/PACKAGING/target_files_intermediates/$CUSTOM_BASE_PRJ-target_files-$BUILD_NUM_FROM_FILE.zip $ANDROID_PRODUCT_OUT/$OTA_OUT_DIR
+
+    BF_BUILD_NUMBER := $(shell $(DATE) +%W%w%H)
+
+

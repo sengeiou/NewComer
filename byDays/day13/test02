@@ -1,0 +1,1 @@
+sudo ./DLoader -pac /home/hjc/gitfiles/code/5110SD_Z453C_E_DS88_N_userdebug/idh.code/release-sp7731c_1h10_bird/5110SD_Z453C_E_DS88_N.A1.SC7731C.FWVGA.B18.20170524.pac -dev /dev/ttyUSB0 -baud 460800 -reset -nvbk true

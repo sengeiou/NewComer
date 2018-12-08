@@ -1,0 +1,70 @@
+01-01 12:20:35.441: W/System.err(4714): java.lang.UnsatisfiedLinkError: dalvik.system.PathClassLoader[DexPathList[[zip file "/vendor/app/ValidationTools/ValidationTools.apk"],nativeLibraryDirectories=[/vendor/app/ValidationTools/lib/arm, /vendor/app/ValidationTools/ValidationTools.apk!/lib/armeabi-v7a, /system/lib, /vendor/lib, /system/lib, /vendor/lib]]] couldn't find "libjni_keybox.so"
+01-01 12:20:35.441: W/System.err(4714): 	at java.lang.Runtime.loadLibrary0(Runtime.java:1011)
+01-01 12:20:35.441: W/System.err(4714): 	at java.lang.System.loadLibrary(System.java:1657)
+01-01 12:20:35.441: W/System.err(4714): 	at com.sprd.validationtools.itemstest.KeyboxNative.<clinit>(KeyboxNative.java:11)
+01-01 12:20:35.441: W/System.err(4714): 	at com.sprd.validationtools.itemstest.KeyboxNative.check_keybox_is_enabled(Native Method)
+01-01 12:20:35.441: W/System.err(4714): 	at com.sprd.validationtools.itemstest.KeyboxTest.getKeyboxStatus(KeyboxTest.java:26)
+01-01 12:20:35.441: W/System.err(4714): 	at com.sprd.validationtools.itemstest.KeyboxTest.onCreate(KeyboxTest.java:22)
+01-01 12:20:35.441: W/System.err(4714): 	at android.app.Activity.performCreate(Activity.java:7025)
+01-01 12:20:35.441: W/System.err(4714): 	at android.app.Activity.performCreate(Activity.java:7016)
+01-01 12:20:35.442: W/System.err(4714): 	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1217)
+01-01 12:20:35.442: W/System.err(4714): 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2812)
+01-01 12:20:35.442: W/System.err(4714): 	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2955)
+01-01 12:20:35.442: W/System.err(4714): 	at android.app.ActivityThread.-wrap12(Unknown Source:0)
+01-01 12:20:35.442: W/System.err(4714): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1650)
+01-01 12:20:35.442: W/System.err(4714): 	at android.os.Handler.dispatchMessage(Handler.java:106)
+01-01 12:20:35.442: W/System.err(4714): 	at android.os.Looper.loop(Looper.java:164)
+01-01 12:20:35.442: W/System.err(4714): 	at android.app.ActivityThread.main(ActivityThread.java:6719)
+01-01 12:20:35.442: W/System.err(4714): 	at java.lang.reflect.Method.invoke(Native Method)
+01-01 12:20:35.442: W/System.err(4714): 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:449)
+01-01 12:20:35.442: W/System.err(4714): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)
+01-01 12:20:35.442: E/zygote(4714): No implementation found for int com.sprd.validationtools.itemstest.KeyboxNative.check_keybox_is_enabled() (tried Java_com_sprd_validationtools_itemstest_KeyboxNative_check_1keybox_1is_1enabled and Java_com_sprd_validationtools_itemstest_KeyboxNative_check_1keybox_1is_1enabled__)
+01-01 12:20:35.443: D/AndroidRuntime(4714): Shutting down VM
+01-01 12:20:35.444: E/AndroidRuntime(4714): FATAL EXCEPTION: main
+01-01 12:20:35.444: E/AndroidRuntime(4714): Process: com.sprd.validationtools, PID: 4714
+01-01 12:20:35.444: E/AndroidRuntime(4714): java.lang.UnsatisfiedLinkError: No implementation found for int com.sprd.validationtools.itemstest.KeyboxNative.check_keybox_is_enabled() (tried Java_com_sprd_validationtools_itemstest_KeyboxNative_check_1keybox_1is_1enabled and Java_com_sprd_validationtools_itemstest_KeyboxNative_check_1keybox_1is_1enabled__)
+01-01 12:20:35.444: E/AndroidRuntime(4714): 	at com.sprd.validationtools.itemstest.KeyboxNative.check_keybox_is_enabled(Native Method)
+01-01 12:20:35.444: E/AndroidRuntime(4714): 	at com.sprd.validationtools.itemstest.KeyboxTest.getKeyboxStatus(KeyboxTest.java:26)
+01-01 12:20:35.444: E/AndroidRuntime(4714): 	at com.sprd.validationtools.itemstest.KeyboxTest.onCreate(KeyboxTest.java:22)
+01-01 12:20:35.444: E/AndroidRuntime(4714): 	at android.app.Activity.performCreate(Activity.java:7025)
+01-01 12:20:35.444: E/AndroidRuntime(4714): 	at android.app.Activity.performCreate(Activity.java:7016)
+01-01 12:20:35.444: E/AndroidRuntime(4714): 	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1217)
+01-01 12:20:35.444: E/AndroidRuntime(4714): 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2812)
+01-01 12:20:35.444: E/AndroidRuntime(4714): 	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2955)
+01-01 12:20:35.444: E/AndroidRuntime(4714): 	at android.app.ActivityThread.-wrap12(Unknown Source:0)
+01-01 12:20:35.444: E/AndroidRuntime(4714): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1650)
+01-01 12:20:35.444: E/AndroidRuntime(4714): 	at android.os.Handler.dispatchMessage(Handler.java:106)
+01-01 12:20:35.444: E/AndroidRuntime(4714): 	at android.os.Looper.loop(Looper.java:164)
+01-01 12:20:35.444: E/AndroidRuntime(4714): 	at android.app.ActivityThread.main(ActivityThread.java:6719)
+01-01 12:20:35.444: E/AndroidRuntime(4714): 	at java.lang.reflect.Method.invoke(Native Method)
+01-01 12:20:35.444: E/AndroidRuntime(4714): 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:449)
+01-01 12:20:35.444: E/AndroidRuntime(4714): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)
+
+
+
+10-12 18:59:55.574: E/zygote(6234): No implementation found for int com.sprd.validationtools.itemstest.KeyboxTest.check_keybox_is_enabled() (tried Java_com_sprd_validationtools_itemstest_KeyboxTest_check_1keybox_1is_1enabled and Java_com_sprd_validationtools_itemstest_KeyboxTest_check_1keybox_1is_1enabled__)
+10-12 18:59:55.575: D/AndroidRuntime(6234): Shutting down VM
+10-12 18:59:55.576: E/AndroidRuntime(6234): FATAL EXCEPTION: main
+10-12 18:59:55.576: E/AndroidRuntime(6234): Process: com.sprd.validationtools, PID: 6234
+10-12 18:59:55.576: E/AndroidRuntime(6234): java.lang.UnsatisfiedLinkError: No implementation found for int com.sprd.validationtools.itemstest.KeyboxTest.check_keybox_is_enabled() (tried Java_com_sprd_validationtools_itemstest_KeyboxTest_check_1keybox_1is_1enabled and Java_com_sprd_validationtools_itemstest_KeyboxTest_check_1keybox_1is_1enabled__)
+10-12 18:59:55.576: E/AndroidRuntime(6234): 	at com.sprd.validationtools.itemstest.KeyboxTest.check_keybox_is_enabled(Native Method)
+10-12 18:59:55.576: E/AndroidRuntime(6234): 	at com.sprd.validationtools.itemstest.KeyboxTest.getKeyboxStatus(KeyboxTest.java:26)
+10-12 18:59:55.576: E/AndroidRuntime(6234): 	at com.sprd.validationtools.itemstest.KeyboxTest.onCreate(KeyboxTest.java:22)
+10-12 18:59:55.576: E/AndroidRuntime(6234): 	at android.app.Activity.performCreate(Activity.java:7025)
+10-12 18:59:55.576: E/AndroidRuntime(6234): 	at android.app.Activity.performCreate(Activity.java:7016)
+10-12 18:59:55.576: E/AndroidRuntime(6234): 	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1217)
+10-12 18:59:55.576: E/AndroidRuntime(6234): 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2812)
+10-12 18:59:55.576: E/AndroidRuntime(6234): 	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2955)
+10-12 18:59:55.576: E/AndroidRuntime(6234): 	at android.app.ActivityThread.-wrap12(Unknown Source:0)
+10-12 18:59:55.576: E/AndroidRuntime(6234): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1650)
+10-12 18:59:55.576: E/AndroidRuntime(6234): 	at android.os.Handler.dispatchMessage(Handler.java:106)
+10-12 18:59:55.576: E/AndroidRuntime(6234): 	at android.os.Looper.loop(Looper.java:164)
+10-12 18:59:55.576: E/AndroidRuntime(6234): 	at android.app.ActivityThread.main(ActivityThread.java:6719)
+10-12 18:59:55.576: E/AndroidRuntime(6234): 	at java.lang.reflect.Method.invoke(Native Method)
+10-12 18:59:55.576: E/AndroidRuntime(6234): 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:449)
+10-12 18:59:55.576: E/AndroidRuntime(6234): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)
+
+
+
+		fpint-gpios = <&ap_eic_async 11 0>;
+

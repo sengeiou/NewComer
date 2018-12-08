@@ -1,0 +1,30 @@
+day14学习笔记
+
+一.单编
+模块需要有Android.mk文件，idh.code打开终端：	
+source build/envsetup.sh
+lunch 选择对应平台 
+单编命令：mmm 模块路径 ---编译指定路径下所有模块，但不包含依赖  mmm ./packages/apps/Settings/
+编译完会生成apk文件,文件路径：./out/target/product/sp7731c_1h10_bird/system/priv-app/Settings/Settings.apk，
+安装到手机 adb install -r Settings.apk
+
+
+二.android日志
+  Android日志主要分为kernel、radio、event、main这四种log。
+1.kernel log属于Linux内核的log ，主要是驱动相关的log。Modem log，主要是通信相关的，比如信号强弱、连接那个网络等等。还有网络相关的netlog，看网络链接情况，抓取网络包等等。。
+2.Radio Log:Android RIL层 log，在调试Android通信方面的代码时，这个Log非常关键。
+3.Main Log:与通过DDMS中看到的log是一致，记录手机android上层app以及framework相关活动的log
+4.Event Log：主要是ActivityManager、powerManager等相关的log
+
+2-4可以使用adb logcat -b [radio/main/event] > 目标.log
+kernel log可以使用adb shell cat /proc/kmsg > 目标.log 抓取
+
+
+二.手机基本信息
+
+1.IMEI
+  IMEI(International Mobile Equipment Identity)是国际移动设备身份码的缩写，国际移动装备辨识码，是由15位数字组成的"电子串号"。拨号状态下输入：“*#06#”,可以查看IMEI号。
+  一般双卡双待的机器，有两个IMEI号。双卡单待的机器只有一个IMEI号。
+
+2.SN号
+  SN号一般指的是软件注册码信息，是一个产品出厂的系列号，SN是series number(中文:系列号)的缩写。

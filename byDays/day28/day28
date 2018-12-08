@@ -1,0 +1,44 @@
+day28学习笔记
+
+一.添加讯飞离线语音
+  代码写好了，单编时出错：
+target Prebuilt: libmsc (out/target/product/sp9820e_1h10/obj/lib/libmsc.so)
+Install: out/target/product/sp9820e_1h10/system/lib/libmsc.so
+Proguard: out/target/common/obj/APPS/GridHome_intermediates/proguard.classes.jar
+ProGuard, version 4.4
+Reading program jar [/home/hjc/gitfiles/SP9820E/idh.code/out/target/common/obj/APPS/GridHome_intermediates/classes.jar]
+Error: Can't read [proguard.ClassPathEntry@70535b58] (Can't process class [com/iflytek/cloud/SpeechSynthesizer$a.class] (Unsupported version number [51.0] for class format))
+make: *** [out/target/common/obj/APPS/GridHome_intermediates/proguard.classes.jar] 错误 1
+可能原因是代码混淆问题，ProGuard或java版本太低。未解决。
+
+二.repo
+第一次拉的时候没新建个文件夹在拉，拉到code的根目录了，导致有个重名文件夹没拉下来。
+
+  repo是Android为了方便管理多个git库而开发的Python脚本。Android源码包含数百个git库，仅仅是下载这么多git库就是一项繁重的任务，所以在下载源码时，Android就引入了repo。repo是通过一个git库来管理项目的清单文件的，这个git库名字叫manifests。在客户端使用repo初始化一个项目时，就会从远程把manifests和repo这两个git库拷贝到本地。repo将自动化的管理信息都隐藏根目录的.repo子目录中。
+
+1.初始化
+repo init -u <URL> [<OPTIONS>]
+-u：指定manifests这个远程git库的URL，manifests库是整个项目的清单。默认情况，这个git库只包含了default.xml一个文件，其内容可以参见Android的样本
+-m， –manifest-name：指定所需要的manifests库中的清单文件。默认情况下，会使用maniftests/default.xml
+-b， –manifest-branch：指定manifest.xml文件中的一个版本，也就是俗称的“分支”
+
+2.同步：下载远程代码，并将本地代码更新到最新。
+repo sync [PROJECT_LIST]
+-c, –current-branch：只同步指定的远程分支。默认情况下，sync会同步所有的远程分支
+-j：开启多线程同步操作，这会加快sync命令的执行速度。默认情况下，使用4个线程并发进行sync
+
+3.forall：指定的git库执行-c参数制定的命令序列。多条命令只需要用“;”间隔。
+ repo forall [PROJECT_LIST] -c <COMMAND>
+PROJECT_LIST是以空格区分，
+-r, –regex： 通过指定一个正则表达式，只有匹配的PROJECT，才会执行指定的命令
+
+4.upload:上传
+upload命令首先会找出本地分支从上一次同步操作以来发生的改动，然后会将这些改动生成Patch文件，上传至Gerrit服务器。
+repo upload [PROJECT_LIST]
+
+5.start：切换分支
+repo start <BRANCH_NAME> [<PROJECT_LIST>]
+使用–all参数对所有的PROJECT都执行分支切换操作。 该命令实际上是对git checkout命令的封装
+
+
+

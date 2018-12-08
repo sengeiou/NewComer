@@ -1,0 +1,44 @@
+usb_use_charging_only
+persist.sys.timezone
+
+    private static final boolean UPDATETZ_NOSIM = SystemProperties.getBoolean("persist.sys.updatetz_nosim", false); //add by wucheng 20170828
+
+    /**
+     * Set the timezone and send out a sticky broadcast so the system can
+     * determine if the timezone was set by the carrier.
+     *
+     * @param zoneId timezone set by carrier
+     */
+    private void setAndBroadcastNetworkSetTimeZone(String zoneId) {
+		//add by wucheng 20170828 begin
+        if (!UPDATETZ_NOSIM && !hasSim()) {
+           if (DBG) log("No sim cards. Do not update timezone");
+            return;
+        }
+		//add by wucheng 20170828 end
+        if (DBG) log("setAndBroadcastNetworkSetTimeZone: setTimeZone=" + zoneId);
+        AlarmManager alarm =
+                (AlarmManager) mPhone.getContext().getSystemService(Context.ALARM_SERVICE);
+        alarm.setTimeZone(zoneId);
+        Intent intent = new Intent(TelephonyIntents.ACTION_NETWORK_SET_TIMEZONE);
+        intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
+        intent.putExtra("time-zone", zoneId);
+        mPhone.getContext().sendStickyBroadcastAsUser(intent, UserHandle.ALL);
+        if (DBG) {
+            log("setAndBroadcastNetworkSetTimeZone: call alarm.setTimeZone and broadcast zoneId=" +
+                    zoneId);
+        }
+    }
+
+		//add by wucheng 20170828 begin
+    private boolean hasSim(){
+        TelephonyManager telePhonyManager = TelephonyManager.from(mPhone.getContext());
+
+        for (int i = 0; i < telePhonyManager.getPhoneCount(); i++) {
+            if(telePhonyManager.hasIccCard(i)){
+                return true;
+            }
+        }
+        return false;
+    }
+		//add by wucheng 20170828 end

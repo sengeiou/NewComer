@@ -1,0 +1,172 @@
+day05学习笔记
+
+一.monkeyrunner使用
+
+在终端打开/sdk_5.1/tools/monkeyrunner.
+连接自己的手机
+输入：>>> from com.android.monkeyrunner import MonkeyRunner,MonkeyDevice,MonkeyImage
+>>> device=MonkeyRunner.waitForConnection()
+这时连接完成。
+
+ 1.唤醒屏幕
+输入>>> device.wake()。
+问题：有时候唤醒不了，不知道什么原因。再重连一下 device=MonkeyRunner.waitForConnection()又可以
+
+ 2.屏幕截图并保存
+输入>> result=device.takeSnapshot()                      
+>>> result.writeToFile('/home/hjc/img/img02.png','png')
+这时返回true，即可在该目录下找到截图img02.png
+可按ctrl+d/c退出
+
+ 3.使用python脚本
+a.编写一个python脚本test.py，内容就和上面一样的：亮屏再截图保存
+from com.android.monkeyrunner import MonkeyRunner,MonkeyDevice,MonkeyImage
+
+device=MonkeyRunner.waitForConnection()
+device.wake()
+MonkeyRunner.sleep(1)
+result=device.takeSnapshot()
+result.writeToFile('/home/hjc/img/img03.png','png')
+
+b.使用monkeyrunner调用这个脚本
+./monkeyrunner /home/hjc/note/test.py
+这时可以在/home/hjc/img目录下找到img03截图。
+
+其他api参考：https://www.cnblogs.com/WXBai/p/5939314.html
+
+
+
+二.android简介
+
+参考：https://developer.android.google.cn/guide/
+
+  Android 应用采用 Java 编程语言编写。Android SDK 工具将您的代码 — 连同任何数据和资源文件 — 编译到一个 APK：Android 软件包，即带有 .apk 后缀的存档文件中。一个 APK 文件包含 Android 应用的所有内容，它是基于 Android 系统的设备用来安装应用的文件。
+
+安装到设备后，每个 Android 应用都运行在自己的安全沙箱内：
+    a.Android 操作系统是一种多用户 Linux 系统，其中的每个应用都是一个不同的用户；
+    b.默认情况下，系统会为每个应用分配一个唯一的 Linux 用户 ID（该 ID 仅由系统使用，应用并不知晓）。系统为应用中的所有文件设置权限，使得只有分配给该应用的用户 ID 才能访问这些文件；
+    c.每个进程都具有自己的虚拟机 (VM)，因此应用代码是在与其他应用隔离的环境中运行；
+    d.默认情况下，每个应用都在其自己的 Linux 进程内运行。Android 会在需要执行任何应用组件时启动该进程，然后在不再需要该进程或系统必须为其他应用恢复内存时关闭该进程。
+
+默认情况下，每个应用都只能访问执行其工作所需的组件，而不能访问其他组件。应用无法访问系统中其未获得权限的部分。 
+
+应用仍然可以通过一些途径与其他应用共享数据以及访问系统服务：
+
+    a.可以安排两个应用共享同一 Linux 用户 ID，在这种情况下，它们能够相互访问彼此的文件。 为了节省系统资源，可以安排具有相同用户 ID 的应用在同一 Linux 进程中运行，并共享同一 VM（应用还必须使用相同的证书签署）。
+    b.应用可以请求访问设备数据（如用户的联系人、短信、可装载存储装置 [SD 卡]、相机、蓝牙等）的权限。 用户必须明确授予这些权限。
+
+
+三.实现在命令行输入studio启动android studio
+1.添加~/bin到PATH中：export PATH=$HOME/bin:$PATH
+2.添加一个软连接文件：ln -s /home/hjc/tools/androidStudio/android-studio/bin/studio.sh /home/hjc/bin/studio
+
+
+四.应用组件
+  应用组件是 Android 应用的基本构建基块。这些组件由应用清单文件松耦合的组织。AndroidManifest.xml描述了应用程序的每个组件，以及他们如何交互。每个组件都是一个不同的点，系统可以通过它进入您的应用。与java这种main函数作单一入口的不同。
+
+1.Activity
+活动代表了一个具有用户界面的单一屏幕.Android 系统初始化它的程序是通过活动中的 onCreate() 回调的调用开始的。存在有一序列的回调方法来启动一个活动，同时有一序列的方法来关闭活动.要创建Activity，必须要创建Activity的子类。
+
+主要方法：(在MainActivity类中用Log.v()调用打印一下信息)
+    String msg="HelloWorld_Main is :";
+    /**
+     *创建Activity 时调用此方法。必须实现此方法。
+     * @param savedInstanceState 保存的Activity状态
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);  //向用户界面填充activity_main.xml的布局内容
+        Log.v(msg, "onCreate"); //在Logcat中输出信息
+    }
+
+    //当活动即将可见时调用
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.v(msg, "onStart");
+    }
+
+    //当活动可见时调用
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.v(msg, "onResume");
+    }
+
+    //当活动暂停时调用(此时另一个 Activity 位于屏幕前台并具有用户焦点)
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.v(msg, "onPause");
+    }
+
+    //当活动不再可见时调用
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.v(msg, "onStop");
+    }
+
+    //当活动被停止以后重新打开时调用
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.v(msg, "onRestart");
+    }
+
+    //当活动将被销毁时调用
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.v(msg, "onDestroy");
+    }
+
+使用模拟器和自己手机（小米4c）都测试了。
+
+问题：onDestroy()方法，只有用我自己手机滑动关闭时执行（直接清理后台不调用）
+原因：从后台清理是系统强制停止应用，不走生命周期。
+
+2.Activity任务栈
+1) 程序打开时就创建了一个任务栈, 用于存储当前程序的activity，当前程序（包括被当前程序所调用的）所有的activity属于一个任务栈。
+2）一个任务栈包含了一个activity的集合, 只有在任务栈栈顶的activity才可以跟用户进行交互。
+3）每次创建一个activity就压入栈（点击进入一个新的界面），每次销毁一个activity就弹出栈（返回上一级）。与栈后进先出的特性吻合。
+4） 退出应用程序时，把该任务栈中所有的activity出栈时。
+
+3.Activity的状态
+1）Running:Activity处于活动状态，此时Activity处于栈顶，是可见状态，可与用户进行交互。 
+2）Paused：当Activity失去焦点时，或被一个新的非全屏的Activity，或被一个透明的Activity放置在栈顶时，Activity就转化为Paused状态。但我们需要明白，此时Activity只是失去了与用户交互的能力，其所有的状态信息及其成员变量都还存在，只有在系统内存紧张的情况下，才有可能被系统回收掉。 
+3）Stopped：当Activity被另一个Activity完全覆盖时，被覆盖的Activity就会进入Stopped状态，此时它不再可见，但是跟Paused状态一样保持着其所有状态信息及其成员变量。 
+4）Killed:当Activity被系统回收掉时，Activity就处于Killed状态。
+
+4.Activity的生命周期
+1)Activity创建到运行:调用顺序 onCreate-->onStart-->onResume
+2)Activity从前台到后台：调用：onPause-->onStop
+3)Activity从后台到前台：一般情况，onRestart-->onStart-->onResume.特殊情况，onPause方法后直接恢复onResume.未调用onStop。
+4)Activity从运行到销毁：onPause-->onStop-->ondestroy
+详情参考生命周期流程图
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

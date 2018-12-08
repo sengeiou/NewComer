@@ -1,0 +1,130 @@
+当日总结
+
+项目：6580go-L5005  MTK
+
+自动亮度问题
+
+1.屏幕亮度与环境光强对应数组
+/device/mediatek/common/overlay/sensor/frameworks/base/core/res/res/values/config.xml
+环境光数组：
+    <integer-array name="config_autoBrightnessLevels">
+        <item>128</item>
+        <item>256</item>
+        <item>384</item>
+        <item>512</item>
+        <item>640</item>
+        <item>768</item>
+        <item>896</item>
+        <item>1024</item>
+        <item>2048</item>
+        <item>4096</item>
+        <item>6144</item>
+        <item>8192</item>
+        <item>10240</item>
+        <item>12288</item>
+        <item>14336</item>
+        <item>16384</item>
+        <item>18432</item>
+    </integer-array>
+
+屏幕亮度数组：
+    <integer-array name="config_autoBrightnessLcdBacklightValues">
+        <item>8</item>
+        <item>64</item>
+        <item>98</item>
+        <item>104</item>
+        <item>110</item>
+        <item>116</item>
+        <item>122</item>
+        <item>128</item>
+        <item>134</item>
+        <item>182</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+        <item>255</item>
+    </integer-array>
+
+这里环境光数组 level[] 少一组值，根据注释:
+实际使用时会用0与value[0]对应，level[0]~value[1]，....
+
+数组调用处：
+DisplayPowerController.java (frameworks\base\services\core\java\com\android\server\display)
+
+    public DisplayPowerController(Context context,DisplayPowerCallbacks callbacks,
+	Handler handler,SensorManager sensorManager, DisplayBlanker blanker) {
+....
+	if (mUseSoftwareAutoBrightnessConfig) {
+            int[] lux = resources.getIntArray(
+                    com.android.internal.R.array.config_autoBrightnessLevels);//环境光数组
+            int[] screenBrightness = resources.getIntArray(
+                    com.android.internal.R.array.config_autoBrightnessLcdBacklightValues);//屏幕亮度数组
+	...
+            Spline screenAutoBrightnessSpline = createAutoBrightnessSpline(lux, screenBrightness);//根据这两组值生成一条曲线
+	//并将该曲线作为一个构造参数传入AutomaticBrightnessController
+                mAutomaticBrightnessController = new AutomaticBrightnessController(this,
+                        handler.getLooper(), sensorManager, screenAutoBrightnessSpline,
+                        lightSensorWarmUpTimeConfig, screenBrightnessRangeMinimum,
+                        mScreenBrightnessRangeMaximum, dozeScaleFactor, lightSensorRate,
+                        initialLightSensorRate, brighteningLightDebounce, darkeningLightDebounce,
+                        autoBrightnessResetAmbientLuxAfterWarmUp, ambientLightHorizon,
+                        autoBrightnessAdjustmentMaxGamma, dynamicHysteresis);
+
+
+另外，也可以通过adb shell dumpsys display,
+Automatic Brightness Controller Configuration:中打印信息，看到该曲线信息。
+
+
+2.打开自动亮度开关时，滑动亮度条，改为手动亮度模式调节（原来是在:当前计算所得屏幕亮度基础上作小幅调整)
+
+
+	private float mLastScreenAutoBrightnessAdjustment=-2;
+    private void updateAutoBrightness(boolean sendUpdate) {
+        if (!mAmbientLuxValid) {
+            return;
+        }
+
+        float value = mScreenAutoBrightnessSpline.interpolate(mAmbientLux); //根据环境光-屏幕亮度曲线/此时加权过的环境光值，计算出对应屏幕亮度
+        float gamma = 1.0f;
+
+	//USE_SCREEN_AUTO_BRIGHTNESS_ADJUSTMENT（是否使用自动亮度微调，此处=true)，mScreenAutoBrightnessAdjustment(亮度条的加权值，平均到[-1,1]区间）
+        if (USE_SCREEN_AUTO_BRIGHTNESS_ADJUSTMENT && mScreenAutoBrightnessAdjustment != 0.0f) { 
+
+修改点:	//mark by hujingcheng 20180920 when autobrightness button on ,slide the brightness bar,switch to manual mode           
+            	if(mLastScreenAutoBrightnessAdjustment!=mScreenAutoBrightnessAdjustment){
+			value=(mScreenAutoBrightnessAdjustment+1)/2;			//value需要在[0,1]间，对mScreenAutoBrightnessAdjustment简单处理
+			mLastScreenAutoBrightnessAdjustment=mScreenAutoBrightnessAdjustment;	//value*255 即是当前亮度条位置所指手动亮度
+			Slog.d(TAG,"not last AutoBrightnessAdjustment value="+value);
+		}else{
+
+	//mark by hujingcheng 20180920 end
+	//原来的方法：mScreenAutoBrightnessAdjustmentMaxGamma最大可调gamma,修改该参数可控制自动亮度开启时调节亮度条的屏幕亮度控制范围，原值300%
+			final float adjGamma = MathUtils.pow(mScreenAutoBrightnessAdjustmentMaxGamma,
+                	Math.min(1.0f, Math.max(-1.0f, -mScreenAutoBrightnessAdjustment)));    //此时adjGamma值在 [1/3,3]区间
+            		gamma *= adjGamma;
+			Slog.d(TAG,"equals last AutoBrightnessAdjustment adjGamma="+adjGamma);
+		}
+            	if (DEBUG) {
+                	Slog.d(TAG, "updateAutoBrightness: value=" + value);
+            	}
+        }
+
+        if (gamma != 1.0f) {
+            final float in = value;
+            value = MathUtils.pow(value, gamma);  //原方法： value在[value^3,value^(1/3)]区间
+            if (DEBUG) {
+                Slog.d(TAG, "updateAutoBrightness: gamma=" + gamma
+                        + ", in=" + in + ", out=" + value);
+         }
+
+
+        int newScreenAutoBrightness =
+                clampScreenBrightness(Math.round(value * PowerManager.BRIGHTNESS_ON)); //PowerManager.BRIGHTNESS_ON=255，控制新的亮度在[设置最小亮度，255]且为整数
+	...
+    }
+
+

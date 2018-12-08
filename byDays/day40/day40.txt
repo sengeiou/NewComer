@@ -1,0 +1,7 @@
+    /** The type of build, like "user" or "eng". */
+    public static final String TYPE = getString("ro.build.type");
+	≈–∂œ±‡“Î∞Ê±æ android.os.Build
+
+https://blog.csdn.net/u014248312/article/details/80497294
+
+persist.sys.usb.config

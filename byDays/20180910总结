@@ -1,0 +1,64 @@
+当日总结
+
+一. 7731e 开机后弹出email权限toast问题
+
+Launcher3申请了一个email权限 
+<uses-permission android:name="com.android.email.permission.ACCESS_PROVIDER" /> 用于显示未读邮件信息
+因为开了GMS包，原来的email软件被Gmail覆盖掉了，这个权限也不存在了。于是会弹出缺乏必要的电子邮件权限。
+修改common.mk：
+ifeq ($(strip $(BIRD_SHOW_UNREADNUM_IN_LAUNCHER)), yes)
+    PRODUCT_PROPERTY_OVERRIDES += ro.launcher.unread.sms=true
+    PRODUCT_PROPERTY_OVERRIDES += ro.launcher.unread.call=true
+    #change by bird hujingcheng for BUG #41271 lack of email permission
+    ifneq ($(strip $(BIRD_BUILD_GMS)), yes)
+        PRODUCT_PROPERTY_OVERRIDES += ro.launcher.unread.email=true
+    endif
+    #change by bird hujingcheng 20180910 end  
+endif 
+
+
+二. 7731e FileGo播放wav/mid/avi/3gp问题
+wav格式-播放出错:码率 13kbps/32kbps/88kbps ,其他测试文件ok
+3gp格式-播放出错:码率 387kbps,其他测试文件ok
+mid格式-不支持该格式
+avi格式-不支持该格式
+播放时FileGo 启动活动com.google.android.apps.nbu.files/documentsbrowser.filepreview.FilePreviewActivity
+
+
+三.monkey 音乐跑测缺少执行权限
+log:
+	Line 25030: 009EE4 01-01 17:34:33.708  3481  3481 D PermissionsActivity: onCreate
+	Line 25144: 009F70 01-01 17:34:34.098  3481  3481 D PermissionsActivity: onDestory
+	Line 25269: 00A014 01-01 17:34:36.117  3481  3481 D PermissionsActivity: onCreate
+	Line 25375: 00A08A 01-01 17:34:36.484  3481  3481 D PermissionsActivity: onDestory
+	Line 26872: 00A729 01-01 17:34:55.060  3481  3481 D PermissionsActivity: onCreate
+	Line 26979: 00A7AC 01-01 17:34:55.453  3481  3481 D PermissionsActivity: onDestory
+该申请权限弹出框一直在创建销毁，表明其一直在点拒绝权限申请。
+
+
+
+四.微信点击联系人退出
+偶发bug
+微信启动活动 com.tencent.mm/.ui.LauncherUI
+11:28:13分
+kernel.log
+798[09-08 11:28:13.697] <6>[ 3976.958215] c2 lowmemorykiller: Killing 'encent.mm:tools' (11762:11762), adj 500,
+799[09-08 11:28:13.697] <6>[ 3976.958215] c2    to free 40544kB on behalf of 'kswapd0' (59) because
+800[09-08 11:28:13.697] <6>[ 3976.958215] c2    cache is 77004kB , limit is 77416kB for oom_score_adj 200
+801[09-08 11:28:13.697] <6>[ 3976.958215] c2    Free memory is 7608kB above reserved
+显示lowmemorykiller：com.tencent.mm:tools 被杀掉
+main.log
+002A4D 09-08 11:28:13.471 11762 11762 W CheckTime: App running slow: Executing handleBindApplication : callApplicationOnCreate took 51136ms
+002A53 09-08 11:28:13.694   274   335 D lowmemorykiller: received lmk:10104,11762,500
+002A54 09-08 11:28:13.694   274   335 D lowmemorykiller: handle killing  11762 done
+同时main.log中也有相应信息。
+main.log
+003E55 09-08 11:29:16.602   560   675 I InputDispatcher: Window 'Window{2dce564 u0 com.tencent.mm/com.tencent.mm.ui.LauncherUI}' spent 33245.8ms processing the last input event: MotionEvent(deviceId=4, source=0x00001002, action=2, actionButton=0x00000000, flags=0x00000000, metaState=0x00000000, buttonState=0x00000000, edgeFlags=0x00000000, xPrecision=1.0, yPrecision=1.0, displayId=0, pointers=[0: (147.7, 429.6)]), policyFlags=0x62000000
+003E56 09-08 11:29:16.603   560   675 I InputDispatcher: Window 'Window{2dce564 u0 com.tencent.mm/com.tencent.mm.ui.LauncherUI}' spent 33234.3ms processing the last input event: MotionEvent(deviceId=4, source=0x00001002, action=2, actionButton=0x00000000, flags=0x00000000, metaState=0x00000000, buttonState=0x00000000, edgeFlags=0x00000000, xPrecision=1.0, yPrecision=1.0, displayId=0, pointers=[0: (147.7, 423.6)]), policyFlags=0x62000000
+003E57 09-08 11:29:16.603   560   675 I InputDispatcher: Window 'Window{2dce564 u0 com.tencent.mm/com.tencent.mm.ui.LauncherUI}' spent 33221.2ms processing the last input event: MotionEvent(deviceId=4, source=0x00001002, action=2, actionButton=0x00000000, flags=0x00000000, metaState=0x00000000, buttonState=0x00000000, edgeFlags=0x00000000, xPrecision=1.0, yPrecision=1.0, displayId=0, pointers=[0: (145.7, 417.6)]), policyFlags=0x62000000
+003E58 09-08 11:29:16.603   560   675 I InputDispatcher: Window 'Window{2dce564 u0 com.tencent.mm/com.tencent.mm.ui.LauncherUI}' spent 21087.0ms processing the last input event: MotionEvent(deviceId=4, source=0x00001002, action=3, actionButton=0x00000000, flags=0x00000000, metaState=0x00000000, buttonState=0x00000000, edgeFlags=0x00000000, xPrecision=1.0, yPrecision=1.0, displayId=0, pointers=[0: (145.7, 417.6)]), policyFlags=0x62000000
+003E59 09-08 11:29:16.626   274   335 D lowmemorykiller: received lmk:10021,13268,500
+003E5A 09-08 11:29:16.626   274   335 D lowmemorykiller: handle killing  13268 done
+微信用了33秒处理InputDispatcher分发，卡了。
+
+考虑低内存下，导致应用闪退的情况。

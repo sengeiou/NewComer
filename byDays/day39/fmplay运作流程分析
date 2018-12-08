@@ -1,0 +1,152 @@
+switchAntenna方法 参数 0, long antenna长, 1 short antenna短
+ACTION_HEADSET_PLUG-插拔耳机的action，state=0：拔出；state=1：插入
+
+device:
+RADIO_AUDIO_DEVICE_WIRED_HEADSET=0 耳机
+RADIO_AUDIO_DEVICE_SPEAKER = 1  扬声器 
+
+手动选择扬声器：
+FMplay类中onOptionsItemSelected方法
+case SPEAKER_HEADSET:
+                    mIsSpeaker = !mIsSpeaker;
+...
+                    ed.putBoolean("isSpeakerUsed", mIsSpeaker);
+...
+			Message msg = mHandler.obtainMessage(MSG_ROUTE);
+==============================================
+handler中   case MSG_ROUTE:
+                removeMessages(MSG_ROUTE);
+                if (mReady) {
+					Log.d(LOGTAG,"handleMessage-MSG_ROUTE:mReady=true");
+                    mService.routeAudio(mIsSpeaker ? FMplayService.RADIO_AUDIO_DEVICE_SPEAKER
+                            : FMplayService.RADIO_AUDIO_DEVICE_WIRED_HEADSET);	
+
+其中mService = new RadioServiceStub(this, this);
+
+=======================================	
+RadioServiceStub绑定了FMplayService.class--- mContext.bindService((new Intent()).setClass(mContext, FMplayService.class), mBinder,
+                Context.BIND_AUTO_CREATE);
+RadioServiceStub类的routeAudio方法
+    public boolean routeAudio(int device) {
+        boolean value = false;
+        try {
+            value = mService.routeAudio(device);
+			Log.d(LOGTAG,"routeAudio ="+value);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return value;
+	其中private IRadioService mService; mService = IRadioService.Stub.asInterface(service);
+=======================================	
+然后到 FMplayService类的内部类static class ServiceStub extends IRadioService.Stub中routeAudio方法
+        public boolean routeAudio(int device) {
+            if(mService != null) {
+				Log.d(LOGTAG,"ServiceStub:routeAudio,device="+device);
+                if (mService.get() != null) {
+                    return mService.get().routeAudio(device);
+                }
+            }
+            Log.d(LOGTAG, "routeAudio fail,due to mService null.");
+            return false;
+        }
+===========================================================
+再到FMplayService类routeAudio方法中
+
+
+
+01-04 13:06:59.919: W/InputEventReceiver(1369): Attempted to finish an input event but the input event receiver has already been disposed.
+01-04 13:06:59.919: D/FMPlay(1369): msg.what: 0 mOver: true,mReady: true
+01-04 13:06:59.919: D/FMPlay(1369): handleMessage-MSG_ROUTE:mReady=true
+01-04 13:06:59.919: D/FMplayService(1369): ServiceStub:routeAudio,device=1
+01-04 13:06:59.919: D/FMplayService(1369): routeAudio() device = 1 audioFocus = true
+01-04 13:06:59.979: D/FMplayService(1369): set volume0
+01-04 13:06:59.979: D/FMplayService(1369): isHeadsetExists =true
+01-04 13:06:59.989: D/FMplayService(1369): routeAudio(),isSpeakerOn=trueisHeadSetOn=true
+01-04 13:07:00.229: E/FMplayService(1369): routeAudio() ,mAudioDevice == RADIO_AUDIO_DEVICE_SPEAKER,setAudioPath=true
+01-04 13:07:00.229: D/FMUtil(1369): fmSignal2Info type:1,state:3,info:on
+01-04 13:07:00.229: D/FMPlay(1369): onStateChange state: 3,info: on,to: com.thunderst.radio.FMPlay@41801150
+01-04 13:07:00.229: D/FMplayService(1369): device=1
+01-04 13:07:00.239: D/FMplayService(1369): is not mute.set volume
+01-04 13:07:00.239: D/FMplayService(1369): setVolumeDelay:300
+01-04 13:07:00.239: D/FMplayServiceStub(1369): routeAudio =true
+01-04 13:07:00.239: D/FMPlay(1369): msg.what: 9 mOver: true,mReady: true
+01-04 13:07:00.249: D/FMPlay(1369): isHeadsetExists =true
+01-04 13:07:00.279: D/FMPlay(1369): msg.what: 12 mOver: true,mReady: true
+01-04 13:07:00.279: D/FMPlay(1369): msg.what: 11 mOver: true,mReady: true
+01-04 13:07:00.539: D/FMplayService(1369): mHandlerThread msg.what: 1
+01-04 13:07:00.549: D/FMplayService(1369): set volume1
+
+
+					
+广播接收耳机插拔：
+FMplayService类：RadioServiceReceiver中onReceive接收耳机插拔广播
+else if(mFmManager.isFmOn() && !isMuted()) 下进入 state=0：拔出；state=1：插入
+					if (intent.getIntExtra("state", 0) == 0) {
+                        boolean result1=switchAntenna(1);
+						Log.d(LOGTAG,"switch to short Antenna,result="+result1);
+                    } else {
+                        boolean result2=switchAntenna(0);
+						Log.d(LOGTAG,"switch to long Antenna,result="+result2);
+                    }
+mAudioDevice = isHeadExist ? RADIO_AUDIO_DEVICE_WIRED_HEADSET : RADIO_AUDIO_DEVICE_SPEAKER; //根据耳机是否存在选择不同输出设备
+                    if (!mPausedByAudioFocus) {
+                       	boolean routeSuccess=routeAudio(mAudioDevice); //也是进入FMplayService类的routeAudio方法
+						Log.d(LOGTAG,"routeSuccess="+routeSuccess+",isSpeakerphoneOn="+mAudioManager.isSpeakerphoneOn()+",isWiredHeadsetOn="+mAudioManager.isWiredHeadsetOn());
+                    }
+==================================================================
+routeAudio方法中：
+        if (device == RADIO_AUDIO_DEVICE_SPEAKER || device == RADIO_AUDIO_DEVICE_WIRED_HEADSET) {
+            mAudioDevice = device;
+            mRouted = true;//mRouted should be set before setVolume().
+
+            // if not do this,noise will come...
+            setVolume(0);
+//根据mAudioDevice不同，选择不同音频通道
+            if (mAudioDevice == RADIO_AUDIO_DEVICE_WIRED_HEADSET) {
+                value = mFmManager.setAudioPath(FmAudioPath.FM_AUDIO_PATH_HEADSET);
+                Log.e(LOGTAG, "routeAudio() ,mAudioDevice == RADIO_AUDIO_DEVICE_WIRED_HEADSET,setAudioPath="+value);
+            } else {
+                value = mFmManager.setAudioPath(FmAudioPath.FM_AUDIO_PATH_SPEAKER);
+                Log.e(LOGTAG, "routeAudio() ,mAudioDevice == RADIO_AUDIO_DEVICE_SPEAKER,setAudioPath="+value);
+            }
+//声音在这个函数恢复
+			setVolumeDelay(300);
+//在mVolumeHandler中接收消息，重新设置声音
+			mVolumeHandler = new Handler(mHandlerThread.getLooper()) {
+                public void handleMessage(Message msg) {
+                    if (msg != null) {
+                        if (DEBUG) Log.d(LOGTAG, "mHandlerThread msg.what: " + msg.what);
+                        removeMessages(msg.what);
+                        if(StationSearch.isSearching()){
+                            if (DEBUG) Log.d(LOGTAG,"mHandlerThread isSearching");
+                            return ;
+                        }
+                        setVolume(msg.arg1);
+                    }
+					
+
+01-04 13:06:10.479: D/FMplayService(1369): headset plug state=0isSpeakerOption=false
+01-04 13:06:10.479: D/FMplayService(1369): switch to short Antenna,result=true
+01-04 13:06:10.489: D/FMplayService(1369): isHeadsetExists =false
+01-04 13:06:10.489: D/FMplayService(1369): AudioDevice=1,isSpeakerUsed2=false
+01-04 13:06:10.489: D/FMplayService(1369): isHeadsetExists()=false RADIO_AUDIO_DEVICE=1,mPausedByAudioFocus=false
+01-04 13:06:10.489: D/FMplayService(1369): routeAudio() device = 1 audioFocus = true
+01-04 13:06:10.559: D/FMplayService(1369): set volume0
+01-04 13:06:10.559: D/FMplayService(1369): isHeadsetExists =false
+01-04 13:06:10.559: D/FMplayService(1369): routeAudio(),isSpeakerOn=falseisHeadSetOn=false
+01-04 13:06:10.759: E/FMplayService(1369): routeAudio() ,mAudioDevice == RADIO_AUDIO_DEVICE_SPEAKER,setAudioPath=true
+01-04 13:06:10.759: D/FMUtil(1369): fmSignal2Info type:1,state:3,info:on
+01-04 13:06:10.759: D/FMPlay(1369): onStateChange state: 3,info: on,to: com.thunderst.radio.FMPlay@41801150
+01-04 13:06:10.759: D/FMplayService(1369): device=1
+01-04 13:06:10.759: D/FMplayService(1369): is not mute.set volume
+01-04 13:06:10.759: D/FMplayService(1369): setVolumeDelay:300
+01-04 13:06:10.769: D/FMplayService(1369): routeSuccess=true,isSpeakerphoneOn=false,isWiredHeadsetOn=false
+01-04 13:06:10.769: D/FMUtil(1369): fmSignal2Info type:1,state:9,info:device
+01-04 13:06:10.769: D/FMPlay(1369): onStateChange state: 9,info: device,to: com.thunderst.radio.FMPlay@41801150
+01-04 13:06:10.769: D/FMPlay(1369): case FMUtil.FM_STATE_HEADSET_PLUG---INFO:device
+01-04 13:06:10.769: D/FMplayServiceStub(1369): getAudioDevice(),device=1
+01-04 13:06:10.769: D/FMPlay(1369): msg.what: 12 mOver: true,mReady: true
+01-04 13:06:10.769: D/FMPlay(1369): msg.what: 11 mOver: true,mReady: true
+01-04 13:06:11.069: D/FMplayService(1369): mHandlerThread msg.what: 1
+01-04 13:06:11.079: D/FMplayService(1369): set volume1
+

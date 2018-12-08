@@ -1,0 +1,133 @@
+ro.vendor.build.fingerprint=	Android/Android/Android:8.1.0/OPM2.171019.012/40012:user/release-keys
+ro.build.fingerprint=		Android/Android/Android:8.1.0/OPM2.171019.012/39412:user/release-keys
+
+
+ro.build.fingerprint=		DATSUN/Datsun_D5001/Datsun_D5001:8.1.0/O11019/1537264044:userdebug/release-keys
+ro.vendor.build.fingerprint=	DATSUN/Datsun_D5001/Datsun_D5001:8.1.0/O11019/1537837332:userdebug/release-keys
+
+
+http://192.168.1.11/jyun/forum.php?mod=viewthread&tid=17&extra=page%3D1
+
+3a7aa76a8eb0b1d83d187611a6a0f20a978948b9
+
+
+elitek/S3P18A/S3P18A
+
+$(BIRD_PRODUCT_BRAND)/$(BIRD_PRODUCT_NAME)/$(BIRD_PRODUCT_DEVICE):$(PLATFORM_VERSION)/$(BUILD_ID)/$(BF_BUILD_NUMBER):$(TARGET_BUILD_VARIANT)/$(BUILD_VERSION_TAGS)
+
+
++说明
++1.此功能基于豆荚TEE功能，所以是否显示水印的宏与豆荚TEE的宏一致，为MICROTRUST_TEE_SUPPORT，有豆荚TEE功能水印功能平台默认打开
++MICROTRUST_TEE_SUPPORT　= yes 显示水印
++MICROTRUST_TEE_SUPPORT　不等于 yes 不显示水印
++2.当谷歌KEY已写入和豆荚TEE已激活同时满足时，水印不显示
++3.风险提示：A版本激活TEE并写入谷歌KEY后，再下载B版本，必须重新写入B版本对应的谷歌key，不然水印不显示，但实际上谷歌key写入状态已失效
++提交记录
++/bird				commit 3a7aa76a8eb0b1d83d187611a6a0f20a978948b9
++/frameworks/base		commit b06ebfa5d1df7fcbb51ab5f3e823f4b961943ec8
+
++#add by bird wucheng 20180419 begin
++ifneq ($(strip $(MICROTRUST_TEE_SUPPORT)), yes)
++    PRODUCT_PROPERTY_OVERRIDES += ro.bdfun.googlekey_tee=false
++endif
++#add by bird wucheng 20180419 end
+
+
+   touch build/make/tools/buildinfo.sh
+    touch build/make/tools/vendor_buildinfo.sh
+
+
+
+[soter.teei.googlekey.status]: [FAIL]  谷歌KEY是否写入
+[soter.teei.init]: [INIT_OK]
+ [soter.teei.thh.init]: [UNACTIVE]  激活状态
+
+防呆[ro.keybox.id.value]: [SPRD]:    Keybox.xml <Keybox DeviceID="dev1">中需要包含SPRD，厂商提供16位，10位固定
+
+diff --git a/services/core/java/com/android/server/policy/PhoneWindowManager.jav
+index cfb3c40..79423b2 100644
+--- a/services/core/java/com/android/server/policy/PhoneWindowManager.java
++++ b/services/core/java/com/android/server/policy/PhoneWindowManager.java
+@@ -263,6 +263,11 @@ import java.util.List;
+ import com.bird.smartwake.*;////bird add by wucheng for smart wake @20171021
+ import com.bird.bgappprotect.BgAppManager;//bird:BIRD_BACKGROUND_APP_PROTECT,ki
+ import com.bird.powersavemanager.PowerSaveManager;//bird:BIRD_POWER_SAVE_MANAGE
++//@ { wucheng 20180419 show test version
++import android.view.LayoutInflater;
++import android.widget.TextView;
++import android.widget.ListView;
++//@ }bird wucheng
+ /**
+  * WindowManagerPolicy implementation for the Android phone UI.  This
+  * introduces a new method suffix, Lp, for an internal lock of the
+@@ -2479,6 +2484,51 @@ public class PhoneWindowManager implements WindowManagerP
+         }
+         return -1;
+     }
++    
++    //@ { wucheng 20180419 show test version
++    TextView mTestVersionTextView;
++    boolean isShowGoogleKeyAndTEEInfo(){
++        return "true".equals(SystemProperties.get("ro.bdfun.googlekey_tee", "tr
++    }
++    
++    final void showGoogleKeyAndTEEInfo(){
++               String googleKey = "GoogleKey NOK";
++               String TEE = "TEE NOK";
++               boolean isGoogleKeyOK = false;
++               boolean isTEEOK = false;
++               if ("OK".equals(SystemProperties.get("soter.teei.googlekey.statu
++                       isGoogleKeyOK = true;
++                       googleKey = "GoogleKey OK";     
++               }
++               if ("ACTIVE".equals(SystemProperties.get("soter.teei.thh.init"))
++                       isTEEOK = true;
++                       TEE = "TEE OK"; 
++               }       
++       if (isGoogleKeyOK && isTEEOK) {
++            return;
++       }
++        mTestVersionTextView = new TextView(mContext);
++        ListView.LayoutParams layoutParams = new ListView.LayoutParams(ListView
++        ListView.LayoutParams.WRAP_CONTENT);
++        mTestVersionTextView.setLayoutParams(layoutParams);
++        mTestVersionTextView.setPadding(5, 5, 5, 5);
++        mTestVersionTextView.setText(googleKey+ "\n" + TEE);
++        mTestVersionTextView.setTextColor(0xffff0000);
++        mTestVersionTextView.setTextSize(18);
++               
++        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
++            WindowManager.LayoutParams.MATCH_PARENT,
++            WindowManager.LayoutParams.WRAP_CONTENT,
++            WindowManager.LayoutParams.TYPE_SECURE_SYSTEM_OVERLAY,
++            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|
++            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
++            PixelFormat.TRANSLUCENT);
++        params.gravity = Gravity.END | Gravity.TOP;
++        params.setTitle("Googlekey_TEE");
++        WindowManager wm = (WindowManager) mContext.getSystemService(Context.WI
++                   wm.addView(mTestVersionTextView, params);
++    }
++    // @ }bird wucheng test version
+ 
+     /** {@inheritDoc} */
+     @Override
+@@ -7528,7 +7578,17 @@ public class PhoneWindowManager implements WindowManagerP
+ 
+         mSystemGestures.systemReady();
+         mImmersiveModeConfirmation.systemReady();
+-
++        
++        //@ { wucheng 20180419 show test version
++        if (isShowGoogleKeyAndTEEInfo()){
++            mHandler.postDelayed(new Runnable() {
++                @Override
++                public void run() {
++                    showGoogleKeyAndTEEInfo();
++                }
++            },2000);
++        }        
++        //@ } bird wucheng test version
+         mAutofillManagerInternal = LocalServices.getService(AutofillManagerInte
+     }
+

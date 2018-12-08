@@ -1,0 +1,75 @@
+day17学习笔记
+
+一.makefile
+1.makefile的规则
+target...: prerequisites ...
+command
+
+target：目标文件，可以是Object File，也可以是执行文件。还可以是一个标签（Label）。
+prerequisites：要生成那个target所需要的文件或是目标。
+command：make需要执行的命令。（任意的Shell命令）
+注：command操作命令要以Tab键开始，command换行输\
+
+2.引用其他Makefile
+include <file> 
+file中可以包含路径和通配符，需要引入多个文件时，可以用空格断开。
+如果文件没有指定路径，make会在当前目录下寻找，如果当前目录下没有找到，make还会在以下目录下找：
+a.如果make执行时，有“-I”或“--include-dir”参数，那么make就会在这个参数所指定的目录下去寻找。
+b.如果目录/include（一般是：/usr/local/bin或/usr/include）存在的话，make也会去找。
+
+3.make常用函数
+a.strip函数：去除前后空字符串(用引号括起来的空格不能删除)
+b.ifeq ($(x),b):判断参数x与b是否相等(注意括号与ifeq中间空格)
+c.ifneq ($(x),b):判断参数x与b是否不等
+d.ifdef x:判断参数x是否定义
+e.ifndef x:判断参数x是否未定义
+f.addprefix fixstring,s1 s2 ...)：添加前缀，fixstring为固定前缀，s1/s2...是将被添加前缀的字符串
+g.foreach var,list,text:遍历list，对每个var执行text的操作。每次返回一个string，最后将这些string累加以空格分开。
+h.shell command：在Makefile中使用shell。
+  注意：1)每行shell都是一个单独的进程。上一行定义的变量在下一行是无效的
+	    2)$():表示在Makefile中定义的变量，$$(x):把参数x交给shell去处理，获取shell中的x变量值
+i.if 布尔式exp，exp为真时的执行语句，exp为假时的执行语句：相当于if(..)then..,else..
+
+		
+二.宏
+通过宏在编译的时候选在代码的走向，而不是在运行的时候选在要处理的代码可以大大提高程序的效率以及移植的方便
+
+BIRD_REMOVE_LIGHT_TEST在Commom.mk中一个宏：移除灯光测试
+
+#bird:Wangpeng 20170414 begin
+ifeq ($(strip $(BIRD_REMOVE_LIGHT_TEST)), yes)
+    PRODUCT_PROPERTY_OVERRIDES += ro.bdui.bird_remove_light_test=true
+endif
+#bird:Wangpeng 20170414 end
+
+在5110SD_Z453C_E_DS88_N.mak中添加BIRD_REMOVE_LIGHT_TEST=yes
+用sourceLight查看其修改的部分(搜索ro.bdui.bird_remove_light_test)。
+在PsensorTestActivity类中onCreate方法中找到
+        //add by bird wangpeng 20170414 begin
+		//当开启移除灯光测试时，改变文本内容，隐藏一些控件
+        if(SystemProperties.getBoolean("ro.bdui.bird_remove_light_test",false)){
+            setTitle(R.string.bird_proximity_sensor_test);
+            tipPsensor= (TextView) findViewById(R.id.bird_tip_psensor);
+            tipPsensor.setText(R.string.bird_tip_for_psensor);
+            valueIllumination.setVisibility(View.INVISIBLE);
+            lsensorProgressBar.setVisibility(View.INVISIBLE);
+        }
+//另外在ListItemTestActivity中getView方法中，当检测到移除灯光测试的宏打开且psensor测试未移除时，改变该行的文本
+            if(SystemProperties.getBoolean("ro.bdui.bird_remove_light_test",false) && 
+               !SystemProperties.getBoolean("ro.bdfun.bird_rm_psensor_test",false)){
+                if(position == 12){
+                    textView.setText(R.string.bird_proximity_sensor_test);
+                }else{
+                    textView.setText(item.getTestTitle());
+                }
+            }
+			
+问题：系统软件无法用adb install安装，应使用adb push
+
+单编之后，push上去没改变。晚上整编一下，刷机测试
+移除灯光测试的宏已打开
+成功关闭灯光测试，item test列表中原proximity test and light test 变成proximity test
+
+
+
+

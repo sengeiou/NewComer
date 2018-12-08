@@ -1,0 +1,40 @@
+1.打开自动亮度,不做调整：
+SCREEN_TO_BRIGHT=1
+
+mScreenAutoBrightnessAdjustment=0时,
+  gamma=1,直接根据ambientlux,自动变化
+  
+mScreenAutoBrightnessAdjustment!=0时,
+	mLastScreenAutoBrightnessAdjustment==mScreenAutoBrightnessAdjustment
+	先算adjGamma，再设置ambientlux，自动变化
+	
+  mAutoMoved=false;
+  
+2.打开自动亮度,做调整
+SCREEN_TO_BRIGHT=1
+
+调整时SCREEN_TO_BRIGHT=0，
+	mAutoMoved=false;
+	
+调整完SCREEN_TO_BRIGHT=0
+	mAutoMoved=true
+	
+	newScreenAutoBrightness=mScreenAutoBrightness;亮度不变
+	
+3.打开自动亮度,做调整后，关闭重开
+SCREEN_TO_BRIGHT=1,mLastScreenAutoBrightnessAdjustment==mScreenAutoBrightnessAdjustment
+mAutoMoved=false
+
+
+09-06 11:22:11.150   217  2460 E Camera3-Device: Camera 0: clearStreamingRequest: Device has encountered a serious error
+09-06 11:22:11.150   217  2460 E Camera2-StreamingProcessor: stopStream: Camera 0: Can't clear stream request: Function not implemented (-38)
+
+09-06 11:22:11.160   217  2460 V Camera2Client: Camera 0: Shutting down
+09-06 11:22:11.160   217  2460 E Camera3-Device: Camera 0: clearStreamingRequest: Device has encountered a serious error
+09-06 11:22:11.160   217  2460 E Camera2-StreamingProcessor: stopStream: Camera 0: Can't clear stream request: Function not implemented (-38)
+
+09-06 11:22:11.260   217  2460 V Camera2Client: Camera 0: Disconnecting device
+09-06 11:22:11.260   217  2460 E Camera3-Device: Camera 0: disconnect: Shutting down in an error state
+09-06 11:22:11.260   217  2460 I Cam3HWI : 1966, close_camera_device: camera3->close E
+09-06 11:22:11.260   217  2460 I Cam3HWI : 169, ~SprdCamera3HWI: :hal3: E
+09-06 11:22:11.260   217  2460 E Cam3SysPer: 292, setPowerHint: need init.

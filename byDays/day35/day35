@@ -1,0 +1,43 @@
+day35学习笔记
+
+一.记录问题
+1.adb命令，hierarchyviewer获取到的不一定是实际activity名字
+activity-alias:活动的别名，需要查看AndroidManifest.xml文件查看是否有别名。android:targetActivity属性指向实际活动。
+例：    <activity-alias
+            android:name="com.android.camera.CameraLauncher"
+            android:label="@string/app_name"
+            android:targetActivity="com.android.camera.CameraActivity">
+实际活动为com.android.camera.CameraActivity
+
+2.makefile
+LOCAL_OVERRIDES_PACKAGES:可以使其他模块不参与编译
+LOCAL_PACKAGE_NAME := DreamCamera2
+LOCAL_OVERRIDES_PACKAGES := Camera2
+这个DreamCamera2照相机，覆盖了Camera2，Camera2未编译
+
+3.编译7731e
+bird/custom/7731.../touchpanel 找不到，驱动
+暂时的解决办法：先把bird/tool/sh/handle_kernel_config中link touchpanel config folder这段注释掉
+
+
+二.MMItest
+1.CameraTestActivity 后置相机测试
+        mTextureView = (TextureView) findViewById(R.id.surfaceView);
+        mTextureView.setSurfaceTextureListener(this);
+TextureView用于显示Camera图像-纹理视图
+SurfaceTextureListener-表面纹理(图像)监听，几个回调函数：
+//当该TextureView可用时回调
+    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width,
+            int height) {
+        Log.d(TAG, "onSurfaceTextureAvailable");
+        mSurfaceTexture = surface;
+        startCamera(); //启动相机
+    }
+//当该TextureView图像变化时调用(逐帧)
+    public void onSurfaceTextureUpdated(SurfaceTexture surface) {}
+//当该TextureView缓冲大小变化时回调
+	public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width,int height) {}
+//当该TextureView销毁时调用，return false：销毁时需要调用SurfaceTexture.release()
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        return false;
+    }

@@ -1,0 +1,36 @@
+当日总结
+
+一.7731e FM通知栏stop不移除FM通知
+提了CQ之后展讯的改法
+FmService.java
+    private void showPlayingNotification() {
+	...
+		synchronized (mNotificationLock) {
+		....
+            //add by bird hujingcheng	
+            if(mPowerStatus == POWER_DOWN){
+                Log.d(TAG, "mPowerStatus == POWER_DOWN");
+                removeNotification();
+            }
+
+二.7731e FileGo wav/mid/3gp/avi 不支持
+FileGo.apk,经测mid/avi不支持，wav/3gp支持
+播放时使用 com.google.android.apps.nbu.files/documentsbrowser.filepreview.FilePreviewActivity
+
+01-01 17:45:36.223: I/AudioTrack(5015): pause
+01-01 17:45:59.806: I/AudioTrack(5015): start  mClientUid:10020 mClientPid:5015  mSessionId:153 app name:com.google.android.apps.nbu.files 
+
+三.紧急电话无sim卡不支持，有sim卡时紧急电话无记录
+查看其它手机无sim卡时，也不支持紧急电话
+紧急电话无记录
+CallLogManager.java (packages\services\telecomm\src\com\android\server\telecom)	
+    private void logCall(CallerInfo callerInfo,String number,String postDialDigits,String viaNumber, int presentation,int callType,int features,PhoneAccountHandle accountHandle,long start,
+            long duration,Long dataUsage,boolean isEmergency,UserHandle initiatingUser,@Nullable LogCallCompletedListener logCallCompletedListener) {
+		...
+		        okToLogEmergencyNumber = mContext.getResources()
+                .getBoolean(R.bool.allow_emergency_numbers_in_call_log);
+查看okToLogEmergencyNumber的值，原为flase,考虑改为true
+<bool name="allow_emergency_numbers_in_call_log">false</bool>
+因未借到sim卡，还未验证
+
+

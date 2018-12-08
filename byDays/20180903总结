@@ -1,0 +1,132 @@
+当日总结
+
+修改80go相机bug:自动场景打开，当图片大小的选项列表展开时，自动场景切换后再点击该列表,报错
+
+排除的两个方案：
+1.删除夜间模式-低内存情况下的图片大小限制，使其与日间模式一致
+(暂不清楚设置该限制的缘由，不宜轻易改动)
+2.当检测到自动场景变换时，收回图片大小的选项列表
+（问题：自动场景打开，当切换预览比例时，会直接先切换至日间模式，后才考虑亮度影响进行场景变换。若此时亮度较低，切换预览比例，模式：夜间->日间->夜间。
+切换完预览比例后，迅速再切换图片大小，图片大小的选项列表直接收回）
+
+解决方案：
+当检测到自动场景变换时，更新弹出的选项列表
+
+
+自动场景变换检测 根据log:
+夜景->普通
+01-02 10:08:24.425682 23206 23206 D CamAp_Asd: [onDeviceCallback] onDetected scene = 1,mLastScene:0
+普通->夜景
+01-02 10:08:46.300428 23206 23206 D CamAp_Asd: [onDeviceCallback] onDetected scene = 0,mLastScene:1
+
+
+
+Asd.java (vendor\mediatek\proprietary\packages\apps\camera\src\com\mediatek\camera\addition)
+
+    private final AsdListener mASDCaptureCallback = new AsdListener() {
+        ....
+            if (mLastScene != scene) {
+                ... //添加一个传入的参数mLastScene上一次的场景
+                mICameraAppUi.onDetectedSceneMode(scene,mLastScene, suggestedHdr); //change by hujingcheng 20180903
+                mLastScene = scene;
+            }
+        }
+    };
+
+在CameraAppUiImpl中判断自动场景值的变换并进行ui刷新
+scene=1 夜景 scene=0 普通
+
+CameraAppUiImpl.java (vendor\mediatek\proprietary\packages\apps\camera\src\com\android\camera\bridge)
+    public void onDetectedSceneMode(int scene,int lastScene,boolean suggestedHdr) {
+    	...
+		ListPreference picSizePref=mCameraActivity.getISettingCtrl().getListPreference(
+                SettingConstants.KEY_PICTURE_SIZE);
+				
+		//两种情况下需要刷新ui(scene=0,lastScene=1 或scene=1,lastScene=0)，且判断是否低内存
+		if(FeatureSwitcher.isLowRAM()&& picSizePref!=null && ((scene^lastScene)==1)){ 
+			Log.d(TAG,"lastScene="+lastScene+",scene="+scene+",picSizePref 1:"+picSizePref);
+			if(mSettingManager!=null){
+				refreshSetting(SECOND_SETTING_LAYOUT); //SECOND_SETTING_LAYOUT=2，需要更新的ui是第二层(上层)
+
+//以下逐层调用实现ui更新				
+//refreshSetting方法调SettingManager的refresh方法
+	public boolean refreshSetting(int num){
+		return mSettingManager.refresh(num);
+	}
+
+
+//在SettingManager.java (vendor\mediatek\proprietary\packages\apps\camera\src\com\android\camera\manager)
+//主要是去调用其适配器的refresh(int num)方法
+	public boolean refresh(int num){
+        boolean refreshChild = false;
+        if (mShowingContainer && mAdapter != null) {
+            mAdapter.refresh(num);
+            refreshChild = true;
+        }
+        Log.d(TAG, "refresh(" + num + ") mShowingContainer=" + mShowingContainer + ", return "
+                + refreshChild);
+        return refreshChild;		
+	}
+	
+	
+//内部类MyPagerAdapter:适配器类
+	private class MyPagerAdapter extends PagerAdapter implements OnPageChangeListener {
+	...
+		//refresh方法去调用上层SettingListLayout的refreshChild方法
+		public boolean refresh(int num){
+			int size = mPageViews.size();
+			if(num-1<size){
+				SettingListLayout pageView = mPageViews.get(num-1);
+				if(pageView != null){
+					pageView.refreshChild();
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		
+//SettingListLayout.java (\vendor\mediatek\proprietary\packages\apps\camera\src\com\android\camera\ui)
+//对上次点击的对象调用其refreshChild方法
+	public void refreshChild(){
+        if (mLastItem != null) {
+            mLastItem.refreshChild();
+        }
+        Log.d(TAG, "refreshChild() return ");
+	}
+	
+
+//InLineSettingSublist.java (\vendor\mediatek\proprietary\packages\apps\camera\src\com\android\camera\ui)
+//如果子列表显示，就刷新一下该列表
+	public void refreshChild(){
+		if(mShowingChildList){
+			mSettingLayout.reloadPreference();
+		}
+	}	
+
+//SettingSublistLayout.java (vendor\mediatek\proprietary\packages\apps\camera\src\com\android\camera\ui)
+    // The value of the preference may have changed. Update the UI. //用于更新UI
+    public void reloadPreference() {
+        String value = mPreference.getOverrideValue();
+        if (value == null) {
+            mPreference.reloadValue();
+            value = mPreference.getValue();
+        }
+        int index = mPreference.findIndexOfValue(value);
+        if (index != -1) {
+            mAdapter.setSelectedIndex(index);
+            ((AbsListView) mSettingList).setSelection(index);
+        } else {
+            Log.e(TAG, "Invalid preference value.");
+            mPreference.print();
+        }
+        Log.i(TAG, "reloadPreference() mPreference=" + mPreference + ", index=" + index);
+    }
+
+
+
+	
+
+
+			
+

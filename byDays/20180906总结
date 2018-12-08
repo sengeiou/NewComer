@@ -1,0 +1,74 @@
+当日总结
+
+一. 9820e FM休眠外放无声
+经查，FM无论插耳机与否，外放或耳机收听，锁屏后系统都会陷入休眠状态。休眠时，FMservice均未destroy。
+判断休眠的方法是看 log是否出现断层，若有明显大段空白时间，则已休眠。
+音乐在锁屏时可以播放，但根据log，系统未休眠。说明FM与音乐，采用不同的策略，达到锁屏时播放的效果。
+
+CQ的解决方案：
+原因：外置PA随AP休眠被关闭
+外置PA的使能脚的gpio的配置：把BIT_PIN_SLP_AP 改为 BIT_PIN_SLP_NONE。
+
+
+
+二. 7731e FM通知栏选择stop不会清除通知问题
+经查看应为功能变更，而非bug。
+展讯git记录中commit 493ef16c9de7cb4dab1202dfe97959bbdadaafe2 
+因Bug #782729 Crash at java.lang.RuntimeException: Unable to start activity ComponentInfo 
+展讯修改功能，不会直接删除通知。
+
+FmService.java (\vendor\sprd\platform\packages\apps\dreamfmradio\src\com\android\fmradio)
+
+//创建通知
+    private void showPlayingNotification() {
+        // Modify for Bug782729, Unable to start activity ComponentInfo  
+		//这里不同点在于，当活动在前台时，也会显示FM的通知；而以前的版本不会。
+        // if (isActivityForeground() || (getRecorderState() == FmRecorder.STATE_RECORDING)) {
+        //     Log.w(TAG, "showPlayingNotification, do not show main notification.");
+        //     return;
+        // }
+		........
+		synchronized (mNotificationLock) {
+		....
+            mNotificationBuilder = new Notification.Builder(mContext);
+			....
+			if (mPowerStatus == POWER_UP) {
+			....
+			//stop的通知栏选项添加一个intent：FM_TURN_OFF
+                intent = new Intent(FM_TURN_OFF);
+                intent.setClass(mContext, FmService.class);
+                pIntent = PendingIntent.getService(mContext, 0, intent, 0);
+                title = getString(R.string.fm_stopplay_title);
+                mNotificationBuilder.addAction(R.drawable.btn_fm_rec_stop_enabled, title, pIntent);
+
+//经过一系列调用最后会调用
+    private boolean powerDown() {
+	...
+        if (!mFmManager.powerDown()) {
+		...
+            // Remove the notification in the title bar.
+            // Modify for Bug782729, Unable to start activity ComponentInfo
+			//原来是有删除通知的操作的，但这里注掉了
+            // removeNotification();
+            return false;
+        }
+		...
+        // Modify for Bug782729, Unable to start activity ComponentInfo
+        // Remove the notification in the title bar.
+        // fix bug 548480 FM show playing notification when FM is off.
+        // synchronized (mNotificationLock) {
+        //     removeNotification();
+        // }
+		
+三.7731e 音频文件与视频文件在文件管理中提示播放出错或不支持此格式
+
+自己下载测试的音频文件mid格式和wav格式在文件管理器可以播放，未出现出错或不支持的信息
+明天问测试取他们测试的文件再看
+
+
+四.7731e 不插卡无法拨打紧急电话，插卡拨打紧急号码通话记录无显示
+
+不插卡无法拨打紧急电话：这个测试其他手机也不支持。
+插卡拨打紧急号码通话记录无显示，因无sim卡，暂未测试
+
+3.54

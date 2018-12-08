@@ -1,0 +1,76 @@
+day30学习笔记
+
+一.宏
+参考5110sd的宏，对应9820e的代码修改
+
+1.修改语言列表，在device/sprd/sharkle/sp9820e_1h10中对应项目mk文件中 PRODUCT_LOCALES := zh_CN zh_TW en_US
+
+2.删除系统更新选项：
+在DeviceInfoSettings中onCreate方法中，修改
+        if(SystemProperties.getBoolean("ro.bdfun_no_system_update",false)){
+            removePreference(KEY_SYSTEM_UPDATE_SETTINGS);
+        }
+在9820e中也是相同位置
+DeviceInfoSettings类就是手机-设置-关于手机中的内容，手机其他基本参数也在这里修改
+
+3.删除长按power键之后跳出dialog中飞行模式选项
+GlobalActions类:长按power键跳出的dialog.在createDialog方法中，修改
+            } else if (GLOBAL_ACTION_KEY_AIRPLANE.equals(actionKey)) {
+                //BIRD:add by wangye for bug#24394 20170511 begin
+                if (!SystemProperties.getBoolean("ro.bdfun.remove_airplane", false)) {
+                     mItems.add(mAirplaneModeOn);
+                }
+                //BIRD:add by wangye for bug#24394 20170511 end
+9820e中也是在GlobalActions类的createDialog方法中修改
+        // next: airplane mode
+        mItems.add(mAirplaneModeOn);
+		
+4.设置选项中不显示summary信息
+例如设置中display下会显示一条summary(adaptive brightness is off)
+DisplaySettings下SummaryProvider内部类中setListening方法中修改
+这里因为在setListening方法下调用到updateSummary方法，在updateSummary方法下修改
+            //BIRD modify by zhanglixain for BIRD_DISPLAY_NO_SUMMARY 20170517 begin
+            if(!SystemProperties.getBoolean("ro.bdfun.diaplay_no_summary", false)){
+                mLoader.setSummary(this, mContext.getString(auto ? R.string.display_summary_on
+                        : R.string.display_summary_off));
+            }
+在9820e中设置主界面无summary
+
+5.BIRD_COMPATIBLE_MARK_CHECK_APK 兼容标识检查结果
+BIRD_INNER_SW_VERSION 内部软件版本
+
+6.看下9820的mmitest进入方法是 *#1#
+
+7.默认时间格式
+还是通过修改Setting.System.TIME_12_24的属性值来改变
+在DatabaseHelper类中loadSystemSettings方法中修改
+loadSetting(stmt, Settings.System.TIME_12_24,SystemProperties.get("ro.bdfun.default_time_format","12"));
+默认是12小时制。
+是否24小时制的复选框会调用is24Hour()检查Settings.System.TIME_12_24的属性
+((CheckBoxPreference)mTime24Pref).setChecked(is24Hour()); 实现ui上的改变
+具体格式的改变：
+DateFormat.getTimeFormat(getActivity())这个函数实际调用is24HourFormat(context)
+判断是否24小时制，并返回该格式的DateFormat对象。
+
+晚上把之前的宏的笔记整理一下，学习一下源码setting的写法
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

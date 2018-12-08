@@ -1,0 +1,17 @@
+google短信： com.google.android.apps.messaging
+ u:object_r:mtk_default_prop:s0
++        // modified by fanjinhao for support google mms  @2018-06-25{
++        if (SystemProperties.getBoolean("ro.bdfun.unreadnum_google",false)) {
++            intent.putExtra(Intent.EXTRA_UNREAD_COMPONENT,
++                    new ComponentName("com.google.android.apps.messaging", "com.google.android.apps.messaging.ui.ConversationListActivity"));
++        } else {
++            intent.putExtra(Intent.EXTRA_UNREAD_COMPONENT,
++                    new ComponentName("com.android.mms", "com.android.mms.ui.BootActivity"));
++        }
++        /// @}
+         
+
+
++     // modified by fanjinhao for support google dialer
++    public static final String CONTACTS_PACKAGE = SystemProperties.getBoolean("ro.bdfun.unreadnum_google",false) ? "com.google.android.dialer" : "com.android.dialer";
++    public static final String CONTACTS_DIALTACTS_ACTIVITY = SystemProperties.getBoolean("ro.bdfun.unreadnum_google",false) ? "com.google.android.dialer.extensions.GoogleDialtactsActivity" : "com.android.dialer.app.DialtactsActivity";

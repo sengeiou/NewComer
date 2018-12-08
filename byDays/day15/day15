@@ -1,0 +1,235 @@
+day15学习笔记
+
+一.SourceInsight
+  SourceInsight主要用于搜索阅读源代码。
+1.New Project-输入项目名-新建一个文件夹存放该SourceInsight工程的信息文件
+2.添加framework、package和vendor文件夹
+3.Rebuild Project
+
+
+二.Android源码学习
+ 1.在拨号界面输入*#*#83789#*#*，进入com.bird.dialer包下BirdSpecialCharMgr类中
+ handleChar方法，随后经过判断输入值进入到handleMMITest方法。
+             ComponentName cn = new ComponentName("com.sprd.validationtools", "com.sprd.validationtools.ValidationToolsMainActivity");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setComponent(cn);
+通过这个intent打开com.sprd.validationtools包下ValidationToolsMainActivity，这个输入后进到的活动。
+
+ 2.先看ValidationToolsMainActivity的onCreate方法，这个活动的布局就是一个四行的ListView。四个选项：full test/item test/test info/reset.
+ 看到onItemClick方法里，有对应按键的case
+ 
+//首先检测多用户模式
+        if (mUserId != 0) {
+            Toast.makeText(getApplicationContext(), R.string.multi_user_hint, Toast.LENGTH_LONG).show();
+            return;
+        }
+        synchronized (mClickCount) {
+            Log.d(TAG, "mClickCount:"+mClickCount);
+            if (mClickCount > 0) {
+            return;
+            }
+            mClickCount++;
+        }
+		
+		
+ 3.先看单项测试item test
+            case UNIT_TEST: {
+                Intent intent = new Intent(this, ListItemTestActivity.class);
+                startActivity(intent);
+            }
+这里进入到ListItemTestActivity活动中，看到其onCreate方法中，还是使用ListView布局。
+//注意到这里使用到了Sqlite数据库，EngSqlite类中对Sqlite原来的方法进行了一些封装
+	mEngSqlite = EngSqlite.getInstance(this);
+	//调用这个方法初始化ListView适配器
+	initAdapter();
+	
+	//看到initAdapter方法里
+	//这里使用Const.getSupportList方法获取支持的测试类型，返回ArrayList<TestItem>
+	mItemsListView = Const.getSupportList(true, this);
+	
+	//遍历这个List，先查询engSqlite数据库中对应TestItem的result，再赋给TestItem
+        for (int i = 0; i < mItemsListView.size(); i++) {
+            item = mItemsListView.get(i);
+            item.setResult(engSqlite.getTestListItemStatus(mItemsListView.get(i)
+                    .getTestname()));
+        }
+	//最后根据获得的List new一个适配器
+	mItemListViewAdapter = new ItemListViewAdapter(this, mItemsListView);
+	//initAdapter end 
+	
+	//回到onCreate方法，把Adapter和Listener都设置上
+	mListViewItem.setAdapter(mItemListViewAdapter);
+    mListViewItem.setOnItemClickListener(new ListItemClickListener());
+	
+	//看下这个监听器
+    private class ListItemClickListener implements OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            mLastTestItemIndex = position;
+			//根据TestItem的类，进入指定的活动
+            Intent intent = new Intent(ListItemTestActivity.this, mItemsListView.get(position)
+                    .getTestClass());
+			//在intent中放入两个参数：当前点击按键的索引，按键名字
+            intent.putExtra(Const.INTENT_PARA_TEST_NAME, mItemsListView.get(position).getTestname());
+
+            intent.putExtra(Const.INTENT_PARA_TEST_INDEX, position);
+			//需要获得返回数据
+            startActivityForResult(intent, 0);
+        }
+    }
+	
+	//看下接受什么返回数据
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (resultCode == Const.TEST_ITEM_DONE) {
+            int position = mLastTestItemIndex;
+			
+			//还是从数据库中取得返回的result，设置给该TestItem
+            mItemsListView.get(position).setResult(
+                    mEngSqlite.getTestListItemStatus(mItemsListView.get(position).getTestname()));
+            //通知数据变化了，刷新view
+			mItemListViewAdapter.notifyDataSetChanged();
+        }
+    }
+	
+4.SystemVersionTest版本测试
+a.Android版本：直接找这个静态变量 Build.VERSION.RELEASE，这个变量的获取方式：
+public static final String RELEASE = getString("ro.build.version.release");
+
+b.Linux版本：通过手机的这个文件FileInputStream fi = new FileInputStream("/proc/version");
+
+c.build_number：通过SystemProperties.get("ro.build.display.id", "unknown")
+
+d.sn号：通过这个属性去获取路径，找到 miscdata这个文件，PHASE_CHECKE_FILE = "miscdata";
+String filePath = SystemProperties.get("ro.product.partitionpath") + PHASE_CHECKE_FILE;
+
+
+5.BaseActivity：其他测试类都继承于这个类(上面SystemVersionTest中没出现的pass/fail button都在这里)
+看下两个按钮的点击事件，通过数据库存储结果
+    public void onClick(View v) {
+        // TODO Auto-generated method stub
+        if (v == mPassButton) {
+            if (canPass) {
+                Log.d("onclick", "pass.." + this);
+				//使用数据库存储result数据
+                storeRusult(true);
+                finish();
+                } else {
+                Toast.makeText(this, R.string.can_not_pass, Toast.LENGTH_SHORT).show();
+            }
+        } else if (v == mFailButton) {
+            storeRusult(false);
+            finish();
+        }
+    }
+	//在数据库中更新对应的测试项
+    public void storeRusult(boolean isSuccess) {
+        Log.d("BaseActivity", "storeResult" + mTestname);
+        mEngSqlite.updateDB(mTestname, isSuccess ? Const.SUCCESS : Const.FAIL);
+    }
+	//返回键又重开一个活动，关掉原来的
+    public void onBackPressed() {
+       // showResultDialog(getString(R.string.alert_finish_test));
+        Intent intent = BaseActivity.this.getIntent();
+        BaseActivity.this.startActivityForResult(intent,0);
+        finish();
+    }
+	
+6.RTCTest 实时时钟（Real-Time Clock）
+获取系统时间是直接用System.currentTimeMillis()，onCreate方法中调用到setTimeText方法
+看下这个方法 
+	//mContent是文本框，mTime是创建活动的时间，超出3秒就不更新了
+    private void setTimeText() {
+	//postDelayed方法：该线程对象100ms后运行
+        mContent.postDelayed(new Runnable() {
+            public void run() {
+                mContent.setText(getResources().getText(R.string.rtc_tag) + getTime());
+                mContent.setTextSize(35);
+                if (System.currentTimeMillis() - mTime > 3000) {
+                }
+                else {
+                    setTimeText();
+                }
+            }
+        }, 100);
+    }
+
+
+三.handler
+  上面涉及了handler及消息异步处理机制,补充学习一下。
+
+1.android不允许在子线程中进行UI操作
+  当应用程序启动时，Android首先会开启一个主线程 (也就是UI线程)，主线程为管理界面中的UI控件，进行事件分发。若需要进行一个较耗时的操作（联网读取数据，或者读取本地较大的一个文件），这时不能放在主线程中。
+  这时需要把这些耗时的操作，放在一个子线程中，因为子线程涉及到UI更新，Android主线程是线程不安全的，也就是说，更新UI只能在主线程中更新，子线程中操作是危险的。
+
+测试一下：
+    	private String[] data={"方法","ff","ww","qq","ee","vv"};
+        adt1=new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,data);
+        lv1=findViewById(R.id.list_view1);
+        lv1.setAdapter(adt1);
+        lv1.setOnItemClickListener(this);
+开个线程去更新这个listview
+            case R.id.fr_bt3:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        data[0]="child thread";
+                        adt1.notifyDataSetChanged();
+                    }
+                }).start();
+报错：android.view.ViewRootImpl$CalledFromWrongThreadException: Only the original thread that created a view hierarchy can touch its views.
+
+2.使用Handler
+  Handler运行在主线程中(UI线程中)，  它与子线程可以通过Message对象来传递数据。Handler就承担着接受子线程传过来的(子线程用sendMessage()方法传递)Message对象，(里面包含数据)，把这些消息放入主线程队列中，配合主线程进行更新UI。
+
+  handler可以分发Message对象和Runnable对象到主线程中，每个Handler实例，都会绑定到创建他的线程中(一般是位于主线程)，它有两个作用：
+(1)安排消息或Runnable 在某个主线程中某个地方执行；
+(2)安排一个动作在不同的线程中执行。
+
+post(Runnable)
+postAtTime(Runnable，long)
+postDelayed(Runnable long)
+以上post类方法允许你排列一个Runnable对象到主线程队列中，
+
+sendEmptyMessage(int)
+sendMessage(Message)
+sendMessageAtTime(Message，long)
+sendMessageDelayed(Message，long)
+sendMessage类方法， 允许你安排一个带数据的Message对象到队列中，等待更新
+
+测试一下：
+    private int count=0;
+    Handler handler=new Handler();
+    private Runnable runTest=new RunTest();
+
+    class RunTest implements Runnable {
+        @Override
+        public void run() {
+            count++;
+            data[0] = "child thread" + count;
+            adt1.notifyDataSetChanged();
+            //handler.postDelayed(this, 1000);
+        }
+    }
+		//fr_bt3实现异步更新listview,按一次+1
+            case R.id.fr_bt3:
+                handler.postDelayed(runTest,1000);
+                break;
+
+//使用递归实现计时，把上面注释的一行删掉，这时数字不断累加
+	//点击fr_bt4 删除Runnable对象 
+            case R.id.fr_bt4:
+                handler.removeCallbacks(runTest);
+                break;
+
+
+
+
+
+
+
+	
+	
+	
+
+

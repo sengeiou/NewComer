@@ -1,0 +1,57 @@
+当日总结
+
+一.MTK刷机
+ 应使用对应机型的版本进行刷机，mtk刷机应选择download only，选择format and download可能导致参数变化
+
+二.80go相机bug
+1.避免闪烁无法点开bug
+验证512m版本原apk，也存在该问题。但出现几率较小，复现困难，暂时未找到原因。在log中暂时也未找到异常信息。
+出现异常的log:
+01-01 12:19:34.298968  5992  5992 I Choreographer: Skipped 82 frames!  The application may be doing too much work on its main thread.
+主线程任务太多，导致跳过了82帧。
+
+2.自动场景切换bug
+1g版本/512m版本都已提交测试，等待测试结果。
+
+三.7731e bug (因暂时无手机可用，先看下代码)
+1.锁屏界面打开相机闪退
+闪退log:
+08-31 15:51:18.520  2976  2976 E AndroidRuntime: java.lang.NullPointerException: Attempt to invoke virtual method 'void com.android.camera.FocusOverlayManager.setFocusPosition(int, int)' on a null object reference
+08-31 15:51:18.520  2976  2976 E AndroidRuntime: 	at com.android.camera.PhotoModule.startCenterFocus(PhotoModule.java:2700)
+
+定位到PhotoModule.java (7731e\vendor\sprd\platform\packages\apps\dreamcamera2\src\com\android\camera)中添加的宏-相机假对焦的代码
+    private void startCenterFocus() {
+        if(!mFocusAreaSupported) {
+            if (BirdFeatureOption.BIRD_FAKE_FOCUS) {
+		if(!(BirdFeatureOption.BIRD_FAKE_FOCUS_ONLYBACK && (mCameraId == 1))){
+                    if(!(BirdFeatureOption.BIRD_FAKE_FOCUS_ONLYFRONT && (mCameraId == 0))){
+					...
+						mFocusManager.setFocusPosition(x, y);  //基本判断是这个mFocusManager==null 导致的
+
+考虑一个简单的改法，在这句前面添加一个判断
+if (mFocusManager == null) {
+	initializeFocusManager();
+}
+
+再看下锁屏处相机的调用
+KeyguardBottomAreaView.java (7731e\frameworks\base\packages\systemui\src\com\android\systemui\statusbar\phone)
+
+    public void onClick(View v) {
+        if (v == mRightAffordanceView) {
+            launchCamera(CAMERA_LAUNCH_SOURCE_AFFORDANCE);
+
+四.9820e FM休眠问题
+FMplay.java
+    protected void onResume() {
+...
+		//add by hujingcheng
+		pm=(PowerManager)getSystemService(Context.POWER_SERVICE);
+		pw=pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, LOGTAG);
+		pw.acquire();
+						
+
+
+
+
+
+

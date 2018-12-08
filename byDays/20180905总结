@@ -1,0 +1,73 @@
+当日总结
+
+一.80go 相机自动场景切换bug代码修改
+按照项目组的要求，尽量不动原来的方法。原因是，mtk后期可能会加patch，若修改原代码则可能冲突。
+Asd.java (vendor\mediatek\proprietary\packages\apps\camera\src\com\mediatek\camera\addition)
+
+原来的改动直接修改了onDetectedSceneMode方法的参数
+    private final AsdListener mASDCaptureCallback = new AsdListener() {
+        ....
+            if (mLastScene != scene) {
+                ... //添加一个传入的参数mLastScene上一次的场景
+                mICameraAppUi.onDetectedSceneMode(scene,mLastScene, suggestedHdr); //change by hujingcheng 20180903
+                mLastScene = scene;
+
+现在改为 添加一个方法，其他类里也做相应变化
+    private final AsdListener mASDCaptureCallback = new AsdListener() {
+		...
+            if (mLastScene != scene) {
+                ...
+				//change by hujingcheng 20180903
+				if(FeatureSwitcher.isLowRAM()&&(mLastScene^scene)==1){
+					mICameraAppUi.onDetectedSceneMode(scene,mLastScene, suggestedHdr); 
+				}else{
+					mICameraAppUi.onDetectedSceneMode(scene,suggestedHdr);
+				}    
+				//change by hujingcheng 20180903 end
+				
+				
+二.9820e FM锁屏外放无声bug
+
+原始版本即有这个问题，包括不支持短天线时，插耳机外放；
+
+暂时的修改方法是添加WakeLock锁
+FMplayService.java (packages\apps\fmplayer\src\com\thunderst\radio)
+    public void onCreate() {
+	...
+		//初始化PowerManager和WakeLock，不计锁数，一次release即可释放
+	    pm=(PowerManager)getSystemService(Context.POWER_SERVICE);
+		pw=pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, LOGTAG);
+		pw.setReferenceCounted(false);
+		//add by hujingcheng end
+
+
+//接收到ACTION_CLOSE_SYSTEM_DIALOGS，"reason"=lock时，加锁；
+    private class RadioServiceReceiver extends BroadcastReceiver {
+        public void onReceive(Context context, Intent intent) {
+	...
+            }else if(Intent.ACTION_CLOSE_SYSTEM_DIALOGS.equals(action)){
+				if("lock".equals(intent.getStringExtra("reason"))){
+					if(pw!=null){
+						Log.d(LOGTAG,"CLOSE_SYSTEM_DIALOGS reason=lock");
+						pw.acquire();
+					}
+				}
+			} //add by hujingcheng 
+
+//解綁时，当fm不工作时解锁
+    public boolean onUnbind(Intent intent) {
+	...
+        if (mFmManager.isFmOn()) {
+            return true;
+        }
+		//add by hujingcheng
+		if(pw!=null&& pw.isHeld()){
+			pw.release();
+			pw=null;
+
+
+				
+				
+				
+
+

@@ -1,0 +1,19 @@
+当日总结
+1.
+FileGo版本1.0.2012xx，目前80go 512m更新了8月GMS包的FileGo版本1.0.1918xx,与7731e FileGo版本1.0.2012xx现象一致。
+80go 1G版本FileGo 版本1.0.2043xx,部分mid格式可播放。暂未找到带相同版本的FileGo的对比机
+
+2.monkey音乐跑测失败log与手动点击拒绝权限log中均有这部分log,循环
+	Line 37347: 00DCCF 09-11 14:00:05.042  4186  4186 D PermissionsActivity: onCreate
+	Line 37430: 00DD3F 09-11 14:00:05.312   648   680 I ActivityManager: Displayed com.google.android.packageinstaller/com.android.packageinstaller.permission.ui.GrantPermissionsActivity: +193ms (total +481ms)
+	Line 37480: 00DD88 09-11 14:00:05.977  4186  4186 D PermissionsActivity: Cannot grant permission:android.permission.READ_EXTERNAL_STORAGE
+	Line 37481: 00DD8A 09-11 14:00:05.980  4186  4186 V Toast   : Toast SHOW: android.widget.Toast@41b21b2 view = android.widget.LinearLayout{57dc503 V.E...... ......I. 0,0-0,0} caller: com.android.music.RequestPermissionsActivityBase.onRequestPermissionsResult:145 
+	Line 37491: 00DD9F 09-11 14:00:06.039   282  1067 E BufferQueueProducer: [com.google.android.packageinstaller/com.android.packageinstaller.permission.ui.GrantPermissionsActivity#0] disconnect: not connected (req=1)
+	Line 37585: 00DE10 09-11 14:00:06.284   282   399 E BufferQueueProducer: [com.android.music/com.android.music.RequestPermissionsActivity#0] disconnect: not connected (req=1)
+	Line 37619: 00DE34 09-11 14:00:06.529  4186  4186 D PermissionsActivity: onDestory
+
+
+3.微信点击联系人退出
+已确认是点击微信中联系人的头像，微信退出，非系统联系人。
+
+

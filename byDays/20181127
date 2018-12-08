@@ -1,0 +1,85 @@
+激活后属性：
+
+[vendor.soter.teei.active.faceid]: [UNACTIVE]
+[vendor.soter.teei.active.fp]: [ACTIVE]
+[vendor.soter.teei.active.google]: [ACTIVE]
+[vendor.soter.teei.googlekey.status]: [OK]
+[vendor.soter.teei.init]: [INIT_OK]
+[vendor.soter.teei.proinfo]: [INIT_OK]
+[vendor.soter.teei.thh.info]: [{"version":"3.0"}]
+[vendor.soter.teei.thh.init]: [ACTIVE]
+
+
+adb shell cat proc/bootprof | grep TEEI:
+       667.123847 :    1-swapper/0       : TEEI Init The Shared Memory Pool
+       668.160001 :    1-swapper/0       : TEEI Shm Init Start
+       669.084001 :    1-swapper/0       : TEEI Shm Init End
+       670.621385 :    1-swapper/0       : TEEI Choose the CPU
+       671.520539 :    1-swapper/0       : TEEI Create The Switch Thread
+       672.645847 :    1-swapper/0       : TEEI Wake UP The Switch Thread
+       673.687616 :    1-swapper/0       : TEEI Register The CPU Notifier
+       675.562616 :    1-swapper/0       : TEEI Start The Buffer LOG
+       883.101847 :    1-swapper/0       : TEEI Sync The REE Time
+       884.073001 :    1-swapper/0       : TEEI Init Version
+       885.952770 :    1-swapper/0       : TEEI Init API Version
+      1582.316849 :    1-swapper/0       : TEEI Virtio Probe Start
+      1583.261157 :    1-swapper/0       : TEEI Virtio Add Device
+      1590.191080 :    1-swapper/0       : TEEI Tipc Probe Start
+      1593.418003 :    1-swapper/0       : TEEI Tipc Probe End
+      1610.999849 :    1-swapper/0       : TEEI Virtio Probe End
+
+
+内存：
+
+userdebug
+不带tee：922440
+豆荚tee-4M：918380
+关宏：922440
+
+user
+不带tee：930560
+豆荚tee-4M：934620
+
+
+#!/bin/bash
+cert_XSA=`jar tf $1 | grep SA` #获取签名文件在Apk中路径, $1为输入的apk
+#echo  $cert_XSA
+jar xf $1 $cert_XSA #提取签名文件
+echo --------------------------------------------------------------------------
+echo 证书MD5指纹:`keytool -printcert -file $cert_XSA | grep MD5`
+echo --------------------------------------------------------------------------
+rm -rf  `dirname $cert_XSA` #删除提取的文件夹
+
+
+
+
+01-01 12:04:10.014292   304  5253 E iio/ifunc: [vendor/mediatek/proprietary/hardware/mtkcam/legacy/platform/mt6580/core/imageio/drv/cam/isp_function.cpp, waitBufReady, line4453] ERROR: waitIrq( irq_TG1_DONE ) fail
+01-01 12:04:10.014378   304  5253 E iio/pathp1: [vendor/mediatek/proprietary/hardware/mtkcam/legacy/platform/mt6580/core/imageio/drv/cam/cam_path_pass1.cpp, dequeueBuf, line0234] ERROR: waitBufReady fail
+01-01 12:04:10.014454   304  5253 E iio/camio: [vendor/mediatek/proprietary/hardware/mtkcam/legacy/platform/mt6580/core/imageio/pipe/CamIOPipe/CamIOPipe.cpp, dequeOutBuf, line0397] ERROR: ERROR:dequeueBuf
+01-01 12:04:10.014539   304  5253 E MtkCam/VSSScen: [dequePass1] mpCamIOPipe->dequeOutBuf fail, triggerAEE = 1 (dequePass1){#980:vendor/mediatek/proprietary/hardware/mtkcam/legacy/platform/mt6580/core/hwscenario/VSSScenario.cpp}
+01-01 12:04:10.014623   304  5253 E MtkCam/PrvCQT: (5253)[dropFrame] still failed. (dropFrame){#2186:vendor/mediatek/proprietary/hardware/mtkcam/legacy/platform/mt6580/v1/hal/adapter/MtkDefault/Preview/PreviewCmdQueThread.cpp}
+
+
+smb://192.168.1.84/workb/workspace/19_6739_P/project/1_7130TF_N5501L_AM2_MV168_20181108_user
+user:wutingying
+pwd:baoliying
+
+smb://192.168.1.89/share/6_测试/10_GMS测试/android-go/测试工具/gms-oem-OMR1-8.1-signed-201810.zip
+
+alps/vendor/mediatek/proprietary/trustzone/custom/build/atf_config.mk
+
+
+叶-差分包
+需修改：
+1.teei.raw替换/vendor/mediatek/proprietary/trustzone/microtrust/source/common/itrusty/teei/teei.raw
+2.MICROTRUST_TEE_FINGERPRINT_SUPPORT = no
+3.MTK_TEE_DRAM_SIZE = 0x400000
+4.添加水印
+5.keybox数组
+
+编译报错
+MTK_SIGNATURE_CUSTOMIZATION = no
+
+豆荚TEE-4M-不带指纹
+mount.cifs -o username="builder",passwd="qwert" //192.168.1.66/builder/
+

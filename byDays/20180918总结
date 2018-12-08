@@ -1,0 +1,1350 @@
+ro.bdfun.fix_sensor_test=false
+[ro.bdfun.mt_z_sensor]: [true]
+
+
+ro.bdfun.mt_g_sensor
+
+
+ro.bdfun.mt_sensor_tip_direct---BIRD_MMI_AUTO_TEST_SENSOR_TIP_DIRECTION---DeviceTestSensorTipDirection
+ro.bdfun.mt_sensor---BIRD_MMI_AUTO_TEST_SENSOR---DeviceTestSensor
+
+
+CONFIG_USB_OTG
+
+
+ro.bird.remove_otg
+
+
+ ifeq ($(strip $(BIRD_REMOVE_OTG)), yes)   PRODUCT_PROPERTY_OVERRIDES += ro.bird.remove_otg=true endif
+
+
+*  L5005_20180829            | not in:
+                                   vendor/mediatek/proprietary/external/stnfctools
+                                   vendor/mediatek/proprietary/frameworks/opt/ST-Extension
+                                   vendor/mediatek/proprietary/frameworks/opt/ST-eSETerminal
+                                   vendor/mediatek/proprietary/hardware/stnfc
+                                   vendor/mediatek/proprietary/packages/apps/ST-Nfc
+                                   vendor/mediatek/proprietary/trustzone/trustkernel
+*  master                    | in all projects
+
+
+QQ 版本 6.6.7.3034
+
+StatusBar.BrightnessController
+AutomaticBrightnessController
+
+
+mTemporaryScreenAutoBrightnessAdjustmentSettingOverride
+
+
+
+PowerManagerService.java
+
+
+setTemporaryScreenAutoBrightnessAdjustmentSettingOverrideInternal()方法
+
+updateDisplayPowerStateLocked()方法
+
+
+mAutomaticBrightnessController.configure(autoBrightnessEnabled
+
+mScreenAutoBrightnessAdjustment
+
+config_autoBrightnessLevels
+config_autoBrightnessLcdBacklightValues
+
+DisplayPowerController
+
+mInitialHorizonAmbientLightRingBuffer
+mAmbientLightRingBuffer
+
+config_autoBrightnessLightSensorRate=250
+config_autoBrightnessAdjustmentMaxGamma=300%
+
+
+01-01 12:02:51.256: D/AutomaticBrightnessController(640): configure() changed=true
+01-01 12:02:51.256: D/AutomaticBrightnessController(640): updateAutoBrightness() mAmbientLuxValid=false
+01-01 12:02:51.532: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:02:51.532: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:02:51.532: D/AutomaticBrightnessController(640):   mAmbientLux=3021.0  ,mScreenAutoBrightness=230,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:51.533: D/AutomaticBrightnessController(640): updateAutoBrightness() mAmbientLuxValid=true
+01-01 12:02:51.533: D/AutomaticBrightnessController(640): updateAutoBrightness: adjGamma=0.8735579
+01-01 12:02:51.533: D/AutomaticBrightnessController(640): updateAutoBrightness: gamma=0.8735579, in=1.0, out=1.0
+01-01 12:02:51.533: D/AutomaticBrightnessController(640): updateAutoBrightness: mScreenAutoBrightness=230, newScreenAutoBrightness=255
+01-01 12:02:51.533: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:51.533: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:51.534: D/AutomaticBrightnessController(640): configure() changed=false
+01-01 12:02:51.812: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:02:51.812: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:02:51.812: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:02:51.812: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:51.812: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:51.917: D/AutomaticBrightnessController(640): configure() changed=false
+01-01 12:02:52.648: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:02:52.649: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:02:52.649: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:52.649: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:52.926: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:02:52.926: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:02:52.926: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:52.926: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:53.481: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:02:53.482: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:02:53.482: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:53.482: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:53.758: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:02:53.758: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:02:53.758: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:53.758: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:54.035: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:02:54.035: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:02:54.035: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:54.035: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:54.865: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:02:54.865: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:02:54.865: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:54.865: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:55.418: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:02:55.418: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:02:55.418: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:55.418: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:55.695: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:02:55.695: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:02:55.695: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:55.695: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:57.355: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:02:57.355: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:02:57.355: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:57.355: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:57.631: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:02:57.631: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:02:57.632: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:57.632: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:59.291: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:02:59.292: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:02:59.292: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:59.292: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:59.568: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:02:59.568: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:02:59.568: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:02:59.568: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:00.951: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:00.952: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:00.952: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:00.952: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:01.228: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:01.228: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:01.228: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:01.228: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:01.781: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:01.781: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:01.782: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:01.782: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:02.058: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:02.058: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:02.058: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:02.058: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:02.335: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:02.335: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:02.335: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:02.335: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:02.611: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:02.611: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:02.611: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:02.612: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:02.888: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:02.888: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:02.888: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:02.888: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:03.165: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:03.165: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:03.165: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:03.165: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:04.272: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:04.273: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:04.273: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:04.273: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:04.551: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:04.551: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:04.552: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:04.552: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:06.215: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:06.215: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:06.216: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:06.216: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:06.495: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:06.495: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:06.495: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:06.497: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:06.775: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:06.775: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:06.776: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:06.776: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:07.055: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:07.056: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:07.056: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:07.056: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:07.612: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:07.612: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:07.613: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:07.613: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:07.892: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:07.892: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:07.892: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:07.892: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:08.172: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:08.172: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:08.172: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:08.173: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:08.728: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:08.729: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:08.729: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:08.730: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:09.009: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:03:09.009: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:03:09.009: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:09.009: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:09.288: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:09.288: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:09.288: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:09.288: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:11.229: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:11.230: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:11.230: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:11.230: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:11.509: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:11.509: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:11.509: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:11.509: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:13.169: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:13.169: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:13.169: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:13.169: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:13.448: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:13.449: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:13.449: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:13.449: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:14.835: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:14.836: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:14.836: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:14.837: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:15.115: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:15.116: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:15.116: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:15.116: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:15.395: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:15.396: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:15.396: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:15.396: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:15.952: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:15.952: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:15.953: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:15.953: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:16.232: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:16.232: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:16.233: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:16.233: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:16.512: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:16.512: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:16.513: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:16.513: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:17.899: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:17.899: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:17.899: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:17.899: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:18.455: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:18.455: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:18.459: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:18.459: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:18.735: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:18.735: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:18.736: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:18.736: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:19.015: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:19.016: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:19.016: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:19.016: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:21.508: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:21.509: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:21.509: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:21.509: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:22.065: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:22.065: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:22.066: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:22.067: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:24.012: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:24.012: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:24.013: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:24.013: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:24.848: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:24.849: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:24.850: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:24.850: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:25.129: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:25.129: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:25.129: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:25.129: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:25.409: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:25.409: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:25.409: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:25.409: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:25.688: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:25.689: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:25.689: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:25.690: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:25.969: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:25.969: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:25.969: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:25.969: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:26.248: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:26.249: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:26.249: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:26.250: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:26.528: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:26.528: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:26.529: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:26.529: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:29.298: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:29.299: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:29.300: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:29.300: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:29.583: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:29.583: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:29.583: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:29.583: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:31.357: D/AutomaticBrightnessController(640): configure() changed=true
+01-01 12:03:31.357: D/AutomaticBrightnessController(640): updateAutoBrightness() mAmbientLuxValid=false
+01-01 12:03:32.019: D/AutomaticBrightnessController(640): configure() changed=false
+01-01 12:03:41.781: D/AutomaticBrightnessController(640): configure() changed=true
+01-01 12:03:41.781: D/AutomaticBrightnessController(640): updateAutoBrightness() mAmbientLuxValid=false
+01-01 12:03:42.058: D/AutomaticBrightnessController(640): lux=110.0
+01-01 12:03:42.058: D/AutomaticBrightnessController(640): lux=110.0
+01-01 12:03:42.058: D/AutomaticBrightnessController(640):   mAmbientLux=1.07374259E9  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:42.058: D/AutomaticBrightnessController(640): updateAutoBrightness() mAmbientLuxValid=true
+01-01 12:03:42.059: D/AutomaticBrightnessController(640): updateAutoBrightness: adjGamma=0.8735579
+01-01 12:03:42.059: D/AutomaticBrightnessController(640): updateAutoBrightness: gamma=0.8735579, in=0.22457807, out=0.27125752
+01-01 12:03:42.059: D/AutomaticBrightnessController(640): updateAutoBrightness: mScreenAutoBrightness=255, newScreenAutoBrightness=69
+01-01 12:03:42.059: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:42.059: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:42.060: D/AutomaticBrightnessController(640): configure() changed=false
+01-01 12:03:42.335: D/AutomaticBrightnessController(640): lux=150.0
+01-01 12:03:42.335: D/AutomaticBrightnessController(640): lux=150.0
+01-01 12:03:42.335: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:42.335: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:42.611: D/AutomaticBrightnessController(640): lux=46.0
+01-01 12:03:42.612: D/AutomaticBrightnessController(640): lux=46.0
+01-01 12:03:42.612: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:42.612: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:42.888: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:42.888: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:42.888: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:42.888: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:43.165: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:43.165: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:43.165: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:43.165: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:43.962: D/AutomaticBrightnessController(640): configure() changed=false
+01-01 12:03:43.995: D/AutomaticBrightnessController(640): lux=96.0
+01-01 12:03:43.995: D/AutomaticBrightnessController(640): lux=96.0
+01-01 12:03:43.995: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:43.995: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:44.272: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:44.272: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:44.272: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:44.273: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:44.829: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:44.830: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:44.830: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:44.830: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:45.105: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:45.106: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:45.106: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:45.106: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:45.385: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:45.386: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:45.386: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:45.386: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:45.665: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:03:45.665: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:03:45.666: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:45.666: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:45.945: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:45.945: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:45.945: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:45.947: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:46.785: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:46.785: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:46.785: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:46.785: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:47.062: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:03:47.063: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:03:47.063: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:47.063: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:47.895: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:47.896: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:47.896: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:47.896: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:48.452: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:48.452: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:48.453: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:48.453: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:48.732: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:48.732: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:48.732: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:48.733: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:49.289: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:49.289: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:49.289: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:49.289: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:49.568: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:03:49.568: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:03:49.568: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:49.568: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:50.402: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:50.402: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:50.402: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:50.403: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:50.959: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:50.959: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:50.959: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:50.959: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:51.239: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:51.239: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:51.239: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:51.239: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:51.519: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:51.519: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:51.519: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:51.519: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:51.799: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:03:51.799: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:03:51.799: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:51.799: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:52.633: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:52.633: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:52.633: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:52.634: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:53.188: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:53.188: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:53.188: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:53.188: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:53.466: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:53.466: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:53.466: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:53.467: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:53.746: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:53.746: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:53.746: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:53.746: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:54.025: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:03:54.025: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:03:54.025: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:54.025: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:55.131: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:55.132: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:55.132: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:55.132: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:55.685: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:55.685: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:03:55.685: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:55.685: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:55.961: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:55.961: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:55.961: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:55.962: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:56.515: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:03:56.515: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:03:56.515: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:56.515: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:57.898: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:57.898: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:57.898: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:57.898: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:58.175: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:58.175: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:58.175: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:58.175: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:58.728: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:58.728: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:03:58.728: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:58.728: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:59.005: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:59.005: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:59.005: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:59.005: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:59.281: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:03:59.281: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:03:59.282: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:59.282: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:59.835: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:59.835: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:03:59.835: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:59.962: D/AutomaticBrightnessController(640):   mAmbientLux=110.0  ,mScreenAutoBrightness=69,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:03:59.962: D/AutomaticBrightnessController(640): updateAutoBrightness() mAmbientLuxValid=true
+01-01 12:03:59.962: D/AutomaticBrightnessController(640): updateAutoBrightness: adjGamma=0.8735579
+01-01 12:03:59.962: D/AutomaticBrightnessController(640): updateAutoBrightness: gamma=0.8735579, in=1.0, out=1.0
+01-01 12:03:59.962: D/AutomaticBrightnessController(640): updateAutoBrightness: mScreenAutoBrightness=69, newScreenAutoBrightness=255
+01-01 12:03:59.962: D/AutomaticBrightnessController(640): configure() changed=false
+01-01 12:04:00.112: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:00.112: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:00.112: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:00.112: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:00.941: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:00.941: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:00.941: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:00.942: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:01.218: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:01.218: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:01.218: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:01.218: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:02.048: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:02.048: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:02.048: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:02.048: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:02.325: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:02.325: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:02.325: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:02.325: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:03.057: D/AutomaticBrightnessController(640): configure() changed=false
+01-01 12:04:03.155: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:03.155: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:03.155: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:03.155: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:04.541: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:04.542: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:04.542: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:04.542: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:04.819: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:04.819: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:04.819: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:04.819: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:05.095: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:05.095: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:05.096: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:05.096: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:05.649: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:05.649: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:05.650: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:05.650: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:05.929: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:05.929: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:05.930: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:05.930: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:07.042: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:07.042: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:07.043: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:07.043: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:07.598: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:07.599: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:07.599: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:07.600: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:07.878: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:07.879: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:07.879: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:07.880: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:08.712: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:08.712: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:08.712: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:08.713: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:08.992: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:08.992: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:08.992: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:08.993: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:09.272: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:09.272: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:09.272: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:09.273: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:09.551: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:09.552: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:09.552: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:09.552: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:09.832: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:09.832: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:09.833: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:09.833: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:10.112: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:10.112: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:10.112: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:10.113: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:10.669: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:10.669: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:10.669: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:10.669: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:10.949: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:10.949: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:10.949: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:10.949: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:11.232: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:11.232: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:11.232: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:11.233: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:11.512: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:11.512: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:11.512: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:11.512: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:12.068: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:12.069: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:12.070: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:12.070: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:12.349: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:12.349: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:12.349: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:12.349: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:13.182: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:13.182: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:13.183: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:13.183: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:14.015: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:14.015: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:14.015: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:14.017: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:14.295: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:14.296: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:14.297: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:14.297: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:14.575: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:14.575: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:14.575: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:14.575: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:15.408: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:15.409: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:15.409: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:15.410: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:16.242: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:16.242: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:16.242: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:16.242: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:16.522: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:16.522: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:16.523: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:16.523: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:16.802: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:16.802: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:16.802: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:16.802: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:17.637: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:17.637: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:17.637: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:17.637: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:17.915: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:17.916: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:17.916: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:17.916: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:18.748: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:18.749: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:18.749: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:18.750: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:19.029: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:19.029: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:19.029: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:19.029: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:19.585: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:19.585: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:19.585: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:19.585: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:19.865: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:19.865: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:19.866: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:19.867: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:20.699: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:20.699: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:20.699: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:20.699: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:20.979: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:20.979: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:20.979: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:20.979: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:21.259: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:21.259: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:21.259: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:21.259: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:21.539: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:21.539: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:21.539: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:21.539: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:21.849: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:21.849: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:21.850: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:21.850: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:22.125: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:22.125: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:22.125: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:22.126: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:22.955: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:22.955: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:22.956: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:22.956: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:23.235: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:23.235: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:23.235: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:23.236: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:24.068: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:24.069: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:24.069: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:24.070: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:24.349: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:24.349: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:24.349: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:24.349: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:24.905: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:24.905: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:24.906: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:24.907: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:25.185: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:25.185: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:25.185: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:25.187: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:26.018: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:26.019: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:26.019: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:26.020: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:26.309: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:26.309: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:26.309: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:26.309: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:26.865: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:26.865: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:26.865: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:26.866: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:27.419: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:27.419: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:27.419: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:27.419: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:30.188: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:30.190: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:30.190: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:30.190: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:30.745: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:30.746: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:30.746: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:30.746: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:31.025: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:31.026: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:31.026: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:31.026: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:31.859: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:31.859: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:31.859: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:31.859: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:32.139: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:32.139: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:32.139: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:32.139: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:33.248: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:33.249: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:33.250: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:33.250: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:33.805: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:33.805: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:33.805: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:33.807: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:34.085: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:34.085: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:34.085: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:34.087: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:34.918: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:34.919: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:34.920: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:34.920: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:35.475: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:35.475: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:35.476: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:35.476: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:37.415: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:37.415: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:37.416: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:37.417: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:37.695: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:37.695: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:37.695: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:37.697: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:37.975: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:37.976: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:37.976: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:37.976: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:38.255: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:38.256: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:04:38.256: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:38.256: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:38.535: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:38.535: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:38.535: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:38.535: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:39.369: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:39.371: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:39.371: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:39.371: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:39.925: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:39.925: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:04:39.926: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:39.926: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:41.035: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:41.036: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:41.036: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:41.036: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:41.315: D/AutomaticBrightnessController(640): lux=150.0
+01-01 12:04:41.316: D/AutomaticBrightnessController(640): lux=150.0
+01-01 12:04:41.316: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:41.316: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:41.595: D/AutomaticBrightnessController(640): lux=144.0
+01-01 12:04:41.595: D/AutomaticBrightnessController(640): lux=144.0
+01-01 12:04:41.596: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:41.596: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:41.875: D/AutomaticBrightnessController(640): lux=137.0
+01-01 12:04:41.875: D/AutomaticBrightnessController(640): lux=137.0
+01-01 12:04:41.875: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:41.876: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:42.155: D/AutomaticBrightnessController(640): lux=144.0
+01-01 12:04:42.155: D/AutomaticBrightnessController(640): lux=144.0
+01-01 12:04:42.155: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:42.155: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:42.435: D/AutomaticBrightnessController(640): lux=150.0
+01-01 12:04:42.435: D/AutomaticBrightnessController(640): lux=150.0
+01-01 12:04:42.435: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:42.436: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:42.992: D/AutomaticBrightnessController(640): lux=177.0
+01-01 12:04:42.992: D/AutomaticBrightnessController(640): lux=177.0
+01-01 12:04:42.992: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:42.993: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:43.272: D/AutomaticBrightnessController(640): lux=184.0
+01-01 12:04:43.272: D/AutomaticBrightnessController(640): lux=184.0
+01-01 12:04:43.272: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:43.272: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:43.552: D/AutomaticBrightnessController(640): lux=171.0
+01-01 12:04:43.552: D/AutomaticBrightnessController(640): lux=171.0
+01-01 12:04:43.552: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:43.553: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:43.832: D/AutomaticBrightnessController(640): lux=1062.0
+01-01 12:04:43.832: D/AutomaticBrightnessController(640): lux=1062.0
+01-01 12:04:43.834: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:43.834: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:44.112: D/AutomaticBrightnessController(640): lux=5830.0
+01-01 12:04:44.112: D/AutomaticBrightnessController(640): lux=5830.0
+01-01 12:04:44.113: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:44.113: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:44.391: D/AutomaticBrightnessController(640): lux=5892.0
+01-01 12:04:44.392: D/AutomaticBrightnessController(640): lux=5892.0
+01-01 12:04:44.392: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:44.392: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:44.671: D/AutomaticBrightnessController(640): lux=5873.0
+01-01 12:04:44.672: D/AutomaticBrightnessController(640): lux=5873.0
+01-01 12:04:44.672: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:44.672: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:44.952: D/AutomaticBrightnessController(640): lux=5849.0
+01-01 12:04:44.952: D/AutomaticBrightnessController(640): lux=5849.0
+01-01 12:04:44.953: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:44.953: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:45.232: D/AutomaticBrightnessController(640): lux=5859.0
+01-01 12:04:45.232: D/AutomaticBrightnessController(640): lux=5859.0
+01-01 12:04:45.232: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:45.232: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:45.512: D/AutomaticBrightnessController(640): lux=5827.0
+01-01 12:04:45.512: D/AutomaticBrightnessController(640): lux=5827.0
+01-01 12:04:45.512: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:45.512: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:45.792: D/AutomaticBrightnessController(640): lux=5832.0
+01-01 12:04:45.792: D/AutomaticBrightnessController(640): lux=5832.0
+01-01 12:04:45.792: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:45.792: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:46.072: D/AutomaticBrightnessController(640): lux=5865.0
+01-01 12:04:46.072: D/AutomaticBrightnessController(640): lux=5865.0
+01-01 12:04:46.072: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:46.072: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:46.352: D/AutomaticBrightnessController(640): lux=5881.0
+01-01 12:04:46.352: D/AutomaticBrightnessController(640): lux=5881.0
+01-01 12:04:46.352: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:46.352: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:46.632: D/AutomaticBrightnessController(640): lux=5938.0
+01-01 12:04:46.632: D/AutomaticBrightnessController(640): lux=5938.0
+01-01 12:04:46.632: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:46.632: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:46.912: D/AutomaticBrightnessController(640): lux=6136.0
+01-01 12:04:46.912: D/AutomaticBrightnessController(640): lux=6136.0
+01-01 12:04:46.912: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:46.913: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:47.468: D/AutomaticBrightnessController(640): lux=6047.0
+01-01 12:04:47.469: D/AutomaticBrightnessController(640): lux=6047.0
+01-01 12:04:47.469: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:47.470: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:47.749: D/AutomaticBrightnessController(640): lux=5933.0
+01-01 12:04:47.749: D/AutomaticBrightnessController(640): lux=5933.0
+01-01 12:04:47.749: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:47.749: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:48.029: D/AutomaticBrightnessController(640): lux=5868.0
+01-01 12:04:48.029: D/AutomaticBrightnessController(640): lux=5868.0
+01-01 12:04:48.029: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:48.029: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:48.308: D/AutomaticBrightnessController(640): lux=5876.0
+01-01 12:04:48.309: D/AutomaticBrightnessController(640): lux=5876.0
+01-01 12:04:48.309: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:48.310: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:48.588: D/AutomaticBrightnessController(640): lux=5892.0
+01-01 12:04:48.589: D/AutomaticBrightnessController(640): lux=5892.0
+01-01 12:04:48.590: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:48.590: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:49.145: D/AutomaticBrightnessController(640): lux=5897.0
+01-01 12:04:49.146: D/AutomaticBrightnessController(640): lux=5897.0
+01-01 12:04:49.146: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:49.317: D/AutomaticBrightnessController(640):   mAmbientLux=5.36736288E8  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:49.317: D/AutomaticBrightnessController(640): updateAutoBrightness() mAmbientLuxValid=true
+01-01 12:04:49.317: D/AutomaticBrightnessController(640): updateAutoBrightness: adjGamma=0.8735579
+01-01 12:04:49.317: D/AutomaticBrightnessController(640): updateAutoBrightness: gamma=0.8735579, in=1.0, out=1.0
+01-01 12:04:49.317: D/AutomaticBrightnessController(640): updateAutoBrightness: mScreenAutoBrightness=255, newScreenAutoBrightness=255
+01-01 12:04:49.425: D/AutomaticBrightnessController(640): lux=5963.0
+01-01 12:04:49.425: D/AutomaticBrightnessController(640): lux=5963.0
+01-01 12:04:49.425: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:49.425: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:49.705: D/AutomaticBrightnessController(640): lux=5987.0
+01-01 12:04:49.705: D/AutomaticBrightnessController(640): lux=5987.0
+01-01 12:04:49.705: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:49.705: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:49.985: D/AutomaticBrightnessController(640): lux=5982.0
+01-01 12:04:49.985: D/AutomaticBrightnessController(640): lux=5982.0
+01-01 12:04:49.986: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:49.987: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:50.265: D/AutomaticBrightnessController(640): lux=6009.0
+01-01 12:04:50.265: D/AutomaticBrightnessController(640): lux=6009.0
+01-01 12:04:50.266: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:50.266: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:50.545: D/AutomaticBrightnessController(640): lux=6014.0
+01-01 12:04:50.545: D/AutomaticBrightnessController(640): lux=6014.0
+01-01 12:04:50.546: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:50.546: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:50.825: D/AutomaticBrightnessController(640): lux=5941.0
+01-01 12:04:50.825: D/AutomaticBrightnessController(640): lux=5941.0
+01-01 12:04:50.826: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:50.826: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:51.105: D/AutomaticBrightnessController(640): lux=5849.0
+01-01 12:04:51.106: D/AutomaticBrightnessController(640): lux=5849.0
+01-01 12:04:51.106: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:51.106: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:51.385: D/AutomaticBrightnessController(640): lux=5821.0
+01-01 12:04:51.385: D/AutomaticBrightnessController(640): lux=5821.0
+01-01 12:04:51.386: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:51.386: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:51.665: D/AutomaticBrightnessController(640): lux=5849.0
+01-01 12:04:51.665: D/AutomaticBrightnessController(640): lux=5849.0
+01-01 12:04:51.665: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:51.666: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:51.945: D/AutomaticBrightnessController(640): lux=5903.0
+01-01 12:04:51.945: D/AutomaticBrightnessController(640): lux=5903.0
+01-01 12:04:51.945: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:51.947: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:52.229: D/AutomaticBrightnessController(640): lux=5843.0
+01-01 12:04:52.229: D/AutomaticBrightnessController(640): lux=5843.0
+01-01 12:04:52.229: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:52.229: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:52.508: D/AutomaticBrightnessController(640): lux=6052.0
+01-01 12:04:52.509: D/AutomaticBrightnessController(640): lux=6052.0
+01-01 12:04:52.509: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:52.510: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:52.788: D/AutomaticBrightnessController(640): lux=1024.0
+01-01 12:04:52.788: D/AutomaticBrightnessController(640): lux=1024.0
+01-01 12:04:52.789: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:52.790: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:53.068: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:53.068: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:53.068: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:53.068: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:54.175: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:54.175: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:54.175: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:54.175: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:54.451: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:54.451: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:54.452: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:54.452: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:56.388: D/AutomaticBrightnessController(640): lux=46.0
+01-01 12:04:56.388: D/AutomaticBrightnessController(640): lux=46.0
+01-01 12:04:56.388: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:56.388: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:56.665: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:56.665: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:56.665: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:56.665: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:56.941: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:56.941: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:56.942: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:56.942: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:58.878: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:58.878: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:04:58.878: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:58.878: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:59.155: D/AutomaticBrightnessController(640): lux=46.0
+01-01 12:04:59.155: D/AutomaticBrightnessController(640): lux=46.0
+01-01 12:04:59.155: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:59.155: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:59.431: D/AutomaticBrightnessController(640): lux=33.0
+01-01 12:04:59.431: D/AutomaticBrightnessController(640): lux=33.0
+01-01 12:04:59.432: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:59.432: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:59.985: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:59.985: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:04:59.985: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:04:59.985: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:00.261: D/AutomaticBrightnessController(640): lux=33.0
+01-01 12:05:00.261: D/AutomaticBrightnessController(640): lux=33.0
+01-01 12:05:00.262: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:00.262: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:00.538: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:00.538: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:00.538: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:00.538: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:03.028: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:03.028: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:03.028: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:03.028: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:03.582: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:03.582: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:03.583: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:03.583: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:03.862: D/AutomaticBrightnessController(640): lux=33.0
+01-01 12:05:03.862: D/AutomaticBrightnessController(640): lux=33.0
+01-01 12:05:03.863: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:03.863: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:04.142: D/AutomaticBrightnessController(640): lux=1.07374221E9
+01-01 12:05:04.142: D/AutomaticBrightnessController(640): lux=1.07374221E9
+01-01 12:05:04.142: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:04.143: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:04.422: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:04.422: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:04.422: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:04.422: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:04.701: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:04.702: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:04.702: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:04.702: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:04.981: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:04.981: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:04.981: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:04.982: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:05.258: D/AutomaticBrightnessController(640): lux=171.0
+01-01 12:05:05.258: D/AutomaticBrightnessController(640): lux=171.0
+01-01 12:05:05.258: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:05.258: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:05.535: D/AutomaticBrightnessController(640): lux=432.0
+01-01 12:05:05.535: D/AutomaticBrightnessController(640): lux=432.0
+01-01 12:05:05.535: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:05.535: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:05.812: D/AutomaticBrightnessController(640): lux=1164.0
+01-01 12:05:05.812: D/AutomaticBrightnessController(640): lux=1164.0
+01-01 12:05:05.812: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:05.813: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:06.092: D/AutomaticBrightnessController(640): lux=1478.0
+01-01 12:05:06.092: D/AutomaticBrightnessController(640): lux=1478.0
+01-01 12:05:06.092: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:06.092: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:06.372: D/AutomaticBrightnessController(640): lux=1596.0
+01-01 12:05:06.372: D/AutomaticBrightnessController(640): lux=1596.0
+01-01 12:05:06.372: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:06.373: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:06.652: D/AutomaticBrightnessController(640): lux=1755.0
+01-01 12:05:06.652: D/AutomaticBrightnessController(640): lux=1755.0
+01-01 12:05:06.652: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:06.653: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:06.932: D/AutomaticBrightnessController(640): lux=1715.0
+01-01 12:05:06.932: D/AutomaticBrightnessController(640): lux=1715.0
+01-01 12:05:06.932: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:06.932: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:07.212: D/AutomaticBrightnessController(640): lux=1398.0
+01-01 12:05:07.212: D/AutomaticBrightnessController(640): lux=1398.0
+01-01 12:05:07.212: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:07.212: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:07.492: D/AutomaticBrightnessController(640): lux=80.0
+01-01 12:05:07.492: D/AutomaticBrightnessController(640): lux=80.0
+01-01 12:05:07.492: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:07.492: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:07.771: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:07.771: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:07.772: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:07.772: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:08.048: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:08.048: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:08.048: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:08.048: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:08.325: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:08.325: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:08.326: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:08.326: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:08.601: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:08.601: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:08.601: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:08.602: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:08.878: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:08.878: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:08.878: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:08.878: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:09.431: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:09.432: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:09.432: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:09.432: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:09.708: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:09.708: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:09.708: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:09.708: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:09.985: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:09.985: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:09.985: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:09.985: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:10.261: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:10.261: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:10.261: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:10.262: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:10.538: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:10.538: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:10.538: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:10.538: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:10.815: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:10.815: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:10.815: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:10.815: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:11.091: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:11.091: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:11.092: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:11.092: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:11.368: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:11.368: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:11.368: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:11.368: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:11.921: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:11.922: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:11.922: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:11.922: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:12.198: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:12.198: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:12.198: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:12.198: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:12.751: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:12.751: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:12.752: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:12.752: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:13.028: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:13.028: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:13.028: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:13.028: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:13.581: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:13.581: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:13.582: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:13.582: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:13.858: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:13.858: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:13.858: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:13.858: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:14.411: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:14.412: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:14.412: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:14.412: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:14.965: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:14.965: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:14.965: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:14.965: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:15.241: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:15.241: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:15.242: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:15.242: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:15.518: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:15.518: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:15.518: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:15.518: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:16.071: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:16.071: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:16.072: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:16.072: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:16.348: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:16.348: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:16.348: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:16.348: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:16.625: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:16.625: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:16.625: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:16.625: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:17.178: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:17.178: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:17.178: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:17.178: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:17.455: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:17.455: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:17.455: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:17.455: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:17.732: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:17.732: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:17.732: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:17.732: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:18.012: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:18.012: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:18.012: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:18.012: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:18.568: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:18.568: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:18.568: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:18.568: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:19.121: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:19.121: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:19.122: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:19.122: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:19.398: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:19.398: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:19.398: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:19.398: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:19.678: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:19.678: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:19.678: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:19.678: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:20.785: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:20.786: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:20.786: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:20.786: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:21.619: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:21.619: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:21.619: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:21.619: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:21.899: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:21.899: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:21.899: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:21.899: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:22.179: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:22.179: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:22.179: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:22.179: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:22.459: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:22.459: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:22.459: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:22.460: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:23.015: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:23.015: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:23.015: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:23.017: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:23.295: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:23.295: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:23.295: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:23.297: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:23.575: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:23.575: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:23.575: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:23.576: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:23.856: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:23.856: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:23.856: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:23.856: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:24.135: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:24.135: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:24.135: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:24.137: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:24.969: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:24.970: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:24.970: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:24.970: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:25.249: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:25.249: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:25.249: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:25.249: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:26.082: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:26.082: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:26.082: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:26.082: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:26.362: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:26.362: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:26.362: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:26.362: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:26.642: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:26.642: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:26.642: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:26.644: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:27.198: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:27.199: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:27.200: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:27.200: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:27.479: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:27.479: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:27.479: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:27.479: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:27.759: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:27.759: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:27.759: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:27.759: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:28.039: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:28.039: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:28.039: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:28.039: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:28.318: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:28.319: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:28.319: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:28.320: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:28.598: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:28.599: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:28.599: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:28.600: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:29.708: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:29.708: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:29.708: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:29.708: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:29.985: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:29.985: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:29.986: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:29.986: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:30.539: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:30.539: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:30.540: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:30.540: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:31.095: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:31.096: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:31.096: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:31.096: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:31.929: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:31.929: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:31.930: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:31.930: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:32.209: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:32.209: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:32.209: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:32.209: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:33.319: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:33.319: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:33.319: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:33.319: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:33.599: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:33.599: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:33.599: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:33.599: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:33.879: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:33.879: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:33.879: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:33.879: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:34.439: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:34.440: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:34.440: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:34.440: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:34.995: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:34.996: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:34.996: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:34.996: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:35.272: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:35.272: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:35.272: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:35.272: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:36.102: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:36.102: D/AutomaticBrightnessController(640): lux=1.07374298E9
+01-01 12:05:36.102: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:36.103: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:36.382: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:36.382: D/AutomaticBrightnessController(640): lux=1.07374259E9
+01-01 12:05:36.382: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:36.382: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:36.939: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:36.939: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:36.939: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:36.939: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:37.219: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:37.219: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:37.220: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:37.220: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:37.498: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:37.499: D/AutomaticBrightnessController(640): lux=1600.0
+01-01 12:05:37.499: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:37.500: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:38.332: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:38.332: D/AutomaticBrightnessController(640): lux=20.0
+01-01 12:05:38.332: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+01-01 12:05:38.335: D/AutomaticBrightnessController(640):   mAmbientLux=5927.3013  ,mScreenAutoBrightness=255,  mScreenAutoBrightnessAdjustment=0.123046875
+
+

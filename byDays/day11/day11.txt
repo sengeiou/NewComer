@@ -1,0 +1,215 @@
+day11学习笔记
+
+
+一.运行时权限
+修改一下SecondActivity中打电话按钮的代码：
+            case R.id.sc_bt4:
+                //启动电话，并输入号码10086，先判断是否有权限打电话
+                if(ContextCompat.checkSelfPermission(SecondActivity.this, Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
+			//请求权限
+                    ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CALL_PHONE},1);
+                }else{
+                    call();
+                }
+                break;
+
+    //打电话
+    public void call(){
+        try{
+            Intent intent4=new Intent(Intent.ACTION_DIAL);
+            intent4.setData(Uri.parse("tel:10086"));
+            startActivity(intent4);
+        }catch (SecurityException e){
+            e.printStackTrace();
+        }
+    }
+
+    //调用完requestPermissions方法后，会弹出选择框给用户，用户无论同意与否都会回调onRequestPermissionsResult方法
+    //授权结果封装在grantResults数组中
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch(requestCode){
+            case 1:
+                if(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    call();
+                }else{
+                    Toast.makeText(this,"permission denied",Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:break;
+        }
+    }
+ContextCompat类的checkSelfPermission方法-检查权限是否已授权，参数(上下文，权限名)，若返回值=PackageManager.PERMISSION_GRANTED(已授权)，则说明该权限已授权，直接调call()方法打电话；若=PackageManager.PERMISSION_DENIED，则通过requestPermissions方法请求权限。
+requestPermissions方法，参数(Activity对象，权限名数组，请求码)
+onRequestPermissionsResult方法，参数(请求码，权限名数组，授权结果)
+
+
+二.Activity的启动模式
+1.standard
+  standard模式是活动的默认启动模式。standard模式下，每创建一个活动，都会创建一个该活动的实例，不管该活动是否已在栈中存在。
+在ThirdActivity中创建一个到本活动的intent按钮th_bt9
+            case R.id.th_bt9:
+                Intent intent4=new Intent(this,ThirdActivity.class);
+                startActivity(intent4);
+                break;
+这时，每按一次按钮th_bt9，都会创建一个活动3的实例。需要按多次返回键，才能将活动3退栈。
+
+2.singleTop
+  在启动活动时，若发现栈顶已是该活动，则直接使用它，而不再次创建新的活动实例。
+在清单文件中修改android:launchMode="singleTop"。
+        <activity android:name=".ThirdActivity" android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_START"></action>
+                <category android:name="android.intent.category.DEFAULT"></category>
+                <category android:name="android.intent.category.ONE"></category>
+            </intent-filter>
+        </activity>
+但当该活动未处于栈顶时，还是会创建新的实例。
+
+3.singleTask
+  singleTask可以使整个应用的上下文环境中只存在一个该活动的实例。每次启动时，检测该实例是否存在；若发现存在，直接使用该实例。
+在清单文件中修改android:launchMode="singleTask"。
+        <activity android:name=".ThirdActivity" android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_START"></action>
+                <category android:name="android.intent.category.DEFAULT"></category>
+                <category android:name="android.intent.category.ONE"></category>
+            </intent-filter>
+        </activity>
+
+4.singleInstance
+  指定为singleInstance模式的活动会启用一个新的返回栈来管理这个活动。
+用途：假设程序中有一个活动允许其他程序的活动调用，且可以共享这个实例。(每个程序都会有自己的返回栈，同一活动在不同栈中入栈，一定会创建不同的实例)
+        <activity android:name=".ThirdActivity" android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_START"></action>
+                <category android:name="android.intent.category.DEFAULT"></category>
+                <category android:name="android.intent.category.ONE"></category>
+            </intent-filter>
+        </activity>
+可以在不同活动的onCreate方法打TaskId来确认当前任务栈id。
+Log.d(four,"onCreate,Task id is "+getTaskId());----getTaskId()方法返回该活动所在任务栈的id
+结果：
+07-09 17:28:07.137 31551-31551/com.example.hjc.hello2 D/SecondActivity:: onCreate,task id=344
+07-09 17:28:08.661 31551-31551/com.example.hjc.hello2 D/ThirdActivity: world,data:null,data2:null,task id=345
+07-09 17:28:19.221 31551-31551/com.example.hjc.hello2 D/FourthActivity:: onCreate,Task id is 344
+这里可以看到ThirdActivity的taskid与其他两个不同，处于不同的任务栈中。这时，在FourthActivity中按back键时，也会直接返回
+SecondActivity。
+
+问题：在SecondActivity(standard)使用startActivityForResult方法启动活动ThirdActivity(singleInstance)时，创建的任务栈taskid：
+07-09 18:38:10.546 14823-14823/com.example.hjc.hello2 V/MainActivity is :: onCreate,task id=353
+07-09 18:38:15.607 14823-14823/com.example.hjc.hello2 D/SecondActivity:: onCreate,task id=353
+07-09 18:38:17.060 14823-14823/com.example.hjc.hello2 D/ThirdActivity: world6,data:one,data2:one,task id=353
+07-09 18:38:19.289 14823-14823/com.example.hjc.hello2 D/FourthActivity:: onCreate,Task id is 354
+07-09 18:38:21.574 14823-14823/com.example.hjc.hello2 D/FifthActivity:: task id=354
+原因：launchMode=singleInstance/singleTask时，调用startActivityForResult启动，会导致冲突；在调用startActivityForResult启动时，最好不要使用这两种启动模式。
+
+
+三.下午2-5点帮忙接电话，测试手机通话
+
+
+四.ListView
+Adapter是连接后端数据和前端显示的适配器接口，是数据和UI（View）之间一个重要的纽带。Adapter有很多的接口、抽象类、子类可以使用，常用：BaseAdapter，ArrayAdapter，SimpleAdapter。
+
+ArrayAdapter
+ArrayAdapter绑定每个对象的toString值到layout中预先定义的TextView控件上。
+布局文件xml：
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ListView
+        android:id="@+id/list_view1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ListView>
+    
+</LinearLayout>
+FourActivity类onCreate方法
+    private String[] data={"方法","ff","ww","qq","ee","vv"};
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_fourth);
+        ArrayAdapter<String> adt1=new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,data);
+        ListView lv1=findViewById(R.id.list_view1);
+        lv1.setAdapter(adt1);
+        Log.d(four,"onCreate");
+    }
+ArrayAdapter的构造方法，参数(上下文，资源id,ListView中展示的数据)
+
+
+五.重新复习git
+ 1. 上次笔记在day02.
+工作区：就是你在电脑里能看到的目录。
+版本库（Repository）：工作区有一个隐藏目录.git，这个不算工作区，而是Git的版本库。
+暂存区：英文叫stage, 或index。一般存放在.git/index中，有时也叫索引（index）。
+
+ 2. 命令：
+撤销工作区的修改 :git checkout -- file
+  两种情况：
+  a.file自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
+  b.file已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
+总之，就是让这个文件回到最近一次git commit或git add时的状态。
+
+撤销暂存区的修改 :git reset HEAD <file>
+从版本库中删除文件：git rm test;git commit -m "xxxx",未commit的可以用git checkout -- file恢复误删的;已commit的，可以用git reset --hard 版本号恢复。
+
+克隆到本地库:git clone url(别名：git路径 )（-b branch 名称）
+提交分支到仓库：git push 仓库名称 分支名
+创建一个分支并切换到该分支：git checkout -b 分支名 
+切换分支：git checkout 分支名 
+查看当前分支：git branch [-arvd]
+  参数： -a: 查看所有分支
+	-v:查看本地分支
+	-r:查看远程分支
+	-d:删除分支
+合并分支dev到当前分支：git merge dev
+
+
+ 3. 分支冲突：当两个分支对同一文件都有修改时，无法合并
+
+使用merge时会报：
+hjc@hjc-Lenovo-Product:~/gitfiles$ git merge hook
+自动合并 test
+冲突（内容）：合并冲突于 test
+自动合并失败，修正冲突然后提交修正的结果。
+
+这时需要手动查看并解决冲突内容cat test
+test 01
+<<<<<<< HEAD
+
+master
+=======
+hook
+>>>>>>> hook
+Git用<<<<<<<，=======，>>>>>>>标记出不同分支的内容,这时需要手动修改，这里修改成：
+test 01
+hook
+再合并分支
+hjc@hjc-Lenovo-Product:~/gitfiles$ git add test
+hjc@hjc-Lenovo-Product:~/gitfiles$ git commit -m "fix 01"
+[master bf9c1a2] fix 01
+hjc@hjc-Lenovo-Product:~/gitfiles$ git merge hook
+Already up-to-date. 
+可以使用git log --graph --pretty=oneline --abbrev-commit 命令查看分支合并的情况
+*   bf9c1a2 fix 01
+|\  
+| * f18d4c7 hook 01
+* | 8e55f9c master 01
+|/  
+* a4a3754 add test
+* 2929a77 delete setup.txt
+* 210c19d hello
+最后可以删除该分支  git branch -d hook
+
+
+
+
+
+
+
+
+
+

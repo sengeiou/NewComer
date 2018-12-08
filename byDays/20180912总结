@@ -1,0 +1,47 @@
+09-12 12:33:13.684: E/ActivityThread(1053): Activity com.android.dialer.DialtactsActivity has leaked ServiceConnection android.speech.tts.TextToSpeech$Connection@41932b90 that was originally bound here
+09-12 12:33:13.684: E/ActivityThread(1053): android.app.ServiceConnectionLeaked: Activity com.android.dialer.DialtactsActivity has leaked ServiceConnection android.speech.tts.TextToSpeech$Connection@41932b90 that was originally bound here
+09-12 12:33:13.684: E/ActivityThread(1053): 	at android.app.LoadedApk$ServiceDispatcher.<init>(LoadedApk.java:983)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at android.app.LoadedApk.getServiceDispatcher(LoadedApk.java:877)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at android.app.ContextImpl.bindServiceCommon(ContextImpl.java:1611)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at android.app.ContextImpl.bindService(ContextImpl.java:1594)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at android.content.ContextWrapper.bindService(ContextWrapper.java:517)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at android.speech.tts.TextToSpeech.connectToEngine(TextToSpeech.java:687)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at android.speech.tts.TextToSpeech.initTts(TextToSpeech.java:657)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at android.speech.tts.TextToSpeech.<init>(TextToSpeech.java:610)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at android.speech.tts.TextToSpeech.<init>(TextToSpeech.java:584)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at android.speech.tts.TextToSpeech.<init>(TextToSpeech.java:568)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at com.android.dialer.DialtactsActivity.onCreate(DialtactsActivity.java:193)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at android.app.Activity.performCreate(Activity.java:5259)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1099)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2228)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2337)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at android.app.ActivityThread.access$800(ActivityThread.java:151)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1243)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at android.os.Handler.dispatchMessage(Handler.java:102)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at android.os.Looper.loop(Looper.java:136)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at android.app.ActivityThread.main(ActivityThread.java:5375)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at java.lang.reflect.Method.invokeNative(Native Method)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at java.lang.reflect.Method.invoke(Method.java:515)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:989)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:805)
+09-12 12:33:13.684: E/ActivityThread(1053): 	at dalvik.system.NativeStart.main(Native Method)
+
+
+267003
+
+
+卡1:15949208019
+卡2:18351588430
+插两张移动sim，必须用对应的数据流量才可以
+
+GsmUmtAdditionalCallOptions
+
+CallFeaturesSetting
+
+10:39
+
+ThermalCvtGovernor
+
+===zss
+
+WeakReference

@@ -1,0 +1,185 @@
+day18学习笔记
+
+一.android编译
+1.make snod重新生成system.img
+使用make snod，将out下重新打包，重新生成system.img。
+注：输入make snod前，也需要配置编译环境
+
+2.adb shell getprop:获取系统属性值
+可以查看到昨天修改过的属性 [ro.bdui.bird_remove_light_test]: [true]
+
+3.adb shell setprop:修改系统属性值
+
+4.idh.code/out/target/product/sp7731c_1h10_bird/obj：编译中间产物，
+若有时重编后无效果，可考虑先删除这里面对应的obj
+
+
+二.android源码
+1.GsensorTestActivity 加速度传感器
+布局：上面2个textview用于展示基本信息和加速度数据，下方4个textview用于显示箭头
+
+  //先看onCreate方法，除了获取控件，还调了两个方法
+    protected void onCreate(Bundle savedInstanceState) {
+		...				//视图相关
+        showMsg(0, 0, 0);  //显示加速度数据(初始为0)
+        initSensor();	//初始化传感器
+    }
+
+	//showMsg方法显示加速度数据和传感器信息
+    private void showMsg(float x, float y, float z) {
+        TextView view = (TextView) findViewById(R.id.txt_msg_gsensor);
+        view.setText("");
+		//显示传感器的名字
+        if (sensor != null)
+            view.append("chip id: " + sensor.getName() + "\n");
+        view.append(" X = " + x + "\n");
+        view.append(" Y = " + y + "\n");
+        //BIRD:add by wangpeng 20170502 for MMITEST_HIDE_Z_VALUES begin
+		//这里可以打开-隐藏z轴数据的宏
+        if(!BirdFeature.BIRD_MMITEST_HIDE_Z_VALUES){
+        view.append(" Z = " + z + "\n");
+        }
+        //BIRD:add by wangpeng 20170502 for MMITEST_HIDE_Z_VALUES end
+    }
+	
+从实际显示的看：传感器名：Memsic ... 2-axis Accelerometer(二轴加速度传感器)
+不论如何转动手机，z轴加速度显示固定值4.903325(重力加速度 g/2)。
+本机实际是不支持z轴加速度测量的。后续可以调整宏，关闭z轴显示。
+
+	//在看initSensor方法时，也看下SensorManager类
+SensorManager：系统所有传感器的管理器。一般获得其实例后，即可获得各类型的传感器。
+		
+		//这里获取的是加速度传感器
+        manager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
+        sensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+   //SensorEventListener传感器事件监听器
+当传感器的精度发生变化时就会调用 onAccuracyChanged()方法；
+当传感器监测到的数值发生变化时就会调用 onSensorChanged()方法。
+		//看下这里是监听数值变化
+        listener = new SensorEventListener() {
+            public void onAccuracyChanged(Sensor s, int accuracy) {
+            }
+			//传入的参数SensorEvent，根据调用传感器的不同，存贮的数据不同
+			//SensorEvent应用的坐标系：手机正放时，x轴从左向右；y轴从下向上；
+			//z轴从屏内向屏外；0点在屏幕中心
+			//SensorEvent中value数组当调用者为加速度传感器时，values[Gx,Gy,Gz](各方向的加速度)
+            public void onSensorChanged(SensorEvent event) {
+				//获取到各方向上的加速度
+                mValues = event.values;
+                float x = event.values[SensorManager.DATA_X];
+                float y = event.values[SensorManager.DATA_Y];
+                float z = event.values[SensorManager.DATA_Z];
+                showMsg(x, y, z);
+				
+				//下面这段不知道在干什么
+                double dx = Math.abs(9.8 - Math.abs(x));
+                double dy = Math.abs(9.8 - Math.abs(y));
+                double dz = Math.abs(9.8 - Math.abs(z));
+                double ref = 9.8 * 0.08;
+                if (!mDxOk)
+                    mDxOk = dx < ref;
+                if (!mDyOk)
+                    mDyOk = dy < ref;
+                if (!mDzOk)
+                    mDzOk = dz < ref;
+					//这里根本进不去，g-g[x]不可能都<0.8
+                if (mDxOk && mDyOk && mDzOk) {
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                        }
+                    }, 10);
+                }
+            }
+        };
+		这个还没看完，但大概知道怎么运作的了，先看AutomaticBrightnessController
+		
+2.AutomaticBrightnessController 自动亮度控制器
+
+     //首先在DisplayManagerService中调用DisplayPowerController，然后在DisplayPowerController中调用AutomaticBrightnessController
+	 
+	                 mDisplayPowerController = new DisplayPowerController(
+                        mContext, callbacks, handler, sensorManager, blanker);
+	
+
+	//PowerManager.BRIGHTNESS_OFF=0,PowerManager.BRIGHTNESS_ON=255
+	//DisplayPowerController类中clampAbsoluteBrightness方法，限制value范围，当value在0-255，取原值；若超出，取0/255中靠近的值
+	
+    private static int clampAbsoluteBrightness(int value) {
+        return MathUtils.constrain(value, PowerManager.BRIGHTNESS_OFF, PowerManager.BRIGHTNESS_ON);
+    }
+	
+	//将value范围控制在0-1间
+    private static float normalizeAbsoluteBrightness(int value) {
+        return (float)clampAbsoluteBrightness(value) / PowerManager.BRIGHTNESS_ON;
+    }
+
+	//lux：环境光亮度数组；screenBrightness：屏幕亮度数组
+            int[] lux = resources.getIntArray(
+                    com.android.internal.R.array.config_autoBrightnessLevels);
+            int[] screenBrightness = resources.getIntArray(
+                    com.android.internal.R.array.config_autoBrightnessLcdBacklightValues);
+					
+	//DisplayPowerController的构造方法中，创建了一条环境光-屏幕亮度(0,1)对应的曲线
+    Spline screenAutoBrightnessSpline = createAutoBrightnessSpline(lux, screenBrightness);
+
+    private static Spline createAutoBrightnessSpline(int[] lux, int[] brightness) {
+        try {
+            final int n = brightness.length;
+            float[] x = new float[n];
+            float[] y = new float[n];
+			
+			//x[0]设为0，后面从lux[]中取；y[]对brightness[]加权处理分配到0-1
+            y[0] = normalizeAbsoluteBrightness(brightness[0]);
+            for (int i = 1; i < n; i++) {
+                x[i] = lux[i - 1];
+                y[i] = normalizeAbsoluteBrightness(brightness[i]);
+            }
+			//创建这条曲线
+            Spline spline = Spline.createSpline(x, y);
+            if (DEBUG) {
+                Slog.d(TAG, "Auto-brightness spline: " + spline);
+                for (float v = 1f; v < lux[lux.length - 1] * 1.25f; v *= 1.25f) {
+                    Slog.d(TAG, String.format("  %7.1f: %7.1f", v, spline.interpolate(v)));
+                }
+            }
+            return spline;
+        } catch (IllegalArgumentException ex) {
+            Slog.e(TAG, "Could not create auto-brightness spline.", ex);
+            return null;
+        }
+		
+		
+		//DisplayPowerController的构造方法中，new的AutomaticBrightnessController对象以及注入的参数
+		/**
+			参数：1.callback:DisplayPowerController自身已实现了AutomaticBrightnessController.callback接口
+			      2.Looper：handler.getLooper()获取Looper对象
+				  3.sensorManager：传感器管理器对象
+				  4.screenAutoBrightnessSpline：环境光和屏幕亮度的对应曲线
+				  5.lightSensorWarmUpTimeConfig：lightSensor启动时间：0
+				  6.screenBrightnessRangeMinimum：屏幕最低亮度1 (设置亮度，黑屏亮度，暗光亮度的最小值)
+				  7.mScreenBrightnessRangeMaximum：屏幕最高亮度255
+				  8.dozeScaleFactor:休眠模式修正因子：1(代表休眠时不修正亮度)
+				  9.lightSensorRate：lightSensor采集数据间隔：250ms
+				  10.brighteningLightDebounce：变亮防抖时间4000(当环境光level快速变化时的迟滞时间？先猜下)
+				  11.darkeningLightDebounce:变暗防抖时间8000
+				  12.autoBrightnessResetAmbientLuxAfterWarmUp：屏幕关闭重亮屏时是否立即重新计算环境光亮度水平并调整true
+				  13.ambientLightHorizon：环境光采样时间10000
+				  14.autoBrightnessAdjustmentMaxGamma:最大gamma值300%
+		*/
+                mAutomaticBrightnessController = new AutomaticBrightnessController(this,
+                        handler.getLooper(), sensorManager, screenAutoBrightnessSpline,
+                        lightSensorWarmUpTimeConfig, screenBrightnessRangeMinimum,
+                        mScreenBrightnessRangeMaximum, dozeScaleFactor, lightSensorRate,
+                        brighteningLightDebounce, darkeningLightDebounce,
+                        autoBrightnessResetAmbientLuxAfterWarmUp,
+                        ambientLightHorizon, autoBrightnessAdjustmentMaxGamma);
+						
+		
+		
+    
+		
+	
+	
+	

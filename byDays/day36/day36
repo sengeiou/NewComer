@@ -1,0 +1,7 @@
+day36学习笔记
+
+一.打包
+把/vendor/sprd/release/PAC_Resource/Scripts和bird/modem_bins/Modem_7130SD_B2358_W1258_W18.23.4_P2下的文件都复制到out/target/product/sp7731e_1h20
+执行pac.sh
+打开虚拟按键： 在/device/sprd/pike2/sp7731e_1h10/system.prop中添加qemu.hw.mainkeys=0
+

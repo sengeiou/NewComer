@@ -1,0 +1,32 @@
+来电震动
+Settings.System.VIBRATE_WHEN_RINGING
+
+/data/system_de/0/UsbDeviceManagerPrefs.xml
+
+/device/mediatek/sepolicy/basic/non_plat/property_contexts
+
+persist.sys.cam.3dnr=true
+
+ro.bdfun.updatetz_nosim
+
+sshfs zss@192.168.1.203:/home/zss/work/workblink/5_MTK/6_BIRD_P0MP1_K39TV1_BSP/project/2_7130TF_N5501L_AM2_MV168_user_1108 $本地想要挂载到的文件夹路径
+
+隐藏Launcher上的搜索框
+设置 连接到系统设置（点击桌面设置按钮指向系统设置）
+Launcher3上要在图标上显示短信和电话的未读数量
+连接电脑的默认模式（MTP）
+日期默认显示格式-(yyyy-mm-dd)
+默认时区，没有SIM卡不自动更新时区-Moscow
+默认字体大小-small
+来电接听震动
+在没插SIM卡时，隐藏网络图标
+状态栏电量百分比
+开发者选项默认打开
+浏览器主页、书签、导航客制化
+在状态栏下拉中添加截图按钮
+12小时制显示AM—PM
+
+gms
+关机充电显示电量百分比
+
+

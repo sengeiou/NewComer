@@ -1,0 +1,81 @@
+一.微信登陆后点击联系人推出
+
+微信版本号：6.7.2
+微信启动时，启动的进程：
+com.tencent.mm
+com.tencent.mm:tools
+com.tencent.mm:push
+com.tencent.mm:sandbox
+com.tencent.mm:appbrand0
+com.tencent.mm:appbrand1
+
+微信登陆后主界面：
+com.tencent.mm.ui.LauncherUI
+
+
+测试log:
+
+main.log
+003F15 09-08 11:29:22.846   560   675 W InputDispatcher: channel '2dce564 com.tencent.mm/com.tencent.mm.ui.LauncherUI (server)' ~ Consumer closed input channel or an error occurred.  events=0x9
+003F16 09-08 11:29:22.846   560   675 E InputDispatcher: channel '2dce564 com.tencent.mm/com.tencent.mm.ui.LauncherUI (server)' ~ Channel is unrecoverably broken and will be disposed!
+003F18 09-08 11:29:22.862   560  8618 W InputDispatcher: Attempted to unregister already unregistered input channel '2dce564 com.tencent.mm/com.tencent.mm.ui.LauncherUI (server)'
+
+event.log
+003F29 09-08 11:29:23.825   560  8223 I am_proc_died: [0,11641,com.tencent.mm,0,2]
+003F2B 09-08 11:29:23.828   560  8223 I am_finish_activity: [0,157869875,125,com.tencent.mm/.ui.LauncherUI,proc died without state saved]
+003FA6 09-08 11:29:24.148   560   574 I am_anr  : [0,13169,com.tencent.mm:tools,949763652,executing service com.tencent.mm/.plugin.websearch.api.ToolsProcessStarterService]
+00429B 09-08 11:29:29.039   560   574 I am_kill : [0,13169,com.tencent.mm:tools,0,bg anr]
+
+traces:
+ANR:
+----- pid 13169 at 2018-09-08 11:29:24 -----
+Cmd line: com.tencent.mm:tools
+
+11:29:23时，微信退出到后台；11:29:24进程：com.tencent.mm:tools出现ANR问题；但ANR问题并非导致此次退出的原因。(自测未出现anr时，也会有微信退出情况)
+查看cpu_memory.log：
+
+9-8 11:29:22.116< 4045.379082>,93,17,0,0,0,0,86,11,1300000,0,0,0,99,31,1300000,0,0,0,85,14,1300000,0,0,0,100,11,1300000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45644,9,8,461864,96120,87280,0,0,0,0,0,0
+9-8 11:29:23.121< 4046.383764>,97,21,0,0,0,0,100,23,1300000,0,0,0,87,17,1300000,0,0,0,100,24,1300000,0,0,0,100,21,1300000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8212,8270,45660,3,6,461864,160032,97488,0,0,0,0,0,0
+9-8 11:29:24.123< 4047.386120>,87,40,0,0,0,0,100,62,1300000,0,0,0,48,6,1300000,0,0,0,100,55,1300000,0,0,0,99,37,1300000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45686,12,7,461864,160616,146956,0,0,0,0,0,0
+9-8 11:29:25.125< 4048.388554>,100,1,0,0,0,0,100,1,1300000,0,0,0,99,3,1300000,0,0,0,100,1,1300000,0,0,0,100,0,1300000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10083,12025,45704,18,11,461864,147056,139564,0,0,0,0,0,0
+9-8 11:29:26.139< 4049.401971>,100,1,0,0,0,0,100,1,1300000,0,0,0,100,0,1300000,0,0,0,100,0,1300000,0,0,0,100,0,1300000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,45717,17,6,461864,157692,150080,0,0,0,0,0,0
+9-8 11:29:27.142< 4050.404847>,100,0,0,0,0,0,100,0,1300000,0,0,0,100,0,1300000,0,0,0,100,0,1300000,0,0,0,100,2,1300000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10426,10844,45754,16,6,461864,152948,144560,0,0,0,0,0,0
+其中<...>(尖括号)后一项为CPU占用率，可以看到11:29:23.121时为97%，之后因微信退出下降至87%，后又因ANR问题持续在100%。
+因CPU占用率过高，会导致应用异常退出。
+
+
+
+二.launcher3中空指针
+  launcher3中出现空指针报错，与我们添加的更换主题功能有关，该问题正在处理中。
+01-02 12:05:52.107  3590  3590 E AndroidRuntime: java.lang.RuntimeException: Unable to start receiver com.android.launcher3.ThemeManagerLaucher2ReloadReceiver: java.lang.NullPointerException: Attempt to invoke interface method 'int com.android.launcher3.LauncherModel$Callbacks.getCurrentWorkspaceScreen()' on a null object reference 
+
+LauncherModel.java (packages\apps\launcher3\src\com\android\launcher3)	
+
+    public void startLoaderFromBackground() {
+        Callbacks callbacks = getCallback();
+        if (callbacks != null) {
+            // Only actually run the loader if they're not paused.
+            if (!callbacks.setLoadOnResume()) {
+                startLoader(callbacks.getCurrentWorkspaceScreen());
+            }
+        //} //change by hujingcheng 20180917
+        /* bird:add by wangye for theme manager apk 20170414 begin */
+       if (!startLoader(callbacks.getCurrentWorkspaceScreen()))   //判断是callbacks为空导致,把这段也包括在上面的if (callbacks != null)函数体内即可
+		{
+        	Log.i("sunjunwei","runLoader="+1);
+        	if (ThemeApkUtil.themeRoload && ThemeApkUtil.apkThemeSupport && ThemeApkUtil.curThemeValid)    
+    		{
+
+
+自测：
+007AB4 09-17 09:03:58.135   568   828 W InputDispatcher: channel 'b812be7 com.tencent.mm/com.tencent.mm.ui.LauncherUI (server)' ~ Consumer closed input channel or an error occurred.  events=0x9
+007AB5 09-17 09:03:58.153   568   828 E InputDispatcher: channel 'b812be7 com.tencent.mm/com.tencent.mm.ui.LauncherUI (server)' ~ Channel is unrecoverably broken and will be disposed!
+007AB6 09-17 09:03:58.161   568   717 W zygote  : kill(-1812, 9) failed: No such process
+007AB7 09-17 09:03:58.163   568   717 I zygote  : Successfully killed process cgroup uid 10106 pid 1812 in 8ms
+007AB9 09-17 09:03:58.166   568  1445 W InputDispatcher: Attempted to unregister already unregistered input channel 'b812be7 com.tencent.mm/com.tencent.mm.ui.LauncherUI (server)'
+
+
+android:hardwareAccelerated=true
+
+007AB2 09-17 09:03:58.134   568  1457 I am_proc_died: [0,1812,com.tencent.mm,0,2]
+007ABD 09-17 09:03:58.178   568  1457 I am_finish_activity: [0,207930403,10,com.tencent.mm/.ui.LauncherUI,proc died without state saved]

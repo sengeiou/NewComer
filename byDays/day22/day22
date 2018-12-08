@@ -1,0 +1,160 @@
+day22学习笔记
+
+一.frameworks编译
+  当添加或修改frameworks中的资源文件时,这里修改了自动亮度的对应值的Config.xml
+1.编译 mmm ./frameworks/base/core/res 在out/target/product/s..bird/system/framework生成framework-res.apk
+2.push到相应位置：adb root;adb remount; adb push 到system/framework
+3.重启adb rebooot
+ 在使用adb shell dumpsys display，可发现对应值改变了。
+
+  开始编译了两处  mmm frameworks/base 生成 framework.jar 和其他一些jar包。
+  后来比较前后生成的R文件(out/target/common/R/com/android/internal/R.java)，发现并无改变。单改这个Config.xml，只需要push framework-res.apk就可以。
+
+二.宏
+1.BIRD_ADD_SREENSHOT=no:关闭下拉菜单的screenshot按钮
+
+ 关闭下拉菜单的screenshot按钮：这个变化主要是在QSTileHost类中实现
+QSTileHost类中onTuningChanged方法：当Tile第一次创建或改变时被调用
+onTuningChanged方法中一开始就会加载tile名字的数组 final List<String> tileSpecs = loadTileSpecs(mContext, newValue);
+所以，在loadTileSpecs中删除screenshot即可
+        //BIRD 20170415 add by zhanglixian for BIRD_ADD_SREENSHOT begin
+        if(!BirdFeatureOption.BIRD_ADD_SREENSHOT)
+            tiles.remove("screenshot");
+			
+看下默认开启的下拉模块：wifi,battery,dnd,data,lte,flashlight,rotation,bt,airplane,location,screenshot
+
+  删除在TileQueryHelper类中addSystemTiles方法中screenshot
+          if(!BirdFeatureOption.BIRD_ADD_SREENSHOT){
+            possible = possible.replace(",screenshot","");
+        }
+
+2.BIRD_CALENDAR_START_VIEW：CALENDAR默认view的类型(month,day,week)
+
+		if("month".equals(custom)){
+			ret=CalendarController.ViewType.MONTH;
+		}else if("week".equals(custom)){
+			ret=CalendarController.ViewType.WEEK;
+		}else if("day".equals(custom)){
+			ret=CalendarController.ViewType.DAY;
+		}
+原来默认的是month：public static final int DEFAULT_START_VIEW = BirdFeature.getDefaultStartViewType(CalendarController.ViewType.MONTH);
+
+3.BIRD_DATA_DEFAULT_OFF 默认关闭data
+在DataEnableController类中getDataEnable方法，如果没设置过data，会catch异常，进入catch块系统默认设置true。通过宏可以控制为false
+    private boolean getDataEnable() {
+        try {
+            Log.d(TAG, "MOBILE_DATA=" + Settings.Global.getInt(mContext.getContentResolver(),
+                    Settings.Global.MOBILE_DATA + SubscriptionManager.MAX_SUBSCRIPTION_ID_VALUE));
+            return Settings.Global.getInt(mContext.getContentResolver(), Settings.Global.MOBILE_DATA
+                    + SubscriptionManager.MAX_SUBSCRIPTION_ID_VALUE) != 0;
+        } catch (SettingNotFoundException e) {
+            //BIRD add by zhanglixian for BIRD_DATA_DEFAULT_OFF 20170425 begin
+            if(SystemProperties.getBoolean("ro.bdfun.data_default_off", false)){
+                Settings.Global.putInt(mContext.getContentResolver(),
+                    Settings.Global.MOBILE_DATA + SubscriptionManager.MAX_SUBSCRIPTION_ID_VALUE, 0);
+                return false;
+            }
+            //BIRD add by zhanglixian for BIRD_DATA_DEFAULT_OFF 20170425 end
+            Settings.Global.putInt(mContext.getContentResolver(),
+                    Settings.Global.MOBILE_DATA + SubscriptionManager.MAX_SUBSCRIPTION_ID_VALUE, 1);
+            return true;
+        }
+    }
+	
+4.BIRD_SYSLAN_DEFAULT_BY_SIM 根据sim改变默认系统语言
+在MccTable类updateMccMncConfiguration方法中,mccLocale即是mccLocale = getLocaleFromMcc(context, mcc , null);从sim卡获取的Locale，这时把这个Locale
+放到LocaleList的顶部
+                    if (mccLocale != null && SystemProperties.getBoolean("ro.bdfun_syslan_def_by_sim", false)) {
+                        Configuration conLocale = new Configuration();
+                        conLocale = ActivityManagerNative.getDefault().getConfiguration();
+                        LocaleList userLocale = conLocale.getLocales();
+					//把从sim从获取的Locale：mccLocale，放到list中第一位
+                        LocaleList newUserLocale = new LocaleList(mccLocale,userLocale);
+                        config.setLocales(newUserLocale);
+                        updateConfig = true;
+                    }
+					
+5.BIRD_HIDE_NOSIMS_ICON 隐藏无sim卡的图标
+找个这个图标，隐藏
+  mNoSimsCombo=indViewById(R.id.no_sims_combo);
+          if(BIRD_HIDE_NOSIMS_ICON){
+            mNoSimsCombo.setVisibility(View.GONE);
+        }
+		
+6.BIRD_HEADSETMEDIABUTTON_TO_HOLDCALL 短按耳机按键保持通话
+原来是短按-静音
+ hold call保持通话:即将当前通话挂起,双方不管主叫还是被叫方都听不到对方的声音
+ mute call静音:静音后对方听不到静音发起方的声音,但是静音发起方能听到对方的声音
+					if(android.os.SystemProperties.getBoolean("ro.bird.headset_holdcall", false)) {
+        				android.util.Log.e("zhanglx","hasActiveOrHoldingCall()===="+hasActiveOrHoldingCall());
+	            		Call activeCall = getFirstCallWithState(CallState.ACTIVE);
+						//前台电话
+                        Call mForegroundCall = getForegroundCall();
+                        Call callToUnHold = getHeldCall();
+	            		if(hasActiveOrHoldingCall()) {
+			    			android.util.Log.e("zhanglx","CallState.ACTIVE===="+getFirstCallWithState(CallState.ACTIVE));
+	    		    		if(activeCall != null)
+								holdCall(mForegroundCall);
+			   			 else
+							unholdCall(callToUnHold/*mForegroundCall*/);
+ForegroundCall：前台通话（正在拨出以及已经接通了的电话，注意是作为主叫方）
+BackgroundCall：后台电话（前台已经有了一通电话，而被挂起在后台的电话）
+RingingCall:响铃电话（正在响铃而尚未被接通的电话，包括存在前台通话时的情况，注意是作为被叫方）
+
+7.BIRD_VIBRATOR_PHONE_IDEL 来电震动
+在InCallPresenter类中onCallListChange方法
+    //BIRD add by zhanglixian 20170419 for BIRD_VIBRATOR_PHONE_IDEL begin
+    private Vibrator mVibrator;
+    final int MO_CALL_VIBRATE_TIME = 300; //震动0.3s
+	//旧状态时INCOMING：来电屏幕显示；新状态INCALL：通话中
+	if ((oldState == InCallState.INCOMING) && (newState == InCallState.INCALL) && (SystemProperties.getBoolean("ro.bird.in_coming_call_vib", false))) {
+	    if (mVibrator == null){
+            	mVibrator = (Vibrator) mContext.getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+	    }
+	    if (mVibrator != null){
+		android.util.Log.d("jugg","vibrate vibrate vibrate ~~~");
+		mVibrator.vibrate(MO_CALL_VIBRATE_TIME);
+	    }
+    }	
+
+8.BIRD_NO_RECORD_016 不记录号码016
+		因为不记录紧急号码，把016设成紧急号码就不记录了
+           //bird add by zhanglixian for BIRD_NO_RECORD_016 20170428 begin
+           if(android.os.SystemProperties.getBoolean("ro.bdfun.no_record_016",false) && number.equals("016")){
+                isEmergency = true;
+           }
+
+        // Don't log emergency numbers if the device doesn't allow it.
+        final boolean isOkToLogThisCall = !isEmergency || okToLogEmergencyNumber;
+
+9.BIRD_MOVE_INCOMINGCALL_FLIPPING_SILENCE 关闭翻转来电静音
+在DialerSettingsActivity的onBuildHeaders方法中
+//如果手机支持这个功能且有权限，就可以设置这个功能。
+//	incomingCallsFlippingSilenceSettingsHeader是一个标题选项，target是List<Header>,只要最后不add到这个list中，就不会显示该功能
+        if(PermissionsUtil.hasPermission(this, READ_PHONE_STATE) &&
+                !InCallUiUtils.isSupportFlipToMute(this) && isPrimaryUser
+                && InCallUiUtils.isFlipToSilentCallEnabled(this)) {
+            Header incomingCallsFlippingSilenceSettingsHeader = new Header();
+            incomingCallsFlippingSilenceSettingsHeader.titleRes =
+                    R.string.incomingcall_flipping_silence_title;
+            incomingCallsFlippingSilenceSettingsHeader.intent = InCallUiUtils
+                    .getIntentForStartingActivity(InCallUiUtils.FLAG_SILENT_FLIPING);
+            //bird add by zhanglixian for BIRD_MOVE_INCOMINGCALL_FLIPPING_SILENCE 20170428 begin
+            if(!android.os.SystemProperties.getBoolean("ro.bdfun.no_flipping_silence",false)){
+                target.add(incomingCallsFlippingSilenceSettingsHeader);
+            }
+            //bird add by zhanglixian for 20170428 end
+        }
+	
+10.BIRD_LOAD_DEFAULT_LAUNCHER 设置默认launcher
+还没看完
+
+
+					
+
+
+
+
+
+
+

@@ -1,0 +1,198 @@
+day09学习笔记
+
+一.Intent
+1.为intent添加category:
+        Button sc_bt3=findViewById(R.id.sc_bt3);
+        sc_bt3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent("android.intent.action.ACTION_START");
+                intent.addCategory("android.intent.category.ONE"); //使用addCategory方法添加
+                startActivity(intent);
+            }
+        });
+这时如果直接运行，将报错：
+android.content.ActivityNotFoundException: No Activity found to handle Intent { act=android.intent.action.ACTION_START cat=[android.intent.category.ONE] }
+注意这时要在清单文件中添加对应活动的category
+<category android:name="android.intent.category.ONE"></category>
+
+2.使用intent启动其他程序的活动
+
+  a. 实现点击按钮，进入电话界面10086
+在SecondActivity中添加一个按钮的监听：
+            case R.id.sc_bt4:
+                Intent intent4=new Intent(Intent.ACTION_DIAL);
+                intent4.setData(Uri.parse("tel:10086"));
+                startActivity(intent4);
+                break;
+指定intent的action是Intent.ACTION_DIAL打电话动作，实际值为String常量"android.intent.action.DIAL"
+方法：public @NonNull Intent setData(@Nullable Uri data)--设置这个intent需要处理的数据，data类型Uri.
+这里的Uri对象由Uri.parse(String uristr)通过解析uri字符串得到。
+对应的可以在清单文件对应活动的<intent-filter>中，添加<data>标签。
+data android:scheme="tel" :指定数据协议，如http,tel
+data android:host :指定主机名
+data android:port :指定端口
+data android:path :指定路径
+data android:mimeType :指定可以处理的数据类型，可使用通配符
+
+  b.点击跳转到计算器
+再添加一个按钮sc_bt5.点击
+            case R.id.sc_bt5:
+                ComponentName cn=new ComponentName("com.android.hjc","com.android.hjc.Calculator");
+                Intent intent5=new Intent();
+                intent5.setComponent(cn);
+                startActivity(intent5);
+                break;
+在intent中设置将要去向的ComponentName；ComponentName的构造函数（包名，活动所在的类）
+
+
+3.使用intent传递数据
+
+  a.向下一个活动传数据
+在SecondActivity中使用putExtra方法传递数据：
+            case R.id.sc_bt3:
+                //隐式intent，并添加分类
+                Intent intent=new Intent("android.intent.action.ACTION_START");
+                intent.putExtra("hello","world"); //添加额外信息，可用于传递数据
+                intent.addCategory("android.intent.category.ONE");
+                startActivity(intent);
+                break;
+在ThirdActivity中取出数据：
+        Intent intent=getIntent();
+        String hello=intent.getStringExtra("hello");
+        Log.d("ThirdActivity",hello);
+
+  b.向上一个活动返回数据
+在SecondActivity中设置按钮sc_bt6，使用startActivityForResult方法启动下个活动
+public void startActivityForResult(Intent intent, int requestCode)--参数（intent,请求码）
+请求码：用于在之后的回调中判断数据来源,这里设了3
+            case R.id.sc_bt6:
+                Intent intent6=new Intent(this,ThirdActivity.class);
+                intent6.putExtra("hello","world6");
+                startActivityForResult(intent6,3);
+                break;
+然后在ThirdActivity中定义一个返回按钮th_bt1
+            case R.id.th_bt1:
+                Intent intent=new Intent();
+                intent.putExtra("third","返回");
+                setResult(RESULT_OK,intent); //用于向上返回数据
+                finish(); //销毁活动
+                break;
+setResult(int resultCode, Intent data)-参数（结果码，传递数据的intent）
+resultCode结果码:通常使用RESULT_OK和RESULT_CANCEL
+再重写SecondActivity的onActivityResult方法（当前活动销毁后，会回调上个活动的onActivityResult方法）
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case 3: //这里和传递的请求码/结果码一致就可得到返回的数据
+                if(resultCode==RESULT_OK){
+                    Log.d(msg,data.getStringExtra("third"));
+                }
+                break;
+            default:break;
+        }
+    }
+另:使用手机的返回键返回上个活动，这时需要重写onBackPressed方法，内容和上面一样
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.th_bt1:
+                Intent intent=new Intent();
+                intent.putExtra("third","返回");
+                setResult(RESULT_OK,intent);
+                finish();
+                break;
+            default:break;
+        }
+    }
+
+
+二.Activity的onSaveInstanceState和onRestoreInstanceState方法
+  当活动A进入停止状态，启动活动B，这时可能因为内存不足，而使得活动A被系统回收。此时活动A中存在的一些临时数据，也会被系统回收，影响用户体验。
+先创建一个输入框th_et，
+    <EditText
+        android:id="@+id/th_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    //保存临时数据
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        String text="文本保存";
+        outState.putString("text",text);
+        Log.d(third,"进入onSaveInstanceState，输入框："+text);
+    }
+    //恢复数据
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if(savedInstanceState!=null){
+            Log.d("onRestoreInstanceState:","非空");
+            //String text=savedInstanceState.getString("text");
+            th_et.setText("调用了");
+        }
+    }
+
+onSaveInstanceState(Bundle outState)会在以下情况被调用：
+1、当用户按下HOME键时。
+2、从最近应用中选择运行其他的程序时。
+3、按下电源按键（关闭屏幕显示）时。
+4、从当前activity启动一个新的activity时。
+5、屏幕方向切换时(无论竖屏切横屏还是横屏切竖屏都会调用)。
+即当系统“未经你许可”时销毁了你的activity，则onSaveInstanceState会被系统调用 。
+
+onRestoreInstanceState(Bundle savedInstanceState)
+只有在activity确实是被系统回收，重新创建activity的情况下才会被调用。
+屏幕方向切换时测试回复成功，activity生命周期如下：
+onPause -> onSaveInstanceState -> onStop -> onDestroy -> onCreate -> onStart -> onRestoreInstanceState -> onResume
+在这里onRestoreInstanceState被调用，是因为屏幕切换时原来的activity确实被系统回收了，又重新创建了一个新的activity。
+
+也可以在onCreate函数中恢复
+        if(savedInstanceState!=null){
+            Log.d("savedInstanceState:","非空");
+            //String text=savedInstanceState.getString("text");
+            th_et.setText("调用了");
+        } 
+
+
+三.判断指定service的状态
+问题：上次建立的绑定service与解绑service功能按钮，因为没有判断service状态，导致未绑定时按解绑键程序异常。
+            //解绑服务
+            case R.id.bt5:
+		//先判断service是否运行
+                boolean b=isServiceActive(this,"com.example.hjc.hello2.MyService");
+                if(b){
+                    unbindService(serviceConnection);
+                }
+                break;
+
+    public boolean isServiceActive(Context context, String serviceName){
+        // 校验服务是否还存在ActivityManager类：Activity管理类
+        ActivityManager am = (ActivityManager) context
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> services = am.getRunningServices(100);
+        for (ActivityManager.RunningServiceInfo info : services) {
+            // 得到所有正在运行的服务的名称
+            String name = info.service.getClassName();
+            Log.d("当前运行的service:",name);
+            if (serviceName.equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+

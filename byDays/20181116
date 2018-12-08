@@ -1,0 +1,21 @@
+连接电脑的默认模式-MTP
+usb调试默认打开
+日历默认显示-按月
+ROM 整数显示
+
+
+com.google.android.apps.messaging/.ui.ConversationListActivity
+
+com.google.android.dialer/com.android.dialer.DialtactsActivity
+
+
+您好：
+
+我们有几个问题，请教一下：
+  1. 请问configstore的方式更多是根据硬件信息进行条件编译吗？
+  另外这部分代码不是很了解，请问贵方有类似demo可以参照一下吗？
+  2. 目前项目Android 8.1,可以将Android.bp文件重新切换成Android.mk文件进行编译，之后的版本9.0是否就可能不可以这样做了？
+  3. 我这里尝试使用go语言控制条件编译，还有一些问题。
+具体修改代码：
+  
+

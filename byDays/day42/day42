@@ -1,0 +1,232 @@
+一.static import:静态导入
+
+例：import static com.android.launcher3.SettingsActivity.NOTIFICATION_BADGING;
+静态导入：导入该类的static成员和常量
+使用：System.out.println(),可写作out.println();Math.PI可写作PI
+注：若对Integer类和Long类执行了静态导入，引用MAX_VALUE将导致一个编译器错误，因为Integer和Long都有一个MAX_VALUE常量，
+
+
+二.宏笔记
+1.launcher显示未读个数
++#add by bird  bird  wucheng 20180630 begin
++ifeq ($(strip $(BIRD_SHOW_UNREADNUM_IN_LAUNCHER)), yes)
++    PRODUCT_PROPERTY_OVERRIDES += ro.launcher.unread.sms=true
++    PRODUCT_PROPERTY_OVERRIDES += ro.launcher.unread.call=true
++    PRODUCT_PROPERTY_OVERRIDES += ro.launcher.unread.email=true
++endif 
++#add by bird  bird  wucheng 20180630 end
+
+
+2.默认不锁屏
+修改属性 ro.lockscreen.disable.default=true
+Android 8.1 在LockSettingsService.java (frameworks\base\services\core\java\com\android\server\locksettings)
+static class Injector {
+	...
+	public LockSettingsStorage getStorage() {
+            final LockSettingsStorage storage = new LockSettingsStorage(mContext);
+            storage.setDatabaseOnCreateCallback(new LockSettingsStorage.Callback() {
+                @Override
+                public void initialize(SQLiteDatabase db) {
+                    // Get the lockscreen default from a system property, if available
+                    boolean lockScreenDisable = SystemProperties.getBoolean( //从属性ro.lockscreen.disable.default获取是否默认关闭锁屏
+                            "ro.lockscreen.disable.default", false);
+                    if (lockScreenDisable) {
+                        storage.writeKeyValue(db, LockPatternUtils.DISABLE_LOCKSCREEN_KEY, "1", 0); //写入数据库DISABLE_LOCKSCREEN_KEY = "lockscreen.disabled"，value="1"
+                    }
+                }
+            });
+            return storage;
+        }
+		
+3.在launcher中隐藏搜索框
+-res/layout-land 横屏　　-res/layout-port 竖屏　　-res/layout 默认
+Launcher3
+布局：
+ <com.android.launcher3.dragndrop.DragLayer     <!--DragLayer可拖动的布局-->
+        ...
+        <com.android.launcher3.Workspace		<!--workspace包括壁纸和页面(有限多页)，可左右滑动-->
+            android:id="@+id/workspace"
+			...
+            launcher:pageIndicator="@+id/page_indicator">
+        </com.android.launcher3.Workspace>
+
+        <include layout="@layout/hotseat"	<!--底部的常用软件栏-->
+            android:id="@+id/hotseat"
+			...
+            launcher:layout_ignoreInsets="true" />
+
+        <include layout="@layout/overview_panel"	<!--在launcher空白处长按后出现的页面(wallpaper/widgets/home settings)-->
+            android:id="@+id/overview_panel"
+            android:visibility="gone" />
+			
+        <include layout="@layout/page_indicator"	<!--页码显示(当前以横条形式显示)-->
+            android:id="@+id/page_indicator" />
+
+        <include
+            android:id="@+id/drop_target_bar"	
+            layout="@layout/drop_target_bar_horz" />	<!--拖曳部件时，顶部的删除/app_info栏-->
+
+        <include layout="@layout/widgets_view"
+            android:id="@+id/widgets_view"
+            ...
+            android:visibility="invisible" />
+
+        <include layout="@layout/all_apps"
+            android:id="@+id/apps_view"
+			...
+            android:visibility="invisible" />
+    </com.android.launcher3.dragndrop.DragLayer>
+	
+单编Launcher3
+使用mmm单编报错，
+mmma packages/apps/Launcher3 单编，包含依赖
+	include $(CLEAR_VARS)
+	....
+	include $(BUILD_HOST_JAVA_LIBRARY)
+BUILD_HOST_JAVA_LIBRARY命令则是在out/host/linux-x86/framework目录下生成相应的JAR包
+
+同时修改
+diff --git a/tests/AndroidManifest-common.xml b/tests/AndroidManifest-common.xml
+index 6e3d1cf..0a29147 100644
+--- a/tests/AndroidManifest-common.xml
++++ b/tests/AndroidManifest-common.xml
+@@ -18,7 +18,7 @@
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     package="com.android.launcher3.tests">
+ 
+-    <uses-sdk android:targetSdkVersion="26" android:minSdkVersion="21"/>
++    <uses-sdk android:targetSdkVersion="25" android:minSdkVersion="21"/>
+
+========================以上在android 8.1 7731e 测试
+
+android 7.0 Launcher3搜索框 (与Android 8.1略有不同[7.1以上])
+1).主页面上的搜索框
+布局：
+        <include
+            android:id="@+id/search_drop_target_bar"
+            layout="@layout/search_drop_target_bar" />
+代替了
+        <include
+            android:id="@+id/drop_target_bar"	
+            layout="@layout/drop_target_bar_horz" />
+ 
+onCreate方法
+protected void onCreate(Bundle savedInstanceState) {
+...
+        setupViews();
+...
+}
+setupViews方法 在SearchDropTargetBar中设置QsbBar
+    private void setupViews() {
+        final DragController dragController = mDragController;
+		...
+		// Get the search/delete bar
+        mSearchDropTargetBar = (SearchDropTargetBar)mDragLayer.findViewById(R.id.search_drop_target_bar);
+		...
+        if (mSearchDropTargetBar != null) {
+            mSearchDropTargetBar.setup(this, dragController); 
+            mSearchDropTargetBar.setQsbSearchBar(getOrCreateQsbBar());
+        }
+//具体创建QsbBar的方法		
+public View getOrCreateQsbBar() {
+        if (mQsb == null) {
+            AppWidgetProviderInfo searchProvider = Utilities.getSearchWidgetProvider(this);
+            if (searchProvider == null || SystemProperties.getBoolean("ro.bird.hide_search_bar", false)) { //change by hujingcheng to hide search bar
+                return null;
+            }
+		...
+		... //上面根据不同机型设置长宽
+            if (widgetId != -1) {
+                mQsb = mAppWidgetHost.createView(this, widgetId, searchProvider);
+                mQsb.setId(R.id.qsb_widget);
+                mQsb.updateAppWidgetOptions(opts);
+                mQsb.setPadding(0, 0, 0, 0);
+                mSearchDropTargetBar.addView(mQsb);
+                mSearchDropTargetBar.setQsbSearchBar(mQsb);
+            }
+不想要搜索框直接返回null即可，其他方法调用该方法时会判断是否返回null。
+
+2).隐藏AllAppsView上的搜索框
+AllAppsContainerView.java (\com\android\launcher3\allapps)
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+		...
+		mSearchContainer = findViewById(R.id.search_container); //搜索框所在容器
+        mAppsRecyclerView = (AllAppsRecyclerView) findViewById(R.id.apps_list_view); //软件列表view
+		//add by hujingcheng test hide search bar in all-app view
+		if(SystemProperties.getBoolean("ro.bird.hide_search_bar", false)){
+			mSearchContainer.setVisibility(View.GONE);	//将其可见度设为GONE
+			MarginLayoutParams allRecycleMargin=(MarginLayoutParams)mAppsRecyclerView.getLayoutParams();
+			allRecycleMargin.topMargin=0;
+			mAppsRecyclerView.setLayoutParams(allRecycleMargin);	//把RecyclerView的topMargin=0，原来是60dp，隐去后会有一段空白
+		}
+		//add by hujingcheng end 20180828
+
+		
+4.修改长按launcher空白处显示的setting指向(原指向HomeSettings[launcher的设置],现改为指向系统Setting)
+Android 8.1 Launcher.java
+    public void onClickSettingsButton(View v) {
+        if (LOGD) Log.d(TAG, "onClickSettingsButton");
+		//bird add by wucheng for enter system Settings instead of Launcher Settings when clicking "SETTINGS" button 20180129
+		if("true".equals(Utilities.getSystemProperty("ro.bdfun.launcher_settings","false"))){
+		  Intent settings = new Intent(android.provider.Settings.ACTION_SETTINGS);				//设置启动系统setting
+	            settings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+	            startActivity(settings);	
+			   		} else {
+		  
+  Intent intent = new Intent(Intent.ACTION_APPLICATION_PREFERENCES)	//启动launcher的setting
+	                .setPackage(getPackageName());
+	        intent.setSourceBounds(getViewBounds(v));
+	        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	        startActivity(intent, getActivityLaunchOptions(v));
+
+		}
+
+Android 7.1 Launcher.java 和8.1的代码差不多
+    protected void onClickSettingsButton(View v) {
+        if (LOGD) Log.d(TAG, "onClickSettingsButton");
+        if (mLauncherCallbacks != null) {
+            mLauncherCallbacks.onClickSettingsButton(v);
+        } else {
+        //change by hujingcheng to switch the orientation to system settings
+            //startActivity(new Intent(this, SettingsActivity.class));
+            Intent settingIntent=new Intent(android.provider.Settings.ACTION_SETTINGS);
+			settingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(settingIntent);
+		//change by hujingcheng end 20180828
+        }
+    }
+	
+5.添加桌面图标
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

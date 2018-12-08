@@ -1,0 +1,285 @@
+com.android.dialer/com.android.incallui.InCallActivity
+
+HeadsetService
+
+family_num_not_set
+
+胡竟成	hujingcheng@szba-mobile.com		20180914
+功能描述: BUG #41127 FM通知栏点击stop移除通知
+
+功能描述: BUG #41271 开机后提示缺乏必要的电子邮件权限
+
+功能描述: BUG #40986 拨打紧急号码通话记录无显示
+
+MESSAGE_VOLUME_CHANGED
+
+AudioManagerEx
+
+com.tencent.mobileqq/.richmedia.capture.activity.CameraCaptureActivity  qq对话拍照界面
+
+
+com.tencent.mobileqq/.activity.SplashActivity  qq对话界面
+
+com.tencent.mobileqq/com.tencent.biz.qqstory.takevideo.EditPicActivity qq拍照完成编辑图片界面
+
+  
+Activities waiting to stop:
+    TaskRecord{c3a7fee #33 A=com.tencent.mobileqq U=0 StackId=1 sz=3}
+      Stop #0: ActivityRecord{9a0c8fc u0 com.tencent.mobileqq/.richmedia.capture.activity.CameraCaptureActivity t33}
+
+  Activities waiting for another to become visible:
+    TaskRecord{c3a7fee #33 A=com.tencent.mobileqq U=0 StackId=1 sz=3}
+      Wait #0: ActivityRecord{9a0c8fc u0 com.tencent.mobileqq/.richmedia.capture.activity.CameraCaptureActivity t33}
+
+  ResumedActivity: ActivityRecord{3f28291 u0 com.tencent.mobileqq/com.tencent.biz.qqstory.takevideo.artfilter.ArtFilterBridgeActivity t33}
+
+
+
+
+
+09-13 16:59:11.588 20491 20491 E LeakInspector: java.lang.NoSuchFieldException: No field mContext in class Landroid/media/AudioManagerEx; (declaration of 'android.media.AudioManagerEx' appears in /system/framework/framework.jar)
+09-13 16:59:11.588 20491 20491 E LeakInspector: 	at java.lang.Class.getDeclaredField(Native Method)
+09-13 16:59:11.588 20491 20491 E LeakInspector: 	at com.tencent.mfsdk.LeakInspector.ActivityLeakSolution.c(ProGuard:239)
+09-13 16:59:11.588 20491 20491 E LeakInspector: 	at com.tencent.mfsdk.LeakInspector.LeakInspector.a(ProGuard:299)
+09-13 16:59:11.588 20491 20491 E LeakInspector: 	at qoa.run(ProGuard:673)
+
+
+
+
+
+09-14 05:51:49.379: D/ArtFilterBridgeActivity(25606): doStartEditPic
+09-14 05:51:49.911: W/CheckTime(25606): App running slow: Executing com.tencent.mobileqq.statistics.ReportReceiver scheduleReceive took 936ms
+09-14 05:51:49.911: W/ActivityThread(25606): Main thread can not be idle for a long time.
+09-14 05:51:50.289: D/RedpointHandler(25606): getNewFlagOp:sendredInfo :systemTimestamp = 1536893510;lastUpdateTimestamp = 1536892472;updateInterval = 1200;updateLbsInterval = 3600;lastCheckLbsInfo = 0;isDebugVersion = false
+09-14 05:51:50.399: I/ArkApp.ArkLocalAppMgr(25606): updateInstalledApps, not update time, delta=17, interval=300
+09-14 05:51:50.486: I/SOSO.LBS.LbsManagerService(25606): getCachedLbsInfo business id: qzone_little_video_enter
+09-14 05:51:50.557: W/zygote(25606): Long monitor contention with owner thread_heavy_128 (31217) at void com.tencent.mobileqq.shortvideo.ShortVideoResourceManager.b(com.tencent.mobileqq.app.QQAppInterface, java.util.List, com.tencent.mobileqq.shortvideo.ShortVideoResourceManager$INet_ShortVideoResource, java.lang.String)(ProGuard:816) waiters=2 in void com.tencent.mobileqq.shortvideo.ShortVideoResourceManager.b(com.tencent.mobileqq.app.QQAppInterface, java.util.List, com.tencent.mobileqq.shortvideo.ShortVideoResourceManager$INet_ShortVideoResource, java.lang.String) for 465ms
+09-14 05:51:50.609: W/zygote(25606): Long monitor contention with owner thread_heavy_128 (31217) at void com.tencent.mobileqq.shortvideo.ShortVideoResourceManager.b(com.tencent.mobileqq.app.QQAppInterface, java.util.List, com.tencent.mobileqq.shortvideo.ShortVideoResourceManager$INet_ShortVideoResource, java.lang.String)(ProGuard:816) waiters=3 in void com.tencent.mobileqq.shortvideo.ShortVideoResourceManager.b(com.tencent.mobileqq.app.QQAppInterface, java.util.List, com.tencent.mobileqq.shortvideo.ShortVideoResourceManager$INet_ShortVideoResource, java.lang.String) for 566ms
+09-14 05:51:50.699: D/MSF.C.NetConnTag(15144): pa ok: 13395
+09-14 05:51:50.708: D/MSF.C.NetConnTag(15144): netSend ssoSeq:13395 uin:*7391 cmd:GRIBLjU2IAk8IH4zPywQNC4mMTgZNzA0Pg 14495 2255ed5
+09-14 05:51:50.727: D/QFixAppImpl_PatchLogTag(31228): isAndroidNPatchEnable patch config is null
+09-14 05:51:50.728: D/QFixAppImpl_PatchLogTag(31228): isAndroidNPatchEnable = false
+09-14 05:51:50.773: D/Q.qwallet.pay(25606): getPayCode false
+09-14 05:51:50.791: E/ArkApp.ArkStateCenter(25606): ark state change to foreground
+09-14 05:51:50.812: W/CheckTime(31228): App running slow: Executing handleBindApplication : makeApplication took 234ms
+09-14 05:51:50.814: D/MSF.D.QLog(31228): QLog init
+09-14 05:51:50.819: I/AutoMonitor(31228): nextState -1, 0
+09-14 05:51:50.855: W/System.err(31228): java.lang.ClassNotFoundException: java.nio.CharArrayBuffer
+09-14 05:51:50.863: W/System.err(31228): 	at java.lang.Class.classForName(Native Method)
+09-14 05:51:50.863: W/System.err(31228): 	at java.lang.Class.forName(Class.java:453)
+09-14 05:51:50.863: W/System.err(31228): 	at java.lang.Class.forName(Class.java:378)
+09-14 05:51:50.863: W/System.err(31228): 	at com.tencent.qphone.base.util.h.a(QLogWriter.java:282)
+09-14 05:51:50.863: W/System.err(31228): 	at com.tencent.qphone.base.util.h.write(QLogWriter.java:253)
+09-14 05:51:50.864: W/System.err(31228): 	at java.io.BufferedWriter.flushBuffer(BufferedWriter.java:129)
+09-14 05:51:50.864: W/System.err(31228): 	at java.io.BufferedWriter.flush(BufferedWriter.java:253)
+09-14 05:51:50.864: W/System.err(31228): 	at com.tencent.qphone.base.util.QLog.writeLogToFile(QLog.java:962)
+09-14 05:51:50.864: W/System.err(31228): 	at com.tencent.qphone.base.util.QLog.access$500(QLog.java:50)
+09-14 05:51:50.864: W/System.err(31228): 	at com.tencent.qphone.base.util.QLog$c.handleMessage(QLog.java:124)
+09-14 05:51:50.864: W/System.err(31228): 	at android.os.Handler.dispatchMessage(Handler.java:106)
+09-14 05:51:50.864: W/System.err(31228): 	at android.os.Looper.loop(Looper.java:164)
+09-14 05:51:50.864: W/System.err(31228): 	at android.os.HandlerThread.run(HandlerThread.java:65)
+09-14 05:51:50.868: W/System.err(31228): Caused by: java.lang.ClassNotFoundException: Didn't find class "java.nio.CharArrayBuffer" on path: DexPathList[[zip file "/system/framework/com.google.android.media.effects.jar", zip file "/data/app/com.tencent.mobileqq-MgInGUm7jDlf0wcB8pKw3g==/base.apk"],nativeLibraryDirectories=[/data/app/com.tencent.mobileqq-MgInGUm7jDlf0wcB8pKw3g==/lib/arm, /system/fake-libs, /data/app/com.tencent.mobileqq-MgInGUm7jDlf0wcB8pKw3g==/base.apk!/lib/armeabi, /system/lib, /vendor/lib]]
+09-14 05:51:50.868: W/System.err(31228): 	at dalvik.system.BaseDexClassLoader.findClass(BaseDexClassLoader.java:125)
+09-14 05:51:50.868: W/System.err(31228): 	at java.lang.ClassLoader.loadClass(ClassLoader.java:379)
+09-14 05:51:50.868: W/System.err(31228): 	at java.lang.ClassLoader.loadClass(ClassLoader.java:312)
+09-14 05:51:50.869: W/System.err(31228): 	... 13 more
+09-14 05:51:50.879: E/DexLoadOat(31228): Success
+09-14 05:51:50.889: D/MSF.C.NetConnTag(15144): netRecv ssoSeq:13395 uin:*7391 cmd:GRIBLjU2IAk8IH4zPywQNC4mMTgZNzA0Pg 14723 cross:0
+09-14 05:51:50.901: D/PatchLogTag(31228): DexPatchInstaller checkDexPatchConfigAndStatus patch config is null
+09-14 05:51:50.901: D/PatchLogTag(31228): DexPatchInstaller installDexPatch Not inject patch, status=0
+09-14 05:51:50.908: I/MSF.S.AppProcessManager(15144): SendToApp process:com.tencent.mobileqq fromServiceMsg: FromServiceMsg msName:unknown ssoSeq:13395 serviceCmd:SQQzoneSvc.getUndealCount appSeq:125 failCode:1000 cost=9 needBoot=false
+09-14 05:51:51.001: I/UndealCount.QZoneUnreadServletLogic(25606): recv Qzone Unread Push: Feed实时更新未读
+09-14 05:51:51.085: D/MSF.D.MonitorSocket(31228): phoneDisplays: KOT49H|KTU84P, phoneModels: COOLPAD7295, appid: , currAppid: 537058562, version: , currVersion: 7.7.8.3705, process: , com.tencent.mobileqq:peak
+09-14 05:51:51.087: I/MSF.D.MonitorSocket(31228): Socket imple class: java.net.SocksSocketImpl
+09-14 05:51:51.087: D/MSF.D.MonitorSocket(31228):  Monitor Socket started.
+09-14 05:51:51.151: E/UndealCount.QZoneUnreadServletLogic(25606): creditlevel:3 message:
+09-14 05:51:51.160: D/RdmInit(31228): doStep process=com.tencent.mobileqq:peak, sRdmState=0
+09-14 05:51:51.251: W/t.mobileqq:peak(31228): type=1400 audit(0.0:1715): avc: denied { read } for name="address" dev="sysfs" ino=22252 scontext=u:r:untrusted_app_25:s0:c512,c768 tcontext=u:object_r:sysfs:s0 tclass=file permissive=0
+09-14 05:51:51.282: E/Linux(31228): zss path.c_str:/data
+09-14 05:51:51.282: E/Linux(31228): zss posix ro.bdfun.in_phone_rom:4096
+09-14 05:51:51.282: E/Linux(31228): libcore_linux zss f_blocks : 1048576
+09-14 05:51:51.282: E/Linux(31228): libcore_linux zss f_bfree : 259431
+09-14 05:51:51.282: E/Linux(31228): libcore_linux zss f_bavail : 240793
+09-14 05:51:51.327: E/Linux(31228): zss path.c_str:/data
+09-14 05:51:51.327: E/Linux(31228): zss posix ro.bdfun.in_phone_rom:4096
+09-14 05:51:51.327: E/Linux(31228): libcore_linux zss f_blocks : 1048576
+09-14 05:51:51.327: E/Linux(31228): libcore_linux zss f_bfree : 259422
+09-14 05:51:51.328: E/Linux(31228): libcore_linux zss f_bavail : 240784
+09-14 05:51:51.464: W/zygote(31228): Long monitor contention with owner beacon-thread-1 (31291) at void com.tencent.beacon.a.a.a.b.<clinit>()(ProGuard:-1) waiters=0 in com.tencent.beacon.a.c.a$a com.tencent.beacon.a.c.a.b(int) for 166ms
+09-14 05:51:51.482: D/StatisticCollector(31228): initCrashReport process=com.tencent.mobileqq:peak, pid=31228
+09-14 05:51:51.561: W/t.mobileqq:peak(31228): type=1400 audit(0.0:1716): avc: denied { read } for name="anr" dev="mmcblk0p32" ino=77 scontext=u:r:untrusted_app_25:s0:c512,c768 tcontext=u:object_r:anr_data_file:s0 tclass=dir permissive=0
+09-14 05:51:51.583: D/StatisticCollector(31228): initNativeCrashReport process=com.tencent.mobileqq:peak, pid=31228
+09-14 05:51:51.600: W/Settings(15144): Setting airplane_mode_on has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+09-14 05:51:51.643: D/StatisticCollector(31228): CrashReport init finished.
+09-14 05:51:51.677: W/Settings(15144): Setting airplane_mode_on has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+09-14 05:51:51.741: D/AutoMonitor(31228): MTA, cost=33 results: true
+09-14 05:51:51.741: D/mqq(31228): doInit begin withcom.tencent.mobileqq:peak
+09-14 05:51:51.768: I/MsfServiceSdk(31228): bee_bee t1 create isUseNewProxy=false randomInt=64
+09-14 05:51:51.807: I/MSF.D.NetworkProvider(31228): refresh currentAPN:. received networkInfo: CONNECTED :[type: WIFI[], state: CONNECTED/CONNECTED, reason: (unspecified), extra: "JYUN6", failover: false, available: true, roaming: false]. ExtraNetInfo: null
+09-14 05:51:51.807: D/MSF.D.NetworkProvider(31228): netchange NONE to WiFi
+09-14 05:51:51.808: D/MsfServiceSdk(31228): MsfServiceSdk init proxyNew=false processName=com.tencent.mobileqq:peak
+09-14 05:51:51.817: D/MSF.D.Proxy(31228): MSF_Alive_Log start service finish
+09-14 05:51:51.817: D/MSF.S.MsfService(15144): MSF_Alive_Log serivce onStart
+09-14 05:51:51.828: D/MSF.D.Proxy(31228): threadID:2, threadName: main bind service finished true
+09-14 05:51:51.829: D/MobileQQ(31228): createNewRuntime, falsefalse5null
+09-14 05:51:51.847: I/zygote(31228): Background concurrent copying GC freed 7157(770KB) AllocSpace objects, 14(408KB) LOS objects, 50% free, 1571KB/3MB, paused 2.209ms total 175.631ms
+09-14 05:51:51.851: D/MSF.S.MsfService(15144): MSF_Alive_Log serivce onStart
+09-14 05:51:51.852: D/MSF.D.Proxy(31228): MSF_Alive_Log start service finish
+09-14 05:51:51.862: D/MSF.D.Proxy(31228): threadID:2, threadName: main bind service finished true
+09-14 05:51:51.879: D/MobileQQ(31228): createNewRuntime, canAutoOK: true
+09-14 05:51:51.887: I/mqq(31228): [AppRuntime]ToolRuntimePeak (*7391) onCreate,savedInstanceState=null
+09-14 05:51:51.888: D/mqq(31228): newServlet = mqq.app.BuiltInServlet@628040b
+09-14 05:51:51.897: D/mqq(31228): doInit finished
+09-14 05:51:51.911: D/MSF.D.Proxy(31228): start MsfService through Broadcast, 1
+09-14 05:51:51.935: D/NetConnInfoCenter(15144): receive broadcast Intent { act=com.tencent.mobileqq.msf.startmsf flg=0x10 cmp=com.tencent.mobileqq/.msf.core.NetConnInfoCenter }
+09-14 05:51:51.940: D/MSF.D.Proxy(31228): threadID:2218, threadName: ServletForward bind service finished true
+09-14 05:51:51.940: D/MSF.D.Proxy(31228): delay binding MSF Service
+09-14 05:51:52.166: W/ResourceType(31228): For resource 0x7f0c05ec, entry index(1516) is beyond type entryCount(1516)
+09-14 05:51:52.167: W/ResourceType(31228): Failure getting entry for 0x7f0c05ec (t=11 e=1516) (error -75)
+09-14 05:51:52.185: D/MainService(31228): start MSF-Receiver 2222
+09-14 05:51:52.188: W/CheckTime(31228): App running slow: Executing handleBindApplication : callApplicationOnCreate took 1375ms
+09-14 05:51:52.539: D/PatchLogTag(31228): DexPatchInstaller checkDexPatchConfigAndStatus patch config is null
+09-14 05:51:52.539: D/PatchLogTag(31228): DexPatchInstaller installDexPatch Not inject patch, status=0
+09-14 05:51:53.425: I/zygote(25606): Background concurrent copying GC freed 33048(2MB) AllocSpace objects, 30(984KB) LOS objects, 39% free, 9MB/15MB, paused 3.061ms total 690.518ms
+09-14 05:51:53.625: W/zygote(31228): Long monitor contention with owner thread_light_1 (31332) at boolean android.os.BinderProxy.transactNative(int, android.os.Parcel, android.os.Parcel, int)(Binder.java:-2) waiters=0 in com.tencent.mobileqq.app.DeviceProfileManager com.tencent.mobileqq.app.DeviceProfileManager.b() for 1.063s
+09-14 05:51:53.640: D/InitHook(31228): NOT AVA
+09-14 05:51:53.742: I/SoLoadUtilNew(31228): load GIFEngine result:true code 3387394
+09-14 05:51:53.931: D/PatchLogTag(31228): DexPatchInstaller checkDexPatchConfigAndStatus patch config is null
+09-14 05:51:53.931: D/PatchLogTag(31228): DexPatchInstaller installDexPatch Not inject patch, status=0
+09-14 05:51:53.964: E/MD5(31228): loadso arm msfbootV2 resultCode=3387394
+09-14 05:51:53.965: E/MD5(31228): loadso msfbootV2 true resultCode=3387394 cost=26
+09-14 05:51:53.967: E/AutoMonitor(31228): java.lang.Error: factory already defined
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at java.net.URL.setURLStreamHandlerFactory(URL.java:1125)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at com.tencent.image.URLDrawable.init(URLDrawable.java:1266)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at com.tencent.mobileqq.startup.step.InitUrlDrawable.a(ProGuard:517)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at com.tencent.mobileqq.startup.step.Step.c(ProGuard:107)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at com.tencent.mobileqq.app.PeakAppInterface.onCreate(ProGuard:68)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at mqq.app.AppRuntime.getAppRuntime(AppRuntime.java:1040)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at com.tencent.biz.qqstory.app.QQStoryContext.a(ProGuard:216)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at com.tencent.biz.qqstory.app.QQStoryContext.a(ProGuard:106)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at com.tencent.mobileqq.app.PeakAppInterface.onCreate(ProGuard:83)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at mqq.app.AppRuntime.getAppRuntime(AppRuntime.java:1040)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at com.tencent.biz.qqstory.app.QQStoryContext.a(ProGuard:87)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at com.tencent.biz.qqstory.storyHome.QQStoryBaseActivity.doOnCreate(ProGuard:103)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at com.tencent.biz.qqstory.takevideo.EditPicActivity.doOnCreate(ProGuard:192)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at mqq.app.AppActivity.onCreate(AppActivity.java:69)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at android.app.Activity.performCreate(Activity.java:7025)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at android.app.Activity.performCreate(Activity.java:7016)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1217)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2812)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2955)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at android.app.ActivityThread.-wrap12(Unknown Source:0)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1650)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at android.os.Handler.dispatchMessage(Handler.java:106)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at android.os.Looper.loop(Looper.java:164)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at android.app.ActivityThread.main(ActivityThread.java:6719)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at java.lang.reflect.Method.invoke(Native Method)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:449)
+09-14 05:51:53.967: E/AutoMonitor(31228): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:807)
+09-14 05:51:54.068: I/zygote(31228): Background concurrent copying GC freed 2735(1945KB) AllocSpace objects, 10(176KB) LOS objects, 49% free, 3MB/7MB, paused 553us total 212.372ms
+09-14 05:51:54.115: E/EditPicActivity(31228): doOnCreate instance=66366265, video params=EditVideoParams{mBusinessId=2, mEnableMasks=265247, mEditSource=com.tencent.biz.qqstory.takevideo.EditTakePhotoSource@130978c, entranceType=99, mExtra=Bundle[{entrance_type=99, pic_entrance_type=0, mCurrentTemplatePath=null, troop_uin=null}]}
+09-14 05:51:54.219: D/RdmInit(31228): doStep process=com.tencent.mobileqq:peak, sRdmState=1
+09-14 05:51:54.257: E/Q.qqstory.user.QQStoryRuntime(31228): get current unionId from sp 0_3417757391
+09-14 05:51:54.264: E/TrimmableManager(31228): trimMemory : level = 0
+09-14 05:51:54.327: D/SQLiteOpenHelper(31228):  new SQLiteOpenHelper  helper = com.tencent.mobileqq.data.QQEntityManagerFactory$SQLiteOpenHelperImpl@b15a078 this = com.tencent.mobileqq.app.SQLiteOpenHelper@3ea1351
+09-14 05:51:54.370: D/SQLiteOpenHelper(31228): check dbRIsNull: null dbIsNull: 163495095
+09-14 05:51:54.375: D/SQLiteOpenHelper(31228): new dbR = 174822285 helper = com.tencent.mobileqq.data.QQEntityManagerFactory$SQLiteOpenHelperImpl@b15a078 this = com.tencent.mobileqq.app.SQLiteOpenHelper@3ea1351
+09-14 05:51:54.623: E/SecurityUtile(31228): loadso arm DBEncryptV2 resultCode=3387394
+09-14 05:51:54.628: E/SecurityUtile(31228): loadso true, resultCode:3387394 cost:244
+09-14 05:51:54.649: E/zygote(31228): The String#value field is not present on Android versions >= 6.0
+09-14 05:51:54.652: W/System.err(31228): java.lang.NoSuchFieldException: No field value in class Ljava/lang/String; (declaration of 'java.lang.String' appears in /system/framework/core-oj.jar)
+09-14 05:51:54.672: W/System.err(31228): 	at java.lang.Class.getDeclaredField(Native Method)
+09-14 05:51:54.672: W/System.err(31228): 	at com.tencent.commonsdk.util.StringUtils.newStringWithData(StringUtils.java:15)
+09-14 05:51:54.672: W/System.err(31228): 	at com.tencent.mobileqq.utils.SecurityUtile.a(ProGuard:122)
+09-14 05:51:54.673: W/System.err(31228): 	at com.tencent.mobileqq.utils.SecurityUtile.a(ProGuard:105)
+09-14 05:51:54.673: W/System.err(31228): 	at com.tencent.mobileqq.utils.SecurityUtile.b(ProGuard:164)
+09-14 05:51:54.673: W/System.err(31228): 	at acwz.getString(ProGuard:727)
+09-14 05:51:54.673: W/System.err(31228): 	at com.tencent.mobileqq.app.SQLiteDatabase.a(ProGuard:705)
+09-14 05:51:54.673: W/System.err(31228): 	at com.tencent.mobileqq.app.SQLiteDatabase.f(ProGuard:676)
+09-14 05:51:54.673: W/System.err(31228): 	at com.tencent.mobileqq.app.SQLiteDatabase.b(ProGuard:932)
+09-14 05:51:54.673: W/System.err(31228): 	at com.tencent.mobileqq.persistence.EntityManager.d(ProGuard:863)
+09-14 05:51:54.673: W/System.err(31228): 	at com.tencent.mobileqq.persistence.EntityManager.a(ProGuard:198)
+09-14 05:51:54.673: W/System.err(31228): 	at com.tencent.mobileqq.persistence.OGEntityManager.a(ProGuard:27)
+09-14 05:51:54.673: W/System.err(31228): 	at com.tencent.mobileqq.persistence.EntityManager.a(ProGuard:280)
+09-14 05:51:54.674: W/System.err(31228): 	at com.tencent.mobileqq.persistence.EntityManager.a(ProGuard:330)
+09-14 05:51:54.674: W/System.err(31228): 	at com.tencent.mobileqq.persistence.EntityManager.a(ProGuard:323)
+09-14 05:51:54.681: W/System.err(31228): 	at com.tencent.mobileqq.persistence.EntityManager.a(ProGuard:339)
+09-14 05:51:54.681: W/System.err(31228): 	at com.tencent.mobileqq.persistence.EntityManager.a(ProGuard:180)
+09-14 05:51:54.681: W/System.err(31228): 	at com.tencent.mobileqq.data.QQEntityManagerFactory.verifyAuthentication(ProGuard:269)
+09-14 05:51:54.681: W/System.err(31228): 	at com.tencent.biz.qqstory.app.QQStoryContext.a(ProGuard:144)
+09-14 05:51:54.681: W/System.err(31228): 	at com.tencent.biz.qqstory.model.UserManager.d(ProGuard:384)
+09-14 05:51:54.681: W/System.err(31228): 	at com.tencent.biz.qqstory.model.UserManager.a(ProGuard:251)
+09-14 05:51:54.681: W/System.err(31228): 	at com.tencent.biz.qqstory.model.UserManager.b(ProGuard:229)
+09-14 05:51:54.682: W/System.err(31228): 	at com.tencent.biz.qqstory.model.UserManager.a(ProGuard:195)
+09-14 05:51:54.682: W/System.err(31228): 	at com.tencent.biz.qqstory.model.UserManager.c(ProGuard:200)
+09-14 05:51:54.682: W/System.err(31228): 	at onl.run(ProGuard:130)
+09-14 05:51:54.682: W/System.err(31228): 	at android.os.Handler.handleCallback(Handler.java:790)
+09-14 05:51:54.682: W/System.err(31228): 	at android.os.Handler.dispatchMessage(Handler.java:99)
+09-14 05:51:54.682: W/System.err(31228): 	at android.os.Looper.loop(Looper.java:164)
+09-14 05:51:54.682: W/System.err(31228): 	at android.os.HandlerThread.run(HandlerThread.java:65)
+09-14 05:51:54.762: I/yh(31228): TMMTencentMultiMedia.so JNI_OnLoad() jvm=a44d10e0.
+09-14 05:51:54.762: I/yh(31228): TMMMessageManager::Register() processor=TMMMaterialManager a44ad890.
+09-14 05:51:54.762: I/yh(31228): OpenGLRender.so JNI_OnLoad() jvm=a44d10e0.
+09-14 05:51:54.762: I/yh(31228): AVCodec.so JNI_OnLoad() jvm=a44d10e0.
+09-14 05:51:54.779: I/yh(31228): [m_jmethodID=0xa47a1764]AVCodec.so Avcodec.getCallbackMethods() init OK...
+09-14 05:51:54.779: I/yh(31228): AVCodec.so JNI_OnLoad() end
+09-14 05:51:55.341: E/DoodleEmojiManager(31228): restoreResponseFromFile failed FileNotFoundException
+09-14 05:51:55.347: E/FacePackage(31228): config json is empty.
+09-14 05:51:55.348: E/FacePackage(31228): config json is illegal, use default value, type : LocationFacePackage
+09-14 05:51:55.363: E/Q.qqstory.sync.EditAioSyncToStoryPart(31228): get 0 type config=20
+09-14 05:51:55.527: E/Q.qqstory.publish.edit.EditVideoPartManager(31228): broadcastEditVideoMessage, but no one handled. { when=-1h31m39s227ms barrier=0 }
+09-14 05:51:55.596: I/TencentLocationSDK(31228): request location with looper,thread name:QQ_SUB
+09-14 05:51:55.678: E/libc(31228): Access denied finding property "ro.opengles.version"
+09-14 05:51:55.661: W/t.mobileqq:peak(31228): type=1400 audit(0.0:1733): avc: denied { read } for name="u:object_r:opengles_prop:s0" dev="tmpfs" ino=14196 scontext=u:r:untrusted_app_25:s0:c512,c768 tcontext=u:object_r:opengles_prop:s0 tclass=file permissive=0
+09-14 05:51:55.751: I/SOSO.LBS(31228): location manager requestLocationUpdates result is: 0
+09-14 05:51:55.751: E/DoodleLayout(31228): StandardMosaicSize, width or height <= 0. width:0,height:0
+09-14 05:51:55.778: V/NFC(31228): this device does not have NFC support
+09-14 05:51:55.794: E/DoodleEmojiManager(31228): current emoji packages is null.
+09-14 05:51:55.826: D/OpenGLRenderer(31228): textureCacheSize 25165824
+09-14 05:51:55.846: D/OpenGLRenderer(31228): HWUI GL Pipeline
+09-14 05:51:55.855: I/zygote(31228): Do partial code cache collection, code=24KB, data=29KB
+09-14 05:51:55.858: I/zygote(31228): After code cache collection, code=21KB, data=28KB
+09-14 05:51:55.858: I/zygote(31228): Increasing code cache capacity to 128KB
+09-14 05:51:55.892: D/MSF.D.RemoteServiceProxy(31228): onServiceConnected service:ComponentInfo{com.tencent.mobileqq/com.tencent.mobileqq.msf.service.MsfService}
+09-14 05:51:55.937: E/MosaicOperator(31228): mosaicHeightScale <= 0.
+09-14 05:51:55.958: D/MSF.S.ReqHandler(15144): handleMsfRequest registerMsfService
+09-14 05:51:55.959: I/MSF.S.AppProcessManager(15144): onRegisterApp process=com.tencent.mobileqq:peak processBootName= appid=537058562 callback=809ee52
+09-14 05:51:56.033: D/MSF.S.ReqHandler(15144): handleMsfRequest registerMsfService
+09-14 05:51:56.034: I/MSF.S.AppProcessManager(15144): onRegisterApp process=com.tencent.mobileqq:peak processBootName= appid=537058562 callback=843a523
+09-14 05:51:56.067: I/MSF.S.AppProcessManager(15144): SendToApp PUSH process:com.tencent.mobileqq fromServiceMsg: FromServiceMsg msName:pushSetConfig ssoSeq:-1 serviceCmd:cmd_pushSetConfig appSeq:-1 failCode:1000 cost=36 needBoot=false
+09-14 05:51:56.085: I/MSF.S.AppProcessManager(15144): SendToApp PUSH process:com.tencent.mobileqq fromServiceMsg: FromServiceMsg msName:pushSetConfig ssoSeq:-1 serviceCmd:cmd_pushSetConfig appSeq:-1 failCode:1000 cost=18 needBoot=false
+09-14 05:51:56.138: I/MSF.S.AppProcessManager(15144): SendToApp PUSH process:com.tencent.mobileqq:peak fromServiceMsg: FromServiceMsg msName:pushSetConfig ssoSeq:-1 serviceCmd:cmd_pushSetConfig appSeq:-1 failCode:1000 cost=53 needBoot=false
+09-14 05:51:56.148: I/MSF.S.AppProcessManager(15144): SendToApp PUSH process:com.tencent.mobileqq:peak fromServiceMsg: FromServiceMsg msName:pushSetConfig ssoSeq:-1 serviceCmd:cmd_pushSetConfig appSeq:-1 failCode:1000 cost=10 needBoot=false
+09-14 05:51:56.159: I/MSF.S.AppProcessManager(15144): SendToApp process:com.tencent.mobileqq:peak fromServiceMsg: FromServiceMsg msName:getAlterTickets ssoSeq:13400 serviceCmd: appSeq:1 failCode:1000 cost=11 needBoot=false
+09-14 05:51:56.315: E/MosaicOperator(31228): mosaicHeightScale <= 0.
+09-14 05:51:56.354: I/zygote(31228): android::hardware::configstore::V1_0::ISurfaceFlingerConfigs::hasWideColorDisplay retrieved: 0
+09-14 05:51:56.354: I/OpenGLRenderer(31228): Initialized EGL, version 1.4
+09-14 05:51:56.354: D/OpenGLRenderer(31228): Swap behavior 2
+09-14 05:51:56.363: D/NetworkSecurityConfig(31228): No Network Security Config specified, using platform default
+09-14 05:51:56.406: D/mali_winsys(31228): EGLint new_window_surface(egl_winsys_display *, void *, EGLSurface, EGLConfig, egl_winsys_surface **, egl_color_buffer_format *, EGLBoolean) returns 0x3000, win:0x8336f808
+09-14 05:51:56.407: I/OpenGLRenderer(31228): queryNativeWindowStatus 0x8336f808 query=0 dataspace=0
+09-14 05:51:56.424: D/GLTextureView(31228): onSurfaceTextureAvailable
+09-14 05:51:56.475: D/mali_winsys(31228): EGLint new_window_surface(egl_winsys_display *, void *, EGLSurface, EGLConfig, egl_winsys_surface **, egl_color_buffer_format *, EGLBoolean) returns 0x3000, win:0x80571008
+09-14 05:51:56.611: I/gralloc(31228): gralloc_register_buffer hnd=0x8331f900, share_fd=100, share_attr_fd=101, magic=51647890, format=1, internal_format=1, byte_stride=1920, flags=4, usage=0xb00, size=1704960, width=480, height=888, internalWidth=480, internalHeight=888, stride=480, base=0x7ff0a000, writeOwner=0, attr_base=0xffffffff, yuv_info=1, fd=-1, buf_idx=0, offset=0, min_pgsz=4096, phyaddr=0
+09-14 05:51:56.701: E/OpenGLRenderer(31228): SaveProgramBinary failed /data/data/com.tencent.mobileqq:peak/PB_8f61_0
+09-14 05:51:56.706: E/OpenGLRenderer(31228): SaveProgramBinary failed /data/data/com.tencent.mobileqq:peak/PB_8f61_1
+09-14 05:51:56.712: E/OpenGLRenderer(31228): SaveProgramBinary failed /data/data/com.tencent.mobileqq:peak/PB_8f61_800000000
+09-14 05:51:56.715: W/Settings(15144): Setting airplane_mode_on has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+09-14 05:51:56.723: E/OpenGLRenderer(31228): SaveProgramBinary failed /data/data/com.tencent.mobileqq:peak/PB_8f61_2000800000003
+09-14 05:51:56.726: E/OpenGLRenderer(31228): SaveProgramBinary failed /data/data/com.tencent.mobileqq:peak/PB_8f61_2000000000001
+09-14 05:51:56.742: W/Settings(15144): Setting airplane_mode_on has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+09-14 05:51:56.760: W/Settings(15144): Setting airplane_mode_on has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+09-14 05:51:56.770: I/chatty(15144): uid=10105(com.tencent.mobileqq) MsfCheckDeepSle identical 1 line
+09-14 05:51:56.785: W/Settings(15144): Setting airplane_mode_on has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+09-14 05:51:56.790: I/an(31228): customized createSocket. host: lbs.map.qq.com
+09-14 05:51:56.796: W/Settings(15144): Setting airplane_mode_on has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+09-14 05:51:56.838: W/SSLCertificateSocketFactory(31228): Bypassing SSL security checks at caller's request
+09-14 05:51:56.858: I/gralloc(31228): gralloc_register_buffer hnd=0x8331f180, share_fd=94, share_attr_fd=98, magic=51647890, format=1, internal_format=1, byte_stride=1920, flags=4, usage=0x300, size=1701120, width=480, height=886, internalWidth=480, internalHeight=886, stride=480, base=0x7fc60000, writeOwner=0, attr_base=0xffffffff, yuv_info=1, fd=-1, buf_idx=0, offset=0, min_pgsz=4096, phyaddr=0
+09-14 05:51:56.882: I/Choreographer(31228): Skipped 31 frames!  The application may be doing too much work on its main thread.
+09-14 05:51:57.004: I/gralloc(31228): gralloc_register_buffer hnd=0x8331fb40, share_fd=107, share_attr_fd=108, magic=51647890, format=1, internal_format=1, byte_stride=1920, flags=4, usage=0xb00, size=1704960, width=480, height=888, internalWidth=480, internalHeight=888, stride=480, base=0x7fabf000, writeOwner=0, attr_base=0xffffffff, yuv_info=1, fd=-1, buf_idx=0, offset=0, min_pgsz=4096, phyaddr=0
+09-14 05:51:57.097: I/gralloc(31228): gralloc_register_buffer hnd=0x8331fe40, share_fd=110, share_attr_fd=111, magic=51647890, format=1, internal_format=1, byte_stride=1920, flags=4, usage=0xb00, size=1704960, width=480, height=888, internalWidth=480, internalHeight=888, stride=480, base=0x7f85f000, writeOwner=0, attr_base=0xffffffff, yuv_info=1, fd=-1, buf_idx=0, offset=0, min_pgsz=4096, phyaddr=0
+09-14 05:51:57.103: E/OpenGLRenderer(31228): SaveProgramBinary failed /data/data/com.tencent.mobileqq:peak/PB_8f61_200c000000000
+09-14 05:51:57.542: I/zygote(31228): Background concurrent copying GC freed 27873(3MB) AllocSpace objects, 62(1160KB) LOS objects, 49% free, 3MB/6MB, paused 1.909ms total 300.584ms
+09-14 05:51:57.663: E/ArkApp.ArkStateCenter(25606): ark state change to  background
+09-14 05:51:57.828: D/TicketManager(31228): set alter tickets for *7391
+

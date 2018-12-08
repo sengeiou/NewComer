@@ -1,0 +1,438 @@
+day19学习笔记
+
+一.AutomaticBrightnessController学习
+接昨天的笔记，mAutomaticBrightnessController是AutomaticBrightnessController控制器对象
+  在DisplayPowerController类的updatePowerState方法中调用到AutomaticBrightnessController的config方法
+  
+          // Configure auto-brightness.
+        boolean autoBrightnessEnabled = false;
+        if (mAutomaticBrightnessController != null) {
+			//休眠模式下是否允许自动变亮-false(mAllowAutoBrightnessWhileDozingConfig为false)
+            final boolean autoBrightnessEnabledInDoze = mAllowAutoBrightnessWhileDozingConfig
+                    && (state == Display.STATE_DOZE || state == Display.STATE_DOZE_SUSPEND);
+					
+			//int brightness = PowerManager.BRIGHTNESS_DEFAULT;(-1)
+			//是否允许自动变亮-亮屏时为true
+			//useAutoBrightness=(mScreenBrightnessModeSetting == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC)(判断用户是否开启自动 1)
+			//这个可以使用 adb shell dumpsys power 查看到开关自动亮度时，mScreenBrightnessModeSetting为1/0
+			
+            autoBrightnessEnabled = mPowerRequest.useAutoBrightness
+                    && (state == Display.STATE_ON || autoBrightnessEnabledInDoze)
+                    && brightness < 0;
+					
+			//根据dump中mPendingRequestChangedLocked=false，无法进入到改变autoBrightnessAdjustmentChanged值
+			//的if块中，autoBrightnessAdjustmentChanged=false ；brightnessSetByUser=false，所以userInitiatedChange=false
+            final boolean userInitiatedChange = autoBrightnessAdjustmentChanged
+                    && mPowerRequest.brightnessSetByUser;
+			
+			//打开自动开关亮屏时，注入的参数(true,调整量，false，false，false)Twilight模式没有
+            mAutomaticBrightnessController.configure(autoBrightnessEnabled,
+                    mPowerRequest.screenAutoBrightnessAdjustment, state != Display.STATE_ON,
+                    userInitiatedChange, mPowerRequest.useTwilight);
+        }
+		
+//回到AutomaticBrightnessController类,先看两个辅助方法		
+//setLightSensorEnabled方法，注册sensor的监听，这里传入参数是true，mLightSensorEnabled初始为false，返回true
+    private boolean setLightSensorEnabled(boolean enable) {
+        if (enable) {
+            if (!mLightSensorEnabled) {
+                mLightSensorEnabled = true;
+				//从开机到现在的毫秒数（手机睡眠的时间不包括在内）
+                mLightSensorEnableTime = SystemClock.uptimeMillis();
+				//注册LightSensor监听器，采样间隔0.25s（mLightSensorRate=250）[单位：微秒]
+                mSensorManager.registerListener(mLightSensorListener, mLightSensor,
+                        mLightSensorRate * 1000, mHandler);
+                return true;
+            }
+        } else {
+			//这里应该是关闭sensor时调到，主要是做一些重置的工作
+            if (mLightSensorEnabled) {
+                mLightSensorEnabled = false;
+                mAmbientLuxValid = !mResetAmbientLuxAfterWarmUpConfig;
+                mRecentLightSamples = 0;
+                mAmbientLightRingBuffer.clear();
+                mInitialHorizonAmbientLightRingBuffer.clear();
+                mHandler.removeMessages(MSG_UPDATE_AMBIENT_LUX);
+                mSensorManager.unregisterListener(mLightSensorListener);
+            }
+        }
+        return false;
+    
+//setScreenAutoBrightnessAdjustment方法，设置调整量，参数adjustment调整量：在-1到1之间；初始mScreenAutoBrightnessAdjustment=0
+    private boolean setScreenAutoBrightnessAdjustment(float adjustment) {
+        if (adjustment != mScreenAutoBrightnessAdjustment) {
+            mScreenAutoBrightnessAdjustment = adjustment;
+            return true;
+        }
+        return false;
+    }		
+		
+//回到AutomaticBrightnessController类的Configure方法
+    public void configure(boolean enable, float adjustment, boolean dozing,boolean userInitiatedChange, boolean useTwilight) {
+        mDozing = dozing;
+		//用于注册LightSensor的监听-这里输入参数是true
+        boolean changed = setLightSensorEnabled(enable && !dozing);
+		//只要本次adjustment与上次不同，返回true
+        changed |= setScreenAutoBrightnessAdjustment(adjustment);
+		//这里返回false，现在changed为true
+        changed |= setUseTwilight(useTwilight);
+        if (changed) {
+			//更新亮度
+            updateAutoBrightness(false /*sendUpdate*/);
+        }
+	//这里进不去因为userInitiatedChange是false
+        if (enable && !dozing && userInitiatedChange) {
+            prepareBrightnessAdjustmentSample();
+        }
+    }
+	
+	
+//updateAutoBrightness更新亮度
+    private void updateAutoBrightness(boolean sendUpdate) {
+        if (!mAmbientLuxValid) {
+            return;
+        }
+		//根据环境光亮度，和对应函数曲线Spline，获取到相应的value
+        float value = mScreenAutoBrightnessSpline.interpolate(mAmbientLux);
+        float gamma = 1.0f;
+
+		//USE_SCREEN_AUTO_BRIGHTNESS_ADJUSTMENT=true,进入这个if，计算需要调整的Gamma值=gamma*adjGamma
+        if (USE_SCREEN_AUTO_BRIGHTNESS_ADJUSTMENT
+                && mScreenAutoBrightnessAdjustment != 0.0f) {
+            final float adjGamma = MathUtils.pow(mScreenAutoBrightnessAdjustmentMaxGamma,
+                    Math.min(1.0f, Math.max(-1.0f, -mScreenAutoBrightnessAdjustment)));
+            gamma *= adjGamma;
+            if (DEBUG || isDebugLcdBacklight()) {
+                Slog.d(TAG, "updateAutoBrightness: adjGamma=" + adjGamma);
+            }
+        }
+		
+		...
+		//修正value值=value^gamma
+        if (gamma != 1.0f) {
+            final float in = value;
+            value = MathUtils.pow(value, gamma);
+            if (DEBUG || isDebugLcdBacklight()) {
+                Slog.d(TAG, "updateAutoBrightness: gamma=" + gamma
+                        + ", in=" + in + ", out=" + value);
+            }
+        }
+		
+		//将value恢复成1-255区间(value*255)四舍五入得到新的屏幕亮度
+        int newScreenAutoBrightness =
+                clampScreenBrightness(Math.round(value * PowerManager.BRIGHTNESS_ON));
+		//把新的亮度和gamma值赋值
+        if (mScreenAutoBrightness != newScreenAutoBrightness) {
+            if (DEBUG || isDebugLcdBacklight()) {
+                Slog.d(TAG, "updateAutoBrightness: mScreenAutoBrightness="
+                        + mScreenAutoBrightness + ", newScreenAutoBrightness="
+                        + newScreenAutoBrightness);
+            }
+
+            mScreenAutoBrightness = newScreenAutoBrightness;
+            mLastScreenAutoBrightnessGamma = gamma;
+            if (sendUpdate) {
+                mCallbacks.updateBrightness();
+            }
+        }
+    }
+	
+	//返回自动亮度的值
+    public int getAutomaticScreenBrightness() {
+		//这里false，没开doze模式下
+        if (mDozing) {
+            return (int) (mScreenAutoBrightness * mDozeScaleFactor);
+        }
+        return mScreenAutoBrightness;
+    }
+	
+	
+//在返回DisplayPowerController类updatePowerState方法内下面一段
+        // Apply auto-brightness.
+        boolean slowChange = false;
+        if (brightness < 0) {
+			//先把brightness赋值mScreenAutoBrightness
+            if (autoBrightnessEnabled) {
+                brightness = mAutomaticBrightnessController.getAutomaticScreenBrightness();
+            }
+			//如果是变亮，slowChange = true，不会突然变亮，会有一个动画效果
+            if (brightness >= 0) {
+                // Use current auto-brightness value and slowly adjust to changes.
+                brightness = clampScreenBrightness(brightness);
+                if (mAppliedAutoBrightness && !autoBrightnessAdjustmentChanged) {
+                    slowChange = true; // slowly adapt to auto-brightness
+                }
+                mAppliedAutoBrightness = true;
+            } else {
+                mAppliedAutoBrightness = false;
+            }
+        } else {
+            mAppliedAutoBrightness = false;
+        }
+
+		//正常情况brightness上面已赋值>0,但当自动亮度无效果时(未准备好时)，使用手动亮度
+        if (brightness < 0) {
+            brightness = clampScreenBrightness(mPowerRequest.screenBrightness);
+        }
+		
+        // 当用户活动超时变暗时，变暗亮度最少减少10，取(当前亮度-10)与10之间的最小值
+        if (mPowerRequest.policy == DisplayPowerRequest.POLICY_DIM) {
+            if (brightness > mScreenBrightnessRangeMinimum) {
+                brightness = Math.max(Math.min(brightness - SCREEN_DIM_MINIMUM_REDUCTION,
+                        mScreenBrightnessDimConfig), mScreenBrightnessRangeMinimum);
+            }
+            if (!mAppliedDimming) {
+                slowChange = false;
+            }
+            mAppliedDimming = true;
+        } else if (mAppliedDimming) {
+            slowChange = false;
+            mAppliedDimming = false;
+        }
+		
+		... //处理Doze模式的
+		
+        //变化屏幕亮度的动画函数 animateScreenBrightness(亮度，变化率)，变化率-slowChange:40;正常速度：200
+        if (!mPendingScreenOff) {
+			//亮屏或休眠状态下，有渐变
+            if (state == Display.STATE_ON || state == Display.STATE_DOZE) {
+                animateScreenBrightness(brightness,
+                        slowChange ? BRIGHTNESS_RAMP_RATE_SLOW : mBrightnessRampRateFast);
+            } else {
+			//立即变化
+                animateScreenBrightness(brightness, 0);
+            }
+        }
+
+		//屏幕亮度变化动画
+    private void animateScreenBrightness(int target, int rate) {
+        if (DEBUG) {
+            Slog.d(TAG, "Animating brightness: target=" + target +", rate=" + rate);
+        }
+		//animateTo以rate的变化率到达target，若target与前值不同，返回true(亮度与当前不同)
+        if (mScreenBrightnessRampAnimator.animateTo(target, rate)) {
+            try {
+				//直接改变屏幕亮度
+                mBatteryStats.noteScreenBrightness(target);
+            } catch (RemoteException ex) {
+                // same process
+            }
+        }
+    }
+	
+//再回到上面setLightSensorEnabled方法中注册的监听器mLightSensorListener，看看这个监听
+    private final SensorEventListener mLightSensorListener = new SensorEventListener() {
+        @Override //检测数据变化时
+        public void onSensorChanged(SensorEvent event) {
+            if (mLightSensorEnabled) {
+				//获取两个参数-开机时间time，环境光数组lux[]
+                final long time = SystemClock.uptimeMillis();
+                final float lux = event.values[0];
+                if (DEBUG || isDebugLcdBacklight()){
+                    Slog.i(TAG, "onSensorChanged, time = " + time + ",lux = " + lux);
+                }
+				//调用这个函数处理事件
+                handleLightSensorEvent(time, lux);
+            }
+        }
+    };
+	
+	//处理sensor事件的函数
+    private void handleLightSensorEvent(long time, float lux) {
+		//删除这个消息
+        mHandler.removeMessages(MSG_UPDATE_AMBIENT_LUX);
+	
+        applyLightSensorMeasurement(time, lux);
+        updateAmbientLux(time);
+    }
+	
+	//主要是存储数据到InitialBuffer和Buffer
+    private void applyLightSensorMeasurement(long time, float lux) {
+		//样本数+1
+        mRecentLightSamples++;
+        // Store all of the light measurements for the intial horizon period. This is to help
+        // diagnose dim wake ups and slow responses in b/27951906.
+		//mAmbientLightHorizon=10000,把sensor启动后10秒内的数据存贮在Initial缓冲中
+        if (time <= mLightSensorEnableTime + mAmbientLightHorizon) {
+			//push函数，把time，lux分别存入两个数组中
+            mInitialHorizonAmbientLightRingBuffer.push(time, lux);
+        }
+		//time - mAmbientLightHorizon：10秒前的系统时间，保留>10秒前时间的数据
+        mAmbientLightRingBuffer.prune(time - mAmbientLightHorizon);
+        mAmbientLightRingBuffer.push(time, lux);
+
+        // Remember this sample value. //记录最近一次的lux，time
+        mLastObservedLux = lux;
+        mLastObservedLuxTime = time;
+    }
+	
+//再看updateAmbientLux方法前先看calculateAmbientLux方法，根据mAmbientLightRingBuffer数据得出AmbientLux的有效值
+    private float calculateAmbientLux(long now) {
+        final int N = mAmbientLightRingBuffer.size();
+        if (N == 0) {
+            Slog.e(TAG, "calculateAmbientLux: No ambient light readings available");
+            return -1;
+        }
+        float sum = 0;
+        float totalWeight = 0;
+		//AMBIENT_LIGHT_PREDICTION_TIME_MILLIS=100
+        long endTime = AMBIENT_LIGHT_PREDICTION_TIME_MILLIS;
+		//startTime从后往前遍历，权重按时间从新到旧减少，最后把lux[i]*weight[i]/总权重=lux的有效值
+        for (int i = N - 1; i >= 0; i--) {
+            long startTime = (mAmbientLightRingBuffer.getTime(i) - now);
+            float weight = calculateWeight(startTime, endTime);
+            float lux = mAmbientLightRingBuffer.getLux(i);
+            if (DEBUG || isDebugLcdBacklight()) {
+                Slog.d(TAG, "calculateAmbientLux: [" +
+                        (startTime) + ", " +
+                        (endTime) + "]: lux=" + lux + ", weight=" + weight);
+            }
+            totalWeight += weight;
+            sum += mAmbientLightRingBuffer.getLux(i) * weight;
+            endTime = startTime;
+        }
+        if (DEBUG || isDebugLcdBacklight()) {
+            Slog.d(TAG, "calculateAmbientLux: totalWeight=" + totalWeight +
+                    ", newAmbientLux=" + (sum / totalWeight));
+        }
+		
+        return sum / totalWeight;
+    }
+	
+//BRIGHTENING_LIGHT_HYSTERESIS=0.1,DARKENING_LIGHT_HYSTERESIS=0.2
+//需要使屏幕变亮的阈值：lux*1.1;需要使屏幕变暗的阈值：lux*0.8,设置亮度变化的阈值
+    private void setAmbientLux(float lux) {
+        mAmbientLux = lux;
+        mBrighteningLuxThreshold = mAmbientLux * (1.0f + BRIGHTENING_LIGHT_HYSTERESIS);
+        mDarkeningLuxThreshold = mAmbientLux * (1.0f - DARKENING_LIGHT_HYSTERESIS);
+    }
+	
+	
+//更新环境光亮度
+    private void updateAmbientLux(long time) {
+	
+		//当sensor刚开启时，立即估算一下当前环境光有效值
+        if (!mAmbientLuxValid) {
+		//sensor启动后的时间点，mLightSensorWarmUpTimeConfig=0，所以就是mLightSensorEnableTime
+            final long timeWhenSensorWarmedUp =
+                mLightSensorWarmUpTimeConfig + mLightSensorEnableTime;
+				//如果time < timeWhenSensorWarmedUp,就在timeWhenSensorWarmedUp时再调一次updateAmbientLux
+            if (time < timeWhenSensorWarmedUp) {
+                if (DEBUG || isDebugLcdBacklight()) {
+                    Slog.d(TAG, "updateAmbientLux: Sensor not  ready yet: "
+                            + "time=" + time
+                            + ", timeWhenSensorWarmedUp=" + timeWhenSensorWarmedUp);
+                }
+                mHandler.sendEmptyMessageAtTime(MSG_UPDATE_AMBIENT_LUX,
+                        timeWhenSensorWarmedUp);
+                return;
+            }
+			//计算得出环境光有效亮度，临界值
+            setAmbientLux(calculateAmbientLux(time));
+            mAmbientLuxValid = true;
+            if (DEBUG || isDebugLcdBacklight()) {
+                Slog.d(TAG, "updateAmbientLux: Initializing: "
+                        + "mAmbientLightRingBuffer=" + mAmbientLightRingBuffer
+                        + ", mAmbientLux=" + mAmbientLux);
+            }
+			//updateAutoBrightness方法上面看过了，传入true的话，会在DisplayPowerController的updateBrightness中回调
+			//而这个方法中handler会传一个消息，最后会调用到updatePowerState方法
+            updateAutoBrightness(true);
+        }
+
+		//找到最早有效变亮时间点+4=亮光持续临界时间点、有效变暗时间点+8=暗光持续临界时间点
+        long nextBrightenTransition = nextAmbientLightBrighteningTransition(time);
+        long nextDarkenTransition = nextAmbientLightDarkeningTransition(time);
+		//重新计算当前环境光有效值
+        float ambientLux = calculateAmbientLux(time);
+		//当前环境光有效值>=变亮临界值且已持续4秒，或，当前环境光有效值<=变暗临界值且已持续8秒
+        if (ambientLux >= mBrighteningLuxThreshold && nextBrightenTransition <= time
+                || ambientLux <= mDarkeningLuxThreshold && nextDarkenTransition <= time) {
+			//重新以当前环境光有效值设置临界值	
+            setAmbientLux(ambientLux);
+            if (DEBUG || isDebugLcdBacklight()) {
+                Slog.d(TAG, "updateAmbientLux: "
+                        + ((ambientLux > mAmbientLux) ? "Brightened" : "Darkened") + ": "
+                        + "mBrighteningLuxThreshold=" + mBrighteningLuxThreshold
+                        + ", mAmbientLightRingBuffer=" + mAmbientLightRingBuffer
+                        + ", mAmbientLux=" + mAmbientLux);
+            }
+			//更新屏幕亮度
+            updateAutoBrightness(true);
+			//因为临界值改变了，这两个亮度保持临界时间点也要重新计算
+            nextBrightenTransition = nextAmbientLightBrighteningTransition(time);
+            nextDarkenTransition = nextAmbientLightDarkeningTransition(time);
+        }
+		//得到下一个临界时间点(>time,则是暗光持续点与亮光持续点中较早的一个；<=time,则是time+250)
+        long nextTransitionTime = Math.min(nextDarkenTransition, nextBrightenTransition);
+        nextTransitionTime =
+                nextTransitionTime > time ? nextTransitionTime : time + mLightSensorRate;
+        if (DEBUG || isDebugLcdBacklight()) {
+            Slog.d(TAG, "updateAmbientLux: Scheduling ambient lux update for "
+                    + nextTransitionTime + TimeUtils.formatUptime(nextTransitionTime));
+        }
+		//在nextTransitionTime时间，再调一次本方法
+        mHandler.sendEmptyMessageAtTime(MSG_UPDATE_AMBIENT_LUX, nextTransitionTime);
+    }
+	
+	//返回最早有效变亮时间点+变亮防抖时间4000；变暗也同理，+变暗防抖时间4000
+    private long nextAmbientLightBrighteningTransition(long time) {
+        final int N = mAmbientLightRingBuffer.size();
+        long earliestValidTime = time;
+		//遍历找到最早的有效变亮时间点(该点lux>临界值)
+        for (int i = N - 1; i >= 0; i--) {
+            if (mAmbientLightRingBuffer.getLux(i) <= mBrighteningLuxThreshold) {
+                break;
+            }
+            earliestValidTime = mAmbientLightRingBuffer.getTime(i);
+        }
+        return earliestValidTime + mBrighteningLightDebounceConfig;
+    }
+	
+	//看这个Handler，看看发的message是怎么处理的
+    private final class AutomaticBrightnessHandler extends Handler {
+		...
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+				//上面发的MSG_UPDATE_AMBIENT_LUX，就继续回到updateAmbientLux方法
+                case MSG_UPDATE_AMBIENT_LUX:
+                    updateAmbientLux();
+                    break;
+				//因为userInitiatedChange=false 这条线没有走
+                case MSG_BRIGHTNESS_ADJUSTMENT_SAMPLE:
+                    collectBrightnessAdjustmentSample();
+                    break;
+            }
+        }
+    }
+	
+	
+	//昨天那个spline没仔细看，再回头看看
+	
+    public static Spline createSpline(float[] x, float[] y) {
+	//若x[]不是严格单调增的话，抛出异常
+        if (!isStrictlyIncreasing(x)) {
+            throw new IllegalArgumentException("The control points must all have strictly "
+                    + "increasing X values.");
+        }
+		//若y[]是单调增
+        if (isMonotonic(y)) {
+			//根据注释，使用Fritsch-Carlson法创建带约束的插值函数(必然经过给定的点[x,y])
+            return createMonotoneCubicSpline(x, y);
+        } else {
+			//若非单调，使用线性插值法
+            return createLinearSpline(x, y);
+        }
+    }
+	
+
+	
+
+
+
+	
+
+	
+	
+

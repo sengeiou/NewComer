@@ -1,0 +1,33 @@
+LOCAL_STATIC_JAVA_LIBRARIES := BaiduLBS_Android
+LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := BaiduLBS_Android:libs/BaiduLBS_Android.jar 
+LOCAL_PREBUILT_LIBS :=liblocSDK4d:libs/armeabi/liblocSDK4d.so
+
+LOCAL_PATH := $(call my-dir)
+include $(CLEAR_VARS)
+
+
+
+LOCAL_JAVA_LIBRARIES :=telephony-common
+
+LOCAL_STATIC_JAVA_LIBRARIES := BaiduLBS_Android
+
+LOCAL_SRC_FILES := $(call all-java-files-under, src)
+LOCAL_PACKAGE_NAME := SOS
+
+LOCAL_MODULE_TAGS := optional
+LOCAL_CERTIFICATE := platform
+
+#android-4.2.1_r1\device\leadcore\common\device.mk
+
+include $(BUILD_PACKAGE)
+include $(CLEAR_VARS)
+
+LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := BaiduLBS_Android:libs/BaiduLBS_Android.jar 
+LOCAL_PREBUILT_LIBS :=liblocSDK4d:libs/armeabi/liblocSDK4d.so
+
+
+#include $(BUILD_PACKAGE)
+
+include $(BUILD_MULTI_PREBUILT)
+
+include $(call all-makefiles-under,$(LOCAL_PATH))

@@ -1,0 +1,122 @@
+添加KeyBox水印
+
+展讯提供接口:
+vendor/sprd/proprietories-source/trustzone/checkKeybox/sprd_check_keybox.c中的 check_keybox_is_enabled()接口,通过 libcheckkeybox.so调用
+返回值为 1 表示已经写过 keybox,部署过了
+返回值为 0 表示没有写过 keybox,没有部署
+注:
+Android.mk中有宏控 BOARD_TEE_CONFIG=trusty时,才会编到
+
+
+一.修改Onload.cpp (frameworks\base\services\core\jni)	
+namespace android {
+...
+int register_android_server_policy_PhoneWindowManager(JNIEnv* env); //add by hujingcheng 声明
+
+...
+
+extern "C" jint JNI_OnLoad(JavaVM* vm, void* /* reserved */) //加载native函数
+{
+...
+    register_android_hardware_display_DisplayViewport(env);
+    register_android_server_policy_PhoneWindowManager(env);//add by hujingcheng
+
+
+二.添加文件jniKeybox.cpp
+jniKeybox.cpp 	frameworks\base\services\core\jni
+
+#define LOG_TAG "jniKeyboxService"
+#include "utils/Log.h"
+
+#include <stdint.h>
+#include <jni.h>
+#include "JNIHelp.h"
+
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <malloc.h>
+
+#include <stdio.h>
+#include <unistd.h>
+#include <dlfcn.h> //使用dlfcn.h中的函数打开so库,并调用其中的方法
+
+#define LIB_CACULATE_PATH "/vendor/lib/npidevice/libcheckkeybox.so" //需要打开的so库的路径
+
+
+namespace android {
+typedef int (*CAC_FUNC)(void);
+
+CAC_FUNC check_keybox_is_enabled = NULL;
+
+void *handle;
+int ret = -1;
+
+static jint Java_PhoneWindowManager_check_keybox_is_enabled(JNIEnv* env, jobject thiz) {
+	ALOGI("framework check keybox start!");
+	handle = dlopen(LIB_CACULATE_PATH, RTLD_LAZY);//dlopen打开so库,成功返回库的引用,错误返回NULL
+	if (!handle) {
+		ALOGI(" lib checkkeybox dlopen failed! %s, %d IN\n", dlerror(), __LINE__);//若出错,dlerror显示库操作出错信息
+		return -1;
+	}
+	*(void **) (&check_keybox_is_enabled) = dlsym(handle, "check_keybox_is_enabled");//返回check_keybox_is_enabled函数地址
+	if (!check_keybox_is_enabled) {
+		ALOGI("could not find symbol 'check_keybox_is_enabled', %d IN\n", __LINE__);
+		return -1;
+	} else {
+		ret = (*check_keybox_is_enabled)();//调用库中的check_keybox_is_enabled(void)函数,返回值ret,ret=1即keybox写入成功;否则,失败.
+		if (ret != 1) {
+			ALOGI("check_keybox_is_enabled fail, ret = %d\n", ret);
+			return ret;
+		} else {
+			ALOGI("check_keybox_is_enabled SUCCESS ----->>>>>>, ret = %d\n", ret);
+		}
+	}
+	return ret;
+}
+
+static const char *hardWareClassPathName =
+		"com/android/server/policy/PhoneWindowManager";
+
+static JNINativeMethod getMethods[] = { { "check_keybox_is_enabled", "()I",
+		(void*) Java_PhoneWindowManager_check_keybox_is_enabled } };//native函数表:java函数名，返回值类型，jni函数名
+
+int register_android_server_policy_PhoneWindowManager(JNIEnv* env)
+{
+    return jniRegisterNativeMethods(env, hardWareClassPathName,
+                                    getMethods, NELEM(getMethods));//注册native函数表
+}
+
+}
+
+三.修改Android.mk	frameworks\base\services\core\jni
+LOCAL_SRC_FILES += \
+...
+    $(LOCAL_REL_DIR)/onload.cpp \
+    $(LOCAL_REL_DIR)/jniKeybox.cpp
+	
+四.在对应java文件中调用
+PhoneWindowManager.java (\frameworks\base\services\core\java\com\android\server\policy)
+...
+	public static native int check_keybox_is_enabled();
+	
+	
+五.添加权限
+运行时权限报错：
+01-01 00:10:00.939   804   804 W android.ui: type=1400 audit(0.0:137): avc: denied { read write } for name="trusty-ipc-dev0" dev="tmpfs" ino=12809 scontext=u:r:system_server:s0 tcontext=u:object_r:teetz_device:s0 tclass=chr_file permissive=0
+
+修改vendor/sprd/proprietories-source/sprdtrusty/vendor/sprd/modules/common/sepolicy_androido/device.te
+添加权限：
+allow system_server teetz_device:chr_file { ioctl open read write };
+
+
+六.keybox测试
+1.
+1.格式化下载后keybox还是检测到已写入
+2.
+
+
+

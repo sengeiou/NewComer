@@ -1,0 +1,265 @@
+day07学习笔记
+
+
+一.adb命令
+  adb 的运行原理是 PC 端的 adb server 与手机端的守护进程 adbd 建立连接，然后 PC 端的 adb client 通过 adb server 转发命令，adbd 接收命令后解析运行。
+
+adb start-server 启动命令(一般无需手动执行，运行adb命令时若发现没有启动会自动执行)
+adb kill-server 停止adb server
+adb root/adb shell su root:以 root 权限运行 adbd
+adb unroot:取消root权限
+adb install apk文件：安装命令
+  -r	允许覆盖安装。
+  -s 	将应用安装到 sdcard。
+  -d 	允许降级覆盖安装。
+adb uninstall [-k] <packagename>
+  -k	卸载应用但保留数据和缓存目录
+adb push 源文件 目标文件： 推送本地文件至设备
+  例：adb push ~/note/day06/day06.txt sdcard/ 注意sdcard后的/不能少
+adb pull 源文件 目标文件： 将设备上的文件复制到本地
+  例：adb pull sdcard/allCity.txt ~/note/day07/allCity.txt
+adb logcat *:W:输出任意tag，warning以上的日志
+adb reboot: 重启手机
+
+adb shell命令
+1.pm:Package Manager,用于获取安装在 Android 设备上的应用信息
+ 查看应用列表：
+语法：adb shell pm list packages [-fde3siu] [--user USER_ID] [FILTER]
+参数：
+-f 	显示应用关联的 apk 文件
+-d 	只显示 disabled 的应用
+-e 	只显示 enabled 的应用
+-s 	只显示系统应用
+-3 	只显示第三方应用
+-i 	显示应用的 installer
+-u 	包含已卸载应用
+<FILTER> 	包名包含 <FILTER> 字符串
+例：pm list packages -3 miui 查找包含miui的第三方包
+
+2.am：activity manager，可以启动Activity、打开或关闭进程、发送广播等操作。
+a.启动Activity，语法：adb shell am start [options] <INTENT>
+参数：
+-n	明确指定启动哪个活动
+-S	关闭Activity所属的App进程后再启动Activity
+-W	等待应用完成启动
+例：adb shell am start -n com.example.hjc.hello2/.MainActivity
+
+b.启动一个service
+例：adb shell am startservice com.example.hjc.hello2/.MyService
+
+c.发送一个广播
+-a: action
+例：adb shell am broadcast -a com.example.hjc.hello.BroadCast 这个广播设过receiver了
+
+d.关闭指定包名的应用程序 
+adb shell am force-stop 包名
+
+e.杀死与包名相关的进程
+adb shell am kill 包名
+
+3.input：向设备发送按键指令
+a.发送文本：adb shell input text test
+注：需要将键盘设为英文
+b.发送按键：adb shell input keyevent KEYCODE_HOME -模拟按home键
+c.发送触摸事件:adb shell input tap 500 500
+d.发送滑动事件:adb shell input swipe 500 500 500 700
+
+4.ps:查看进程
+
+
+二.关于包名
+
+
+三.计算器的源码学习
+Calculator：清单文件中定义的app入口activity
+CalculatorEditText：改变字体大小
+CalculatorExpressionBuilder：过滤非法表达式
+CalculatorExpressionTokenizer：替换非通用字符
+CalculatorExpressionEvaluator：实际计算表达式的类
+
+    //点击按键时的动作，按照对应的按键调用相应的方法
+    public void onButtonClick(View view) {
+        switch (view.getId()) {
+            case R.id.eq:
+                //“=”调用等于方法
+                onEquals();
+                break;
+                //删除调用onDelete
+            case R.id.del:
+                onDelete();
+                break;
+                //清除调用onClear
+            case R.id.clr:
+                onClear();
+                break;
+            case R.id.fun_cos:
+            case R.id.fun_ln:
+            case R.id.fun_log:
+            case R.id.fun_sin:
+            case R.id.fun_tan:
+                // Add left parenthesis after functions.
+                // 调用这几个函数时，加个左括号
+                mFormulaEditText.append(((Button) view).getText() + "(");
+                break;
+            //BIRD add by zhanglixian 20161215 begin
+            //点击小数点的操作
+            case R.id.dec_point:
+                //获取系统属性，若不会自动加0时
+                if(SystemProperties.getBoolean("ro.bdfun.add_zero",false)){
+                    //当前公式窗口为空时，点击小数点，则在前面加0
+                    if(mFormulaEditText.getText().toString().equals("")){
+                        mFormulaEditText.append("0"+((Button) view).getText());
+                    }else{
+                        //当前公式窗口非空时
+                        mStrLength = mFormulaEditText.getText().toString().length();
+                        mLastStr = mFormulaEditText.getText().toString().substring(mStrLength-1,mStrLength);
+                        //当公式窗最后一个字符是运算符号时，点击小数点，默认前面加个0
+                        if(!mLastStr.equals("0") && !mLastStr.equals("1") && !mLastStr.equals("2") &&
+                           !mLastStr.equals("3") && !mLastStr.equals("4") && !mLastStr.equals("5") &&
+                           !mLastStr.equals("6") && !mLastStr.equals("7") && !mLastStr.equals("8") &&
+                           !mLastStr.equals("9") && !mLastStr.equals(".")){
+                           mFormulaEditText.append("0"+((Button) view).getText());
+                           //若最后一个字符非运算符，直接加上小数点
+                        }else{
+                            mFormulaEditText.append(((Button) view).getText());
+                        }
+                    }
+                }else{
+                    mFormulaEditText.append(((Button) view).getText());
+                }
+                break;
+            //BIRD add by zhanglixian 20161215 end
+            //按其他按键时直接添加该按钮的text
+            default:
+                mFormulaEditText.append(((Button) view).getText());
+                break;
+        }
+    }
+
+    //长按删除则启动清除功能
+    @Override
+    public boolean onLongClick(View view) {
+        if (view.getId() == R.id.del) {
+            onClear();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 计算过程中调用
+     */
+    @Override
+    public void onEvaluate(String expr, String result, int errorResourceId) {
+        //当state为input时，直接显示result=input
+        if (mCurrentState == CalculatorState.INPUT) {
+            mResultEditText.setText(result);
+            //当第三个参数！=INVALID_RES_ID，进入onError错误处理
+        } else if (errorResourceId != INVALID_RES_ID) {
+            onError(errorResourceId);
+            //当result非空，输出result
+        } else if (!TextUtils.isEmpty(result)) {
+            onResult(result);
+            //当result为空且状态为EVALUATE，则转化状态为INPUT
+        } else if (mCurrentState == CalculatorState.EVALUATE) {
+            // The current expression cannot be evaluated -> return to the input state.
+            setState(CalculatorState.INPUT);
+        }
+        //设置焦点在公式区
+        mFormulaEditText.requestFocus();
+    }
+
+
+    //只有状态处于input时，状态设为EVALUATE，mEvaluator调用evaluate方法
+    private void onEquals() {
+        if (mCurrentState == CalculatorState.INPUT) {
+            setState(CalculatorState.EVALUATE);
+            mEvaluator.evaluate(mFormulaEditText.getText(), this);
+        }
+    }
+
+    //删除最后一个字符
+    private void onDelete() {
+        // Delete works like backspace; remove the last character from the expression.
+        final Editable formulaText = mFormulaEditText.getEditableText();
+        final int formulaLength = formulaText.length();
+        if (formulaLength > 0) {
+            formulaText.delete(formulaLength - 1, formulaLength);
+        }
+    }
+
+    //清除调用
+    private void onClear() {
+        //当公式区非空时才继续
+        if (TextUtils.isEmpty(mFormulaEditText.getText())) {
+            return;
+        }
+
+        final View sourceView = mClearButton.getVisibility() == View.VISIBLE
+                ? mClearButton : mDeleteButton;
+        //做一个清除动画并清除公式区字符
+        reveal(sourceView, R.color.calculator_accent_color, new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                mFormulaEditText.getEditableText().clear();
+            }
+        });
+    }
+
+
+
+
+    //具体执行计算的方法
+    public void evaluate(String expr, EvaluateCallback callback) {
+        //首先过滤表达式中的字符
+        expr = mTokenizer.getNormalizedExpression(expr);
+
+        // remove any trailing operators
+        //去除尾部的运算符
+        while (expr.length() > 0 && "+-/*".indexOf(expr.charAt(expr.length() - 1)) != -1) {
+            expr = expr.substring(0, expr.length() - 1);
+        }
+
+        //若此时表达式为空或为纯数字，则调用onEvaluate参数为Calculator.INVALID_RES_ID
+        try {
+            if (expr.length() == 0 || Double.valueOf(expr) != null) {
+                callback.onEvaluate(expr, null, Calculator.INVALID_RES_ID);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            // expr is not a simple number
+        }
+
+        //过滤完成，这时的expr是正常的表达式
+        try {
+            //通过Arity的eval方法，得出该表达式的结果
+            double result = mSymbols.eval(expr);
+            //当结果超出定义（0/0或根号下负数），实际在结果区输出不是数字
+            if (Double.isNaN(result)) {
+                callback.onEvaluate(expr, null, R.string.error_nan);
+            } else {
+                // The arity library uses floating point arithmetic when evaluating the expression
+                // leading to precision errors in the result. The method doubleToString hides these
+                // errors; rounding the result by dropping N digits of precision.
+                //当result合法时，先把double型四舍五入转为string
+                final String resultString = mTokenizer.getLocalizedExpression(
+                        Util.doubleToString(result, MAX_DIGITS, ROUNDING_DIGITS));
+                callback.onEvaluate(expr, resultString, Calculator.INVALID_RES_ID);
+            }
+        } catch (SyntaxException e) {
+            //转化过程抛出异常，输出error
+            callback.onEvaluate(expr, null, R.string.error_syntax);
+        }
+    }
+
+
+
+
+
+ 
+
+
+
+
+
+

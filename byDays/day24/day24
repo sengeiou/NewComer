@@ -1,0 +1,139 @@
+day24学习笔记
+
+一.宏
+1. BIRD_LOAD_DEFAULT_LAUNCHER
+ActivityManagerService类：是Android中最核心的服务，主要负责系统中四大组件的启动、切换、调度及应用程序的管理和调度等工作。
+ActivityManagerService类的startHomeActivityLocked方法：启动Home Activity
+在这个方法中添加：  BIRD_LOAD_DEFAULT_LAUNCHER的格式：包名/类名
+		//BIRD_LOAD_DEFAULT_LAUNCHER add by zhanglixian 20170419 begin
+		final PackageManager mPm = mContext.getPackageManager();
+		//在SprdUsbReceiver广播接收者类中设置一个Global属性isFirstReboot，当收到开机广播ACTION_BOOT_COMPLETED时，就设为1
+		int isFirstReboot = Settings.Global.getInt(mContext.getContentResolver(),"isFirstReboot",1);
+		final String strComponentName = android.os.SystemProperties.get(
+				"bird_default_start_launcher", "");
+			//得到并解析这个宏bird_default_start_launcher为ComponentName
+			ComponentName defaultLauncher=ComponentName.unflattenFromString(strComponentName);
+		if(isFirstReboot == 1 && !"".equals(strComponentName)){
+			//here set the package name and class name of default launcher.
+			ArrayList<ResolveInfo> homeActivities = new ArrayList<ResolveInfo>();
+			mPm.getHomeActivities(homeActivities);
+			ComponentName[] mHomeComponentSet = new ComponentName[homeActivities.size()];
+			Log.e("zhanglx","homeActivities=========="+homeActivities.size());
+			for (int i = 0; i < homeActivities.size(); i++) {
+    			final ResolveInfo candidate = homeActivities.get(i);
+    			Log.d("zhanglx","homeActivitie: candidate = "+candidate);
+    			final ActivityInfo activityInfo= candidate.activityInfo;
+    			ComponentName activityName = new ComponentName(activityInfo.packageName, activityInfo.name);
+    			mHomeComponentSet[i] = activityName;
+			}
+			IntentFilter mHomeFilter = new IntentFilter(Intent.ACTION_MAIN);
+			mHomeFilter.addCategory(Intent.CATEGORY_HOME);
+			mHomeFilter.addCategory(Intent.CATEGORY_DEFAULT);
+			//上面遍历是为了取得mHomeComponentSet，最后设置默认的为defaultLauncher
+			mPm.replacePreferredActivity(mHomeFilter, IntentFilter.MATCH_CATEGORY_EMPTY,mHomeComponentSet, defaultLauncher);
+		} 
+BIRD_LOAD_DEFAULT_LAUNCHER = com.android.launcher2/Launcher
+
+2.BIRD_THEME_APK_MANAGER 主题管理
+开启THEME_APK_MANAGER这个apk，因为这个修改是在com.android.launcher3.Launcher中进行的所以只有选择launcher3时，才会起作用
+BIRD_THEME_OPPO/BIRD_THEME_QING/BIRD_THEMERICE2 具体的主题包
+这些包是在ThemeApkUtil类中导入的，具体顺序在getXmlOrder方法中
+				orderList = new ArrayList<String>();
+				orderList.add(COM_NBBSW_THEME_DEFAULTTHEME);
+				XmlResourceParser parser = context.getResources().getXml(R.xml.theme_order);
+				
+3.BIRD_CUSTOM_BROWSER 自定义浏览器
+自定义主页：在BrowserSettings的setHomePage方法
+                //BIRD:add by wangye for custom browser homepage 20170418 begin
+                if(BirdFeature.BIRD_CUSTOM_BROWSER){
+                    sFactoryResetUrl = BirdBrowser.getHomePage(mContext);
+                }else {
+            	    sFactoryResetUrl = carrierConfig;
+                }
+	//从xml中读取HomePage，getHomePageResId()=R.string.bird_default_home_page;
+	public static String getHomePage(Context c){
+		String homepage=c.getResources().getString(getHomePageResId());
+		if(isHomePageSuffixEnable(c,homepage)){
+			homepage+=getBirdCustomHomePagesuffix(c);
+		}
+		return homepage;
+	}
+自定义书签：BrowserProvider2类createDefaultBookmarks方法中，从xml中读取
+		//BIRD:add by wangye for custom bookmarks,20170418,begin
+			if(BirdFeature.BIRD_CUSTOM_BROWSER){
+            		addBirdDefaultBookmarks(db, FIXED_ID_ROOT, 0, BirdBrowser.getBookmarksResId(), BirdBrowser.getBookmarksPreloadResId());
+            }else {
+            		addDefaultBookmarks(db, FIXED_ID_ROOT);			
+			}
+			
+4.BIRD_SHOW_MORE_RINGTONES_MENU 选择铃声显示more选项
+在RingtonePickerActivity中onPrepareListView方法中，增加一项more ringtone，mMoreRingtonesPos是这项的位置
+        /*bird:add by wangye 20170411 begin*/
+        if(SystemProperties.getBoolean("ro.bdfun.show_more_ringtones", false)){
+		//mHasMoreRingtonesItem是由下面一个宏BIRD_RINGTONES_PICK_NO_MENU_MORE控制的
+            if (mHasMoreRingtonesItem) {
+                mMoreRingtonesPos = addMoreRingtonesItem(listView);
+            }
+        }
+在mRingtoneClickListener监听的onClick方法中，如果点了more，设置intent，打开音乐
+            if(SystemProperties.getBoolean("ro.bdfun.show_more_ringtones", false)){
+                if (which == mMoreRingtonesPos) {
+                    Intent intent = new Intent(Intent.ACTION_PICK);
+                    intent.addCategory(Intent.CATEGORY_DEFAULT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("vnd.android.cursor.dir/audio");
+                    intent.setData(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(intent, ADD_MORE_RINGTONES);
+                 } 
+在重写onActivityResult方法，获取返回的uri,设置铃声到该URI
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        switch (requestCode) {
+            case ADD_MORE_RINGTONES:
+                if (resultCode == RESULT_OK) {
+                    Uri uri = (null == intent ? null : intent.getData());
+                    if (uri != null) {
+                        setRingtone(this.getContentResolver(), uri);
+                        Log.v(TAG, "onActivityResult: RESULT_OK, so set to be ringtone! "
+                                + uri);
+                    }
+                } else {
+                    Log.v(TAG, "onActivityResult: Cancel to choose more ringtones, "
+                            + "so do nothing!");
+                }
+                break;
+        }
+    }
+	
+5.BIRD_RINGTONES_PICK_NO_MENU_MORE 可以关闭alarm/contact的more选项
+1)alarm闹钟中
+//在ExpandedAlarmViewHolder的构造方法中，添加点击铃声的监听
+        ringtone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alarmTimeClickHandler.onRingtoneClicked(mAlarm);
+            }
+        });
+  //进入AlarmTimeClickHandler的onRingtoneClicked方法中，对这个intent添加一条属性EXTRA_RINGTONE_SHOW_MORE_RINGTONES
+  //ACTION_RINGTONE_PICKER指向RingtonePickerActivity类
+final Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+...
+intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_MORE_RINGTONES, !BirdFeatureOption.BIRD_ALARM_NO_MORE_RINGTONES);
+mFragment.startActivityForResult(intent, R.id.request_code_ringtone);
+  //在RingtonePickerActivity的onCreate方法中接收这个传递属性EXTRA_RINGTONE_SHOW_MORE_RINGTONES的值
+        mHasMoreRingtonesItem = intent.getBooleanExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_MORE_RINGTONES, false);
+再由这个Boolean值，判断是否添加more选项，其他就是上一个宏所控制的。	
+2)contact中
+QuickContactActivity中pickRingtone方法中	
+和上面一样 ，添加属性
+Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);		
+intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_MORE_RINGTONES, !BirdFeatureOption.BIRD_CONTACTS_NO_MORE_RINGTONES);	 
+				 
+				 
+二. 下午拉代码，编译系统 
+				 
+				 
+				 
+				 
+
+

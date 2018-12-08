@@ -1,0 +1,82 @@
+day31学习笔记
+
+一.makefile
+PRODUCT_COPY_FILES属性
+ifneq ($(strip $(BIRD_BOOT_ANIMATION)), )
+  PRODUCT_COPY_FILES += \
+    bird/resources/bootanimation/$(BIRD_BOOT_ANIMATION).zip:system/media/bootanimation.zip
+endif
+PRODUCT_COPY_FILES格式是在build/core/MakeFile中规定的-  源文件:目标文件
+# PRODUCT_COPY_FILES contains words like <source file>:<dest file>[:<owner>].
+# <dest file> is relative to $(PRODUCT_OUT), so it should look like,
+# e.g., "system/etc/file.xml".
+#$(1): the src:dest pair
+
+二.宏
+1.没有sim卡不自动更新时区
+GsmServiceStateTracker类的setAndBroadcastNetworkSetTimeZone方法
+    		//add by zhangshanshan 20170828 begin
+    private boolean hasSim(){
+        TelephonyManager telePhonyManager = TelephonyManager.from(mPhone.getContext());
+            if(telePhonyManager.hasIccCard()){
+                return true;
+        }
+        return false;
+    }
+	//如果开宏且没有sim卡
+     		//add by zhangshanshan 20170828 begin
+        if (!UPDATETZ_NOSIM && !hasSim()) {
+           if (DBG) log("No sim cards. Do not update timezone");
+            return;
+        }
+在CdmaServiceStateTracker类中同样修改，这两个类都是继承于ServiceStateTracker。两者区别在于
+使用的网络信号不同。
+设置默认时区，就是更改属性： persist.sys.timezone
+		
+2. BIRD_NO_KEEP_SCREEN_OFF 来电时不息屏
+//本来是5秒后息屏，开宏关闭这个功能
+    private void keepScreenOffAfterFiveSeconds(){
+		if (!SystemProperties.getBoolean("ro.bdfun.no_keep_screen_off", false)) {
+		//息屏的操作，释放WakeLock，WakeLock：wakelock是一种锁的机制，只要有应用拿着这个锁，
+		//CPU就无法进入休眠状态
+	        releaseWakeLock();
+			//设置息屏时间
+	        mPowerManager.setTimeoutLocked(SCREEN_OFF_DEFAULT_TIMEOUT, true);
+	        mPowerManager.userActivity(SystemClock.uptimeMillis(), false);
+		}
+    }
+
+3.添加-设置永不休眠选项
+修改ui-DisplaySettings类中onCreate方法修改休眠选项内容
+		if(SystemProperties.getBoolean("ro.bdmisc.sctimeout_never", false)){
+		    mScreenTimeoutPreference.setEntries(R.array.screen_timeout_entries_never);
+		    mScreenTimeoutPreference.setEntryValues(R.array.screen_timeout_values_never);
+		}
+		在updateTimeoutPreferenceDescription方法中，修改summary，当选择永不时，summary也显示永不
+				if(SystemProperties.getBoolean("ro.bdmisc.sctimeout_never", false) && (best == values.length - 1)){
+				    summary = entries[best].toString();			
+				}
+注：never-对应的实际数值是 2^31-1，long型的最大值
+
+4.添加-设置日期时间选项
+添加一个类DateTimeSettings
+选项-自动获取时间 优先顺序：从网络获取-从GPS获取-关闭自动
+开宏-BIRD_CHOOSEDATEFORMAT_ON
+        if(null != mDateFormat && !SystemProperties.getBoolean("ro.bdmisc.choosedateformat", false)){
+            getPreferenceScreen().removePreference(mDateFormat);
+        }
+
+5.字体大小
+想设置一下字体，发现本来就有但是因为bug移除了这个选项
+        mFontSizePref = (WarnedListPreference) findPreference(KEY_FONT_SIZE);
+        /* SPRD: Modify for Bug819626, remove font size setting. @{ */
+        // mFontSizePref.setOnPreferenceChangeListener(this);
+        // mFontSizePref.setOnPreferenceClickListener(this);
+        getPreferenceScreen().removePreference(mFontSizePref);
+另外不支持的还有screensaver,accelerometer，NotificationPulse
+		
+四.整理一下以前的笔记。参考源码，自己写写代码，练练手。
+
+	
+
+

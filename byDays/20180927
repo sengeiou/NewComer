@@ -1,0 +1,56 @@
+
+
+一.7731e wifi性能问题
+cq:SPCSS00516152
+修改connectivity_configure.ini中enhance_reserved变量
+修改前：
+enhance_reserved = 1, 0, 0, 0
+修改后：
+enhance_reserved = 1, 2, 0, 0
+
+展讯给的三条命令查看，初始为：
+Android:/ # iwnpi wlan0 get_reg mac 0x100
+ret: status 0 :end
+reg values is :0x00007322	
+Android:/ # iwnpi wlan0 get_reg mac 0x108                                      
+ret: status 0 :end
+reg values is :0x000000A4	
+Android:/ # iwnpi wlan0 get_reg mac 0x114                                      
+ret: status 0 :end
+reg values is :0x1F400000	
+
+查看cp版本
+Android:/ # echo "at+spatgetcp2info\r" > /proc/mdbg/at_cmd
+Android:/ # cat /proc/mdbg/at_cmd
+
+替换PM_pike2_cm4.bin，查看到cp版本变更，但上述三条命令查看后还是原来的值。
+继续跟进
+
+二.9820e BUG #41414 中文下不支持语音播报
+
+预装讯飞tts引擎apk并设为默认
+预装：
+讯飞tts包名：com.iflytek.speechcloud
+仿照NikieIME输入法的Android.mk
+
+#xunfei tts engine
+LOCAL_PATH := $(call my-dir)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE := xunfei
+LOCAL_MODULE_STEM := xunfei.apk
+LOCAL_MODULE_CLASS := APPS
+LOCAL_CERTIFICATE := PRESIGNED
+LOCAL_MODULE_PATH := $(TARGET_OUT)/vital-app
+LOCAL_SRC_FILES := xunfei.apk
+include $(BUILD_PREBUILT)
+include $(call all-makefiles-under,$(LOCAL_PATH))
+
+设为默认：
+DatabaseHelper.java (frameworks\base\packages\settingsprovider\src\com\android\providers\settings)
+    private void loadSecureSettings(SQLiteDatabase db) {
+	...
+				loadSetting(stmt, Settings.Secure.TTS_DEFAULT_SYNTH, "com.iflytek.speechcloud");//add by hujingcheng
+
+

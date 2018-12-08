@@ -1,0 +1,145 @@
+https://blog.csdn.net/u014248312/article/details/80497294
+
+需求：在 user 版中，插入 usb 连接电脑时，默认只有 mtp （传文件）功能，关闭 adb 功能。在 eng 版中，插入 usb 连接电脑时，默认打开 adb 功能，且兼具 mtp （传文件）功能。
+提示：
+
+    Android 4.4 之后貌似修改了整个 usb 模式配置的 方案，从 DatabaseHelper.java 中配置默认功能是行不通的了。
+    试图在 SystemServer.java 中，Android 第一次启动时 setSystemProperties 也是行不通的。
+    注意，尽量不要使用 .mk 的方法添加 PRODUCT_PROPERTIES_OVERRIDES persist.sys.usb.config 的方案来配置，这种适合配置无论 eng 还是 user 均使用同一模式的情况。但是，同样不建议这么做，因为这么做之后，下面我将要说的这个方案就会不起作用了。
+
+解决方案：
+
+一种比较合理的解决方案是，尽量少地改动源码。从 build 目录下进行修改。
+首先确认一下，build/core/main.mk 中关于 ro.debuggable 的配置源码没有被芯片供应商改动过。其源码应为：
+
+420 ifeq (true,$(strip $(enable_target_debugging)))
+421   # Target is more debuggable and adbd is on by default
+422   ADDITIONAL_DEFAULT_PROPERTIES += ro.debuggable=1
+423   # Enable Dalvik lock contention logging.
+424   ADDITIONAL_BUILD_PROPERTIES += dalvik.vm.lockprof.threshold=500
+425   # Include the debugging/testing OTA keys in this build.
+426   INCLUDE_TEST_OTA_KEYS := true
+427 else # !enable_target_debugging
+428   # Target is less debuggable and adbd is off by default
+429   ADDITIONAL_DEFAULT_PROPERTIES += ro.debuggable=0
+430 endif # !enable_target_debugging
+
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+    10
+    11
+
+其大致意思是， 如果编译的是 eng 版本，那么就把 ro.debuggable 属性置为 1，否则，置为0。
+
+紧接着，在 build/tools/post_process_props.py 中，对相关默认配置进行修改，其源码本为：
+
+28  # Put the modifications that you need to make into the /system/build.prop into this
+29  # function. The prop object has get(name) and put(name,value) methods.
+30  def mangle_build_prop(prop):
+31      pass
+32
+33  # Put the modifications that you need to make into the /default.prop into this
+34  # function. The prop object has get(name) and put(name,value) methods.
+35  def mangle_default_prop(prop):
+36      # If ro.debuggable is 1, then enable adb on USB by default
+37      # (this is for userdebug builds)
+38      if prop.get("ro.debuggable") == "1":
+39          val = prop.get("persist.sys.usb.config")
+40      if "adb" not in val:
+41          if val == "":
+42              val = "adb"
+43          else:
+44              val = val + ",adb"
+45          prop.put("persist.sys.usb.config", val)
+46  # UsbDeviceManager expects a value here.  If it doesn't get it, it will
+47  # default to "adb". That might not the right policy there, but it's better
+48  # to be explicit.
+49  if not prop.get("persist.sys.usb.config"):
+50      prop.put("persist.sys.usb.config", "none");
+
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+    10
+    11
+    12
+    13
+    14
+    15
+    16
+    17
+    18
+    19
+    20
+    21
+    22
+    23
+
+其大致意思是，如果 ro.debuggable == 1，即 eng 版本，那么先获取一下 persist.sys.usb.config 的值，如果 “adb” 不存在于这个值里面，就把 “adb” 加进去。然后再设置一下 persist.sys.usb.config 这个值。如果 ro.debuggable == 0 的话，就不操作，如果无法获取 persist.sys.usb.config 的值，就把它置为 “none”。
+因此，如果之前在 .mk 文件中设置过 persist.sys.usb.config 的属性，这里也可以把 “adb” 从原属性中去掉，但是会显得很混乱，因此是不建议从 .mk 文件中配置默认的 USB 连接配置的。
+根据本文的需求，可以将上述源码做如下修改：
+
+28  # Put the modifications that you need to make into the /system/build.prop into this
+29  # function. The prop object has get(name) and put(name,value) methods.
+30  def mangle_build_prop(prop):
+31      pass
+32
+33  # Put the modifications that you need to make into the /default.prop into this
+34  # function. The prop object has get(name) and put(name,value) methods.
+35  def mangle_default_prop(prop):
+36      # If ro.debuggable is 1, then enable adb on USB by default
+37      # (this is for userdebug builds)
+38      if prop.get("ro.debuggable") == "1":
+39          val = prop.get("persist.sys.usb.config")
+40      if "adb" not in val:
+41          if val == "":
+42              val = "mtp,adb"
+43          else:
+44              val = val + ",adb"
+45          prop.put("persist.sys.usb.config", val)
+46  # UsbDeviceManager expects a value here.  If it doesn't get it, it will
+47  # default to "adb". That might not the right policy there, but it's better
+48  # to be explicit.
+49  if not prop.get("persist.sys.usb.config"):
+50      prop.put("persist.sys.usb.config", "mtp");
+
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+    10
+    11
+    12
+    13
+    14
+    15
+    16
+    17
+    18
+    19
+    20
+    21
+    22
+    23
+
+如此，即可达到，eng 版默认为 mtp、adb 模式，即 默认打开了 usb debug。而 user 版默认为 mtp 模式。
+但是，刚刚在写这篇文章时发现一个问题，如果之前配置过 persist.sys.usb.config 属性，但不是 mtp，则会出现 未知属性 val 和 adb 的模式。
+此外，貌似，如果在 device/ 目录下使用 .mk 文件仅对 mtp 进行配置时，即只写入 persist.sys.usb.config=mtp 的话，同样无法满足需求。这种情况我记不清具体的现象了

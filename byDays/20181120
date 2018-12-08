@@ -1,0 +1,80 @@
+ssh builder@192.168.1.66
+66:
+用户名：builder
+密码：qwert
+
+BIRD_SHOW_UNREADNUM_GOOGLE 
+
+GMS信息 http://112.124.14.158/teamnote-view-38.html
+禅道-团队笔记-GMS信息专区-一般提前3周上传
+
++	private static boolean handleMMITest(Context context, String input){
++		if(BirdFeatureOption.BIRD_MMI_AUTO_TEST && CommandMMITest.contains(input)){
++			return startActivity(context,"com.nbbsw.mmi_test", "com.nbbsw.mmi_test.MMITest");
++		}else{
++			return false;
++		}
++	}
+
+	private static boolean startActivity(Context context,String pkgName,String clzName){
+		ComponentName cpn = new ComponentName(pkgName, clzName);
+        Intent intent = new Intent();
+        intent.setComponent(cpn);
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Log.e(TAG, "startActivity() failed: " + e);
+			return false;
+        }
+		return true;
+	}
+
+     private static boolean handleEngineermode(Context context, String input){
+		if(CommandEngineerMode.contains(input)){
+			return startActivity(context,"com.mediatek.engineermode", "com.mediatek.engineermode.EngineerMode");
+		}else{
+			return false;
+		}
+	}
+      //BIRD:add by wangye 20180317 end
+	  
+		if("true".equals(Utilities.getSystemProperty("ro.bdfun.launcher_settings",""))){ //change by Bird@hujingcheng 20181120
+
+
+com.google.android.apps.assistant/.go.onboarding.OnboardingActivity
+com.google.android.apps.assistant/com.google.android.apps.assistant.go.onboarding.OnboardingActivity
+
+com.google.android.googlequicksearchbox/com.google.android.apps.gsa.searchnow.SearchNowActivity
+
+ASSISTANT=com.google.android.apps.assistant/.go.MainActivity
+VOICE_RECOGNITION_SERVICE=com.google.android.apps.speechservices/com.google.android.voicesearch.serviceapi.GoogleRecognitionService
+
+Settings.Secure.VOICE_INTERACTION_SERVICE
+Settings.Secure.VOICE_RECOGNITION_SERVICE
+http://112.124.14.158/project-configure-2997.html
+
+
+
+        if(isFirstBoot()){			
+			final List<ResolveInfo> assistActivity = queryIntentActivitiesInternal(new Intent(Intent.ACTION_ASSIST),null, PackageManager.MATCH_DEFAULT_ONLY,UserHandle.getCallingUserId());
+			int assistSize=assistActivity.size();
+			ComponentName[] assistComponentSet=new ComponentName[assistSize];
+			for(int i=0;i<assistSize;i++){
+				ActivityInfo activityInfo = assistActivity.get(i).activityInfo;
+                String packageName = activityInfo.packageName;
+                String className = activityInfo.name;
+                Slog.d(TAG, "assistActivity "+i+" packageName: " + packageName+" ,className: "+className);
+                clearPackagePreferredActivities(packageName);
+                ComponentName componentName = new ComponentName(packageName,
+                        className);
+                assistComponentSet[i] = componentName;
+			}
+			ComponentName assistComponent=new ComponentName("com.google.android.apps.assistant","com.google.android.apps.assistant.go.MainActivity");
+			IntentFilter assistFilter=new IntentFilter(Intent.ACTION_ASSIST);
+			assistFilter.addCategory("android.intent.category.DEFAULT");
+			assistFilter.addCategory("android.intent.category.BROWSABLE");
+			addPreferredActivity(assistFilter,IntentFilter.MATCH_CATEGORY_EMPTY, assistComponentSet,assistComponent,UserHandle.getCallingUserId());
+		}
+
+                <action android:name="android.intent.action.ASSIST"/>
+

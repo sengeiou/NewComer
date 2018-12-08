@@ -1,0 +1,29 @@
+day29学习笔记
+
+碰到的git相关问题：
+
+1.早上切39的分支
+在bird目录下
+repo forall -c 'git fetch origin Featurephone_MP1_test:Featurephone_MP1_test'
+repo forall -c 'git checkout -b Featurephone_MP1_test'
+就是所有仓库都获取更新，再切换新分支
+
+2.拉37代码的时候，也没仔细看要切分支
+git clone githost:shenzhen_mirror/bd6737m_65_a_m0.git 
+查看一下远程分支：git branch -r
+然后切换分支：git checkout 6121S_L8_C5030_MP_NEWUI
+
+3.git pull origin 下午更新9820e代码时，
+error: Your local changes to the following files would be overwritten by merge:
+	idh.code/bird/make/8121SA_EF39_TF_ME44_CTA/8121SA_EF39_TF_ME44_CTA.mk
+Please, commit your changes or stash them before you can merge.
+需要提交或者stash这个改变，我都不需要
+先git status看看，再git checkout -- 文件名 放弃这个修改，再git pull就好了
+
+
+离线语音合成：
+咨询梅芳婷后，了解到不需要使用讯飞sdk。而是可以使用讯飞语音+，作为tts引擎。所以只要预装这个软件即可。
+
+
+
+

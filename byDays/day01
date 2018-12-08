@@ -1,0 +1,117 @@
+day01学习笔记
+
+一.安装ubuntu系统：已安装，了解安装步骤。
+
+二.根据教学txt，按步骤安装JDK，SDK，并配置完成环境变量。
+	sudo:提升权限，以其他用户身份来执行命令，预设身份为root。
+
+三.安装编译等一系列的工具
+用到的命令-
+  apt-get:Debian Linux发行版（ubuntu）中的APT软件包管理工具。所有基于Debian的发行都使用这个包管理系统。deb包可以把一个应用的文件包在一起，大体就如同Windows上的安装文件。
+注：这里apt-get一般要root权限，所以会使用到上述sudo apt-get ...。
+  语法：apt-get [-c] [参数]
+  选项：-c 指定配置文件。
+  参数：apt-get update:更新源(软件列表)
+	apt-get install packagename 安装新软件包
+	apt-get [-purge] remove packagename 卸载已安装软件包,[不]保留配置文件
+	apt-get upgrade 更新所有已安装的软件包
+	apt-get source package 下载该包的源代码
+然后，就按照txt指引完成安装软件。
+
+四.配置共享文件夹
+  需要安装的软件：samba，是一个实现不同操作系统之间文件共享和打印机共享的一种SMB协议的免费软件。
+先卸载再安装：	
+	sudo apt-get remove samba-common smbclient samba -y
+	sudo apt-get install samba system-config-samba cifs-utils -y
+	
+	sudo system-config-samba
+再根据txt的指引：完成共享文件夹的配置。
+
+五.配置脚本文件双击运行
+  创建脚本 touch hello.sh
+  编辑脚本 vim hello.sh
+   键入 i 进入插入模式
+   输入 
+	#!/bin/sh
+	echo "hello world!"
+ 按esc,退出插入模式，输入：wq-保存并退出
+注：这时，并不能运行该脚本因为没有x权限
+ls -l
+-rw-rw-r-- 1 huangyaosheng huangyaosheng    0  6月 26 13:23 hello.sh
+使用chmod 774 改变其权限为可执行文件。
+再在终端 输入./hello.sh 即可得到hello world！
+或者不改变权限：使用 bash/sh hello.sh
+再根据txt指引完成双击询问运行脚本的设置。
+
+六.手机设置目录结构
+查看自己的小米手机。
+百度下自己以前不了解或不常用的设置选项：
+1.WLAN-WLAN助理：wifi信号弱时，自动切换为数据流量。
+2.WLAN-智能流量策略-针对后台程序的流量控制
+	普通模式：根据当前应用智能分配网速
+	极致模式：阻断后台应用联网
+3.WLAN-高级设置-WLAN频带：2.4GHz和5.0GHz指无线路由器的工作频段。
+4.WLAN-高级设置-安装证书：手机在访问或者使用某些对安全性要求的信息时会判断手机的证书
+5.WLAN-高级设置-MAC地址：MAC（Media Access Control或者Medium Access Control）地址，意译为媒体访问控制，或称为物理地址、硬件地址，用来定义网络设备的位置。
+6.WLAN-高级设置-WLAN直连：Wi-Fi直连，最初称为Wi-Fi P2P（Peer-To-Peer），是Wi-Fi协议簇中的一个，使设备之间能够轻松连接彼此而不再需要一个中介性质的无线接入点（Access Point）。
+7.WLAN-高级设置-连接WPS：路由器开启WPS连接，在WPA加密的条件下，不用输入密码也能连接，有两种连接方式，按键方式跟PIN方式。
+8.蓝牙-打开-配对设备:蓝牙地址的表示格式：XX:XX:XX:XX:XX:XX，X可以是数字，也可以是字母，与网络设备的MAC地址一样，就是设备之间通讯的唯一身份证。
+9.个人热点：便携式wlan热点，也就是将因特网分享给其它具备wlan功能的设备。手持设备可作为无线路由器使用，将无线网络向外广播，然后由其它具备wlan功能的设备来接收。
+10.usb网络共享：通过手机让电脑上网。
+11.蓝牙网络共享：通过你的手机蓝牙让别人的手机可以用你的网络。
+12.无线显示：手机投屏到电视等设备
+
+七.其他用到的linux命令
+
+1.tar命令
+  tar命令可以为linux的文件和目录创建档案。利用tar，可以为某一特定文件创建档案（备份文件），也可以在档案中改变文件，或者向档案中加入新的文件。
+  弄清两个概念：打包和压缩。打包是指将一大堆文件或目录变成一个总的文件；压缩则是将一个大的文件通过一些压缩算法变成一个小文件。
+  Linux中很多压缩程序只能针对一个文件进行压缩，这样当你想要压缩一大堆文件时，你得先将这一大堆文件先打成一个包（tar命令），然后再用压缩程序进行压缩（gzip bzip2命令）。
+常用命令：
+tar -cvf d1.tar day01	仅打包
+tar -zcvf d2.tar day01	打包后以gzip压缩
+tar -jcvf d3.tar day01  打包后以bzip2压缩
+ll显示：
+-rw-rw-r--  1 huangyaosheng huangyaosheng 10240  6月 26 15:59 d1.tar
+-rw-rw-r--  1 huangyaosheng huangyaosheng  2279  6月 26 16:00 d2.tar.gz
+-rw-rw-r--  1 huangyaosheng huangyaosheng  2615  6月 26 16:04 d3.tar.bz2
+-rw-rw-r--  1 huangyaosheng huangyaosheng  4602  6月 26 16:04 day01
+可以看出仅打包的话，其大小甚至>原文件。压缩后是小于原文件的。
+tar -ztvf d2.tar.gz  查看d2.tar.gz包中有哪些文件
+tar -zxvf d2.tar.gz  解压d2.tar.gz
+
+2.df命令
+统计linux系统中磁盘使用情况，默认以KB显示。
+-h: 以KB以上的单位显示。
+
+3.grep命令
+grep（global search regular expression(RE) and print out the line，全面搜索正则表达式并把行打印出来）是一种强大的文本搜索工具，它能使用正则表达式搜索文本，并把匹配的行打印出来。
+参数：	-E：使用正则表达式进行匹配
+	-v:输出除匹配行外的所有行
+	-o:只输出文件中匹配到的部分
+	-c:统计文件或文本中包含匹配字符串的行数
+	-i:忽略大小写
+	-n:输出匹配行的内容与行号
+	-l:列出文件内容匹配的文件名称
+例.grep "grep" ~/tools/day01
+   echo this is a test line. | grep -E "[a-z]+\."  输出line.
+   grep -n "grep" ~/tools/day01
+
+4.管道命令
+管道命令操作符是：”|”,它只能处理经由前面一个指令传出的正确输出信息，对错误信息信息没有直接处理能力。然后，传递给下一个命令，作为标准的输入.
+例：cat ~/tools/hello.sh | grep -n "hello"
+    cat ~/tools/day01 | grep -n "grep"| grep "输出"
+注：第二个grep不用加-n了，第二个grep若加-n,显示的是从第一次取到的内容中再取的行数。
+
+
+
+
+
+
+
+
+
+
+
+	
+	

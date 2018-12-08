@@ -1,0 +1,58 @@
+day03学习笔记
+
+
+因为虚拟机鼠标一直显示不出，可能的问题。
+1.显卡驱动没装。
+2.原来的系统是ubuntu 12，需要重装为ubuntu 14。
+  
+一.重装ubuntu 14.04及相关软件
+
+花了大半天，重装。
+
+碰到的问题及解决：
+1.用usb装机时，读不了镜像。
+解决：联想主板，开机时按F12,进入BIOS，进入SETUP，设置usb启动方式由Legacy only改成UEFI。(装完机改回legacy)
+
+2.分区问题
+可以根据目录不同区分不同的硬盘 /dev/sda,/dev/sdb.
+不同硬盘下又可分不同分区 /dev/sda1,/dev/sda2...
+
+3.从89复制sdk文件夹到本地时，文件失去x权限
+解决：使用copy -a 命令去复制
+
+二.android studio测试
+建立一个工程
+问题：
+1.报错Gradle sync failed: Failed to find target with hash string 'android-26' in: /home/hjc/tools/sdk_5.1
+					Consult IDE log for more details (Help | Show Log) (456ms)
+实际原因：没有android-26(8.0)的sdk。
+解决：在SDK MANAGER中选择android-8安装。
+
+2.解决完上面的问题后，报错Conflict with dependency 'com.android.support:support-annotations' in project ':app'. Resolved versions for app (26.1.0) and test app (27.1.1) differ.
+原因：test app和app 版本冲突
+
+解决：修改Gradle Scripts下的build.gradle(Module:app)中dependencies:
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+中版本改成以上的。
+
+三.android studio工程的目录结构
+  既然上面已经修改了build.gradle(Module:app)，先看grandle.
+1.Grandle
+ Gradle是一种依赖管理工具，基于Groovy语言，面向Java应用为主.
+ 类似Maven,但是不使用xml配置。而是使用一种基于Groovy的内部领域特定（DSL）语言。
+build.grandle(Module:app):实际位置是在app目录下
+整个来看这个文件有三部分：
+第一行：apply plugin: 'com.android.application' ，表示为该Module为一个com.android.application。
+android大括号：进行app的编译运行发布等配置
+dependencies大括号：进行依赖配置
+
+
+未完待续
+
+
+
+
+
+
+
