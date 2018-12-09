@@ -1,0 +1,56 @@
+覆盖： cp -rvf /home/hjc/gitfiles/code2/MOCOR5_SFPHONE_17F_RLS1_W18.19.6_P2/idh.code/. '/home/hjc/gitfiles/code2/idh.code'
+
+解压到指定目录： tar -xzvf '/home/hjc/gitfiles/code2/idh.code.tgz' -C '/home/hjc/gitfiles/code2/idh.code' 需要提前新建idh.code目录
+
+在当前目录递归查找字符串：grep -rn "BIRD_LOAD_DEFAULT_LAUNCHER" .
+
+递归查找某文件：find . -name "*.txt"
+
+递归查找某文件(正则)：find . -regex ".*/[0-9]*/.c"
+
+git clone命令：git clone $75别名:shenzhen_mirror/MOCOR5_SFPHONE_17F_RLS1_W18.19.6_P2.git
+
+adb命令获取当前活动:adb shell dumpsys activity | grep "mFocusedActivity"
+
+adb命令获取安装的全部包名:adb shell pm list packages
+
+删除gedit临时~文件 find . -name "*~" -print -exec rm -f {} \
+
+拉取展讯Slog:	adb pull /data/slog  电脑目录
+
+展讯：
+*#*#83789#*#* ----MMITest
+*#*#83781#*#* ----工程模式
+
+MTK
+*#685564#*	--MTK_log
+*#*#3646633#*#*
+
+adb shell am start com.sprd.validationtools/com.sprd.validationtools.ValidationToolsMainActivity
+
+MTK工程模式：adb shell am start com.mediatek.engineermode/.EngineerMode
+
+adb shell reboot autodloader
+
+repo forall -c 'git reset --hard HEAD;git clean -df;git rebase --abort';repo sync -f;repo start --all master;
+
+git fetch origin 7130DW_L5005_A_DS883_DATSUN_20180829:7130DW_L5005_A_DS883_DATSUN_20180829
+
+git查看某commit : git show commit-id
+
+跳过google开机向导：adb shell am start -a com.android.setupwizard.FOUR_CORNER_EXIT
+
+挂载：sshfs zss@192.168.1.203:/home/zss/work/workblink/5_MTK/6_BIRD_P0MP1_K39TV1_BSP/project/2_7130TF_N5501L_AM2_MV168_user_1108 $本地想要挂载到的文件夹路径
+TARGET_BOARD_FRONT_CAMERA_FLASH_LED_0 := true
+
+39p：repo init -u 176别名:bird_p0mp1_k39tv1_bsp/manifests.git -b master
+
+查看该包属于哪个apk:adb shell pm path $包名
+
+反编译：java -jar apktool_2.3.4.jar d -f $apk路径 -o $输出文件夹路径
+
+查看当前内存情况：adb shell dumpsys meminfo
+
+挂载：sudo mount.cifs -o username="builder",passwd="qwert" //192.168.1.66/builder/
+
+7130D_S8020K_E_DS842

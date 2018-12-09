@@ -1,0 +1,34 @@
+展讯cq:
+http://222.66.158.139:2008/cqweb/login
+账户	bird_sz	  
+密码	Bird2016
+
+展讯iSupport:
+https://isupport.unisoc.com/iSupport/apply/login#
+用户名：bird_sz			
+密码：Bird20180824
+
+gitlab:
+用户名：hujingcheng@szba-mobile.com
+密码：Jiuyuan0626
+
+84
+用户名：smb
+密码：123456
+
+久源论坛
+http://192.168.1.11/jyun/forum.php?mod=forumdisplay&fid=36
+用户名：hujingcheng
+密码：hujingcheng
+
+mtk es
+用户名：zhangxuansw.zhang@nbbsw.com
+密码：nbbsw2017
+finder: liangliang.guo@nbbsw.com
+
+yaozhong.zhu@nbbsw.com
+nbbswa2016 
+
+66服务器
+用户名：builder
+密码：qwert
