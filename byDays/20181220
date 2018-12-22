@@ -1,0 +1,20 @@
+打开kernel串口log
+
+project
+kernel-4.9-lc
+
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 0d9b28c..d77025e 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -94,7 +94,7 @@ void mt_disable_uart(void)
+ {
+        /* uart print not always enable */
+        if ((mt_need_uart_console != 1) && (printk_disable_uart != 2))
+-               printk_disable_uart = 1;
++               printk_disable_uart = 0;
+ }
+ void mt_enable_uart(void)
+ {
+
+
